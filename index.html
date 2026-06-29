@@ -1,0 +1,3133 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>⚡ CHAOS A.D. BATTLE</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07070a;--bg2:#0e0e14;--bg3:#16161f;--bg4:#1e1e28;
+  --red:#e02020;--red2:#c0392b;--red3:#8b1a12;
+  --gold:#d4a017;--gold2:#f0c040;
+  --blue:#2980b9;--blue2:#3498db;
+  --green:#27ae60;--purple:#8e44ad;
+  --text:#f0f0f0;--t2:#a0a0b0;--t3:#565668;
+  --p1:#e02020;--p2:#2980b9;--p3:#27ae60;--p4:#8e44ad;
+  --r:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;font-weight:600;min-height:100vh;
+  background-image:radial-gradient(ellipse at 15% 40%,rgba(192,57,43,.06) 0%,transparent 55%),
+                   radial-gradient(ellipse at 85% 60%,rgba(41,128,185,.06) 0%,transparent 55%);}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--red3);border-radius:2px}
+.app{max-width:760px;margin:0 auto;padding:10px 10px 50px;}
+
+/* HEADER */
+.logo{font-family:'Bebas Neue',cursive;font-size:clamp(32px,7vw,50px);letter-spacing:5px;
+  background:linear-gradient(130deg,#fff 0%,var(--gold2) 45%,var(--red) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1;filter:drop-shadow(0 0 22px rgba(224,32,32,.35));
+  animation:logoGlow 3.5s ease-in-out infinite alternate;text-align:center;}
+@keyframes logoGlow{from{filter:drop-shadow(0 0 12px rgba(224,32,32,.25))}to{filter:drop-shadow(0 0 30px rgba(240,192,64,.5))}}
+.logo-sub{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:5px;color:var(--t3);margin-top:4px;text-align:center;}
+.header-wrap{padding:16px 0 12px;position:relative;margin-bottom:12px;}
+.header-wrap::after{content:'';position:absolute;bottom:0;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--red2),var(--gold),var(--red2),transparent);}
+
+/* SCORES */
+.scores-bar{display:grid;grid-template-columns:1fr 28px 1fr;gap:6px;align-items:center;margin-bottom:12px;}
+.sc{background:var(--bg3);border:1px solid #1c1c28;border-radius:var(--r);padding:9px 13px;position:relative;overflow:hidden;transition:border-color .3s,box-shadow .3s;}
+.sc::after{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;}
+.sc.p1::after{background:linear-gradient(135deg,rgba(224,32,32,.1),transparent 60%)}
+.sc.p2{text-align:right}.sc.p2::after{background:linear-gradient(225deg,rgba(41,128,185,.1),transparent 60%)}
+.sc.p1.active{color:var(--p1);border-color:var(--p1);box-shadow:0 0 16px rgba(224,32,32,.2);}
+.sc.p2.active{color:var(--p2);border-color:var(--p2);box-shadow:0 0 16px rgba(41,128,185,.2);}
+.sc.p3.active{color:var(--p3);border-color:var(--p3);box-shadow:0 0 16px rgba(39,174,96,.2);}
+.sc.p4.active{color:var(--p4);border-color:var(--p4);box-shadow:0 0 16px rgba(142,68,173,.2);}
+.sc.p3::after{background:linear-gradient(135deg,rgba(39,174,96,.1),transparent 60%)}
+.sc.p4::after{background:linear-gradient(225deg,rgba(142,68,173,.1),transparent 60%)}
+.scores-bar.multi{flex-wrap:wrap;gap:4px;justify-content:center;}
+.scores-bar.multi .sc{min-width:70px;flex:1;}
+.scores-bar.multi .vs{display:none;}
+.pcount-row{display:flex;gap:8px;margin-bottom:10px;}
+.pcount-btn{flex:1;padding:8px 4px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--t3);font-size:13px;font-family:'Bebas Neue',cursive;letter-spacing:1px;cursor:pointer;}
+.pcount-btn.sel{background:rgba(212,160,23,.15);border-color:var(--gold);color:var(--gold);}
+.podium-list{display:flex;flex-direction:column;gap:6px;margin:12px 0;}
+.podium-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;background:var(--bg2);border:1px solid var(--border);}
+.podium-medal{font-size:22px;width:28px;text-align:center;}
+.podium-name{flex:1;font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;}
+.podium-score{font-family:'Bebas Neue',cursive;font-size:20px;color:var(--gold);}
+.podium-row.rank-1{border-color:var(--gold);background:rgba(212,160,23,.1);}
+.bp3{background:rgba(39,174,96,.12);color:var(--p3);border:1px solid rgba(39,174,96,.3);}
+.bp4{background:rgba(142,68,173,.12);color:var(--p4);border:1px solid rgba(142,68,173,.3);}
+.sc.active::after{opacity:1}
+.sc-name{font-family:'Bebas Neue',cursive;font-size:14px;letter-spacing:2px;color:currentColor;}
+.sc-num{font-family:'Bebas Neue',cursive;font-size:40px;line-height:1;color:var(--text);}
+.sc-num.bump{animation:scoreBump .45s ease;}
+@keyframes scoreBump{0%{transform:scale(1)}40%{transform:scale(1.45);color:var(--gold2)}100%{transform:scale(1)}}
+.sc-tag{font-size:8px;color:var(--t3);letter-spacing:2px;}
+.vs{font-family:'Bebas Neue',cursive;font-size:18px;color:var(--red2);text-align:center;opacity:.5;}
+
+/* SECTION STATUS BAR */
+.status-bar{display:flex;align-items:center;justify-content:space-between;
+  background:var(--bg2);border:1px solid #14141e;border-radius:var(--r);
+  padding:8px 14px;margin-bottom:10px;}
+.status-section{font-family:'Bebas Neue',cursive;font-size:14px;letter-spacing:2px;color:var(--gold);}
+.status-round{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--t3);}
+.status-timer{font-family:'Bebas Neue',cursive;font-size:18px;color:var(--red);letter-spacing:2px;}
+.status-timer.low{color:var(--red);animation:timerPulse .5s ease-in-out infinite alternate;}
+@keyframes timerPulse{from{opacity:1}to{opacity:.4}}
+
+/* SECTION DOTS */
+.section-dots{display:flex;gap:6px;justify-content:center;margin-bottom:12px;}
+.sdot{width:10px;height:10px;border-radius:50%;background:var(--bg4);border:1px solid #222;transition:all .3s;}
+.sdot.done{background:var(--red3);border-color:var(--red2);}
+.sdot.active{background:var(--gold);border-color:var(--gold2);box-shadow:0 0 8px rgba(240,192,64,.5);}
+
+/* VIEWS */
+.view{display:none;}.view.show{display:block;animation:fadeUp .22s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+/* CARD */
+.card{background:var(--bg2);border:1px solid #14141e;border-radius:8px;padding:13px;margin-bottom:10px;}
+.card-title{font-family:'Bebas Neue',cursive;font-size:11px;letter-spacing:3px;color:var(--t3);margin-bottom:9px;}
+
+/* BUTTONS */
+.btn{width:100%;padding:13px;border:none;border-radius:var(--r);font-family:'Bebas Neue',cursive;
+  font-size:19px;letter-spacing:3px;color:#fff;cursor:pointer;transition:all .15s;margin-top:6px;
+  position:relative;overflow:hidden;}
+.btn::before{content:'';position:absolute;top:0;left:0;right:0;height:40%;background:rgba(255,255,255,.07);pointer-events:none;}
+.btn:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.18);}
+.btn:active:not(:disabled){transform:translateY(1px);filter:brightness(.9);}
+.btn:disabled{opacity:.28;cursor:not-allowed;transform:none;filter:none;}
+.btn-red{background:linear-gradient(150deg,#c84b3e,var(--red2));box-shadow:0 4px 16px rgba(192,57,43,.3);}
+.btn-green{background:linear-gradient(150deg,#1a7040,var(--green));box-shadow:0 4px 16px rgba(39,174,96,.25);}
+.btn-blue{background:linear-gradient(150deg,#145880,var(--blue));box-shadow:0 4px 16px rgba(41,128,185,.25);}
+.btn-gold{background:linear-gradient(150deg,#a07010,var(--gold));box-shadow:0 4px 16px rgba(212,160,23,.25);color:#0a0a0a;}
+.btn-purple{background:linear-gradient(150deg,#5a2080,#8e44ad);box-shadow:0 4px 16px rgba(142,68,173,.25);}
+.btn-ghost{background:var(--bg3);border:1px solid #222230;color:var(--t3);box-shadow:none;}
+.btn-ghost:hover:not(:disabled){border-color:var(--red2);color:var(--t2);}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+
+/* MODE SELECT */
+.mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.mode-btn{background:var(--bg3);border:2px solid #1c1c28;border-radius:8px;padding:16px 8px;
+  cursor:pointer;text-align:center;transition:all .2s;color:var(--t2);}
+.mode-btn:hover{border-color:#333;color:var(--text);}
+.mode-btn.sel{border-color:var(--gold);background:rgba(212,160,23,.08);}
+.mode-icon{font-size:28px;display:block;margin-bottom:6px;}
+.mode-name{font-family:'Bebas Neue',cursive;font-size:15px;letter-spacing:2px;display:block;}
+.mode-desc2{font-size:9px;color:var(--t3);display:block;margin-top:3px;letter-spacing:1px;}
+.mode-btn.sel .mode-name{color:var(--gold2);}
+.timer-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;justify-content:center;}
+.timer-label{font-size:11px;color:var(--t3);}
+.timer-in{background:var(--bg3);border:1px solid #333;border-radius:5px;padding:8px 16px;
+  font-family:'Share Tech Mono',monospace;font-size:20px;color:var(--text);width:80px;
+  text-align:center;outline:none;transition:border-color .2s;}
+.timer-in:focus{border-color:var(--gold);}
+
+/* SETUP INPUTS */
+.setup-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+.setup-label{font-size:11px;color:var(--t3);min-width:68px;letter-spacing:1px;}
+.setup-input{background:var(--bg3);border:1px solid #22223a;border-radius:5px;padding:8px 12px;
+  font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--text);flex:1;outline:none;transition:border-color .2s;}
+.setup-input:focus{border-color:var(--red2);}
+
+/* SECTION TRANSITION */
+#transition-view{display:none;text-align:center;padding:40px 20px;}
+.trans-icon{font-size:60px;margin-bottom:12px;display:block;animation:transIcon .6s ease infinite alternate;}
+@keyframes transIcon{from{transform:scale(1)}to{transform:scale(1.1)}}
+.trans-title{font-family:'Bebas Neue',cursive;font-size:40px;color:var(--gold2);letter-spacing:5px;margin-bottom:8px;}
+.trans-sub{font-size:12px;color:var(--t3);letter-spacing:3px;}
+
+/* TRIVIA QUESTION */
+.trivia-q{font-family:'Bebas Neue',cursive;font-size:22px;line-height:1.3;text-align:center;margin-bottom:14px;letter-spacing:1px;}
+.quiz-choices{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;}
+.qc{padding:11px;background:var(--bg3);border:1px solid #222232;border-radius:6px;cursor:pointer;
+  text-align:center;font-size:11px;color:var(--t2);transition:all .15s;line-height:1.3;}
+.qc:hover:not(.disabled){border-color:var(--gold);color:var(--gold);}
+.qc.correct{background:rgba(39,174,96,.14);border-color:var(--green);color:var(--green);opacity:1!important;}
+.qc.wrong{background:rgba(224,32,32,.1);border-color:var(--red2);color:var(--red);}
+.qc.disabled{pointer-events:none;opacity:.5;}
+
+/* BUZZ AREA */
+.buzz-hint{text-align:center;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--t3);margin-bottom:8px;letter-spacing:1px;}
+.who-label{text-align:center;font-family:'Bebas Neue',cursive;font-size:15px;color:var(--gold);margin-bottom:8px;letter-spacing:2px;}
+
+/* AUDIO SECTION */
+.audio-section{background:var(--bg2);border:1px solid #1a1a26;border-radius:10px;padding:14px;margin-bottom:10px;position:relative;overflow:hidden;}
+.audio-section::before{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(255,255,255,.008) 3px,rgba(255,255,255,.008) 4px);pointer-events:none;}
+.audio-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:9px;letter-spacing:2px;color:var(--t3);}
+.audio-song{font-family:'Bebas Neue',cursive;font-size:13px;color:var(--gold);letter-spacing:2px;}
+.vis-wrap{height:68px;margin:8px 0 10px;border-radius:6px;overflow:hidden;background:#030305;border:1px solid #111120;}
+canvas.vis{width:100%;height:100%;display:block;}
+.playbar{display:flex;align-items:center;gap:10px;}
+.play-btn{width:38px;height:38px;flex-shrink:0;background:var(--red2);border:none;border-radius:50%;cursor:pointer;
+  font-size:13px;color:#fff;display:flex;align-items:center;justify-content:center;transition:all .15s;position:relative;}
+.play-btn::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(224,32,32,.3);animation:none;}
+.play-btn.playing::after{animation:playRing 1.6s ease-in-out infinite;}
+@keyframes playRing{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.35);opacity:0}}
+.play-btn:hover{background:var(--red);transform:scale(1.06);}
+.prog-wrap{flex:1;height:7px;background:var(--bg3);border-radius:4px;cursor:pointer;position:relative;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--red2),var(--gold));border-radius:4px;width:0%;transition:width .1s;pointer-events:none;}
+.time-disp{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--t3);min-width:68px;text-align:right;}
+.vol-wrap{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--t3);}
+.vol-in{width:48px;accent-color:var(--red);cursor:pointer;}
+.audio-status{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--t3);text-align:center;min-height:16px;margin-top:7px;}
+
+/* PREP TIMER */
+.prep-wrap{display:flex;flex-direction:column;align-items:center;padding:10px 0;}
+.circ-svg{width:110px;height:110px;}
+.circ-track{fill:none;stroke:#1a1a28;stroke-width:8;}
+.circ-fill{fill:none;stroke:var(--gold);stroke-width:8;stroke-linecap:round;
+  transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset .9s linear;}
+.circ-fill.urgent{stroke:var(--red);}
+.circ-text{font-family:'Bebas Neue',cursive;font-size:26px;fill:var(--text);dominant-baseline:middle;text-anchor:middle;}
+.circ-label{font-family:'Share Tech Mono',monospace;font-size:7px;fill:var(--t3);dominant-baseline:middle;text-anchor:middle;letter-spacing:2px;}
+.prep-hint{font-size:11px;color:var(--t3);text-align:center;margin-top:8px;letter-spacing:1px;}
+
+/* RIFF REVEAL */
+.riff-reveal{background:var(--bg2);border:2px solid var(--red2);border-radius:10px;padding:16px;margin-bottom:10px;
+  box-shadow:0 0 24px rgba(192,57,43,.12);animation:fadeUp .3s ease;}
+.riff-name{font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:3px;color:var(--red);line-height:1.1;}
+.riff-meta{display:flex;gap:10px;align-items:center;margin:5px 0;flex-wrap:wrap;}
+.riff-song{font-size:11px;color:var(--gold);letter-spacing:1px;}
+.riff-tuning{font-size:9.5px;color:var(--t3);}
+.diff{font-family:'Share Tech Mono',monospace;font-size:8px;padding:2px 6px;border-radius:3px;letter-spacing:2px;}
+.easy{background:rgba(39,174,96,.1);color:var(--green);border:1px solid var(--green);}
+.mid{background:rgba(212,160,23,.1);color:var(--gold);border:1px solid var(--gold);}
+.hard{background:rgba(224,32,32,.1);color:var(--red);border:1px solid var(--red2);}
+.tab-box{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--gold2);background:rgba(0,0,0,.5);
+  padding:12px;border-radius:5px;overflow-x:auto;white-space:pre;line-height:1.9;max-height:190px;overflow-y:auto;
+  margin:8px 0;border:1px solid rgba(240,192,64,.09);}
+.riff-desc{font-size:11.5px;color:var(--t2);line-height:1.4;}
+.riff-corner{position:absolute;top:12px;right:14px;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--t3);text-align:right;}
+.riff-corner span{font-size:20px;color:var(--t2);font-family:'Bebas Neue',cursive;display:block;line-height:1;}
+
+/* PLAY STATE */
+.play-instruction{text-align:center;padding:20px;}
+.play-icon{font-size:50px;display:block;margin-bottom:10px;animation:playBounce .8s ease infinite alternate;}
+@keyframes playBounce{from{transform:scale(1)}to{transform:scale(1.08)}}
+.play-title{font-family:'Bebas Neue',cursive;font-size:30px;color:var(--red);letter-spacing:4px;}
+.play-sub{font-size:12px;color:var(--t3);margin-top:6px;letter-spacing:1px;}
+
+/* HISTORY */
+.history{max-height:100px;overflow-y:auto;}
+.hist-item{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid #0e0e18;
+  font-size:11px;animation:slideIn .2s ease;}
+@keyframes slideIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
+.hist-what{color:var(--t3);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ok{color:var(--green)}.fail{color:var(--red)}
+.badge{font-family:'Share Tech Mono',monospace;font-size:8px;padding:2px 7px;border-radius:10px;white-space:nowrap;letter-spacing:1px;}
+.bp1{background:rgba(224,32,32,.12);color:var(--p1);border:1px solid rgba(224,32,32,.3);}
+.bp2{background:rgba(41,128,185,.12);color:var(--p2);border:1px solid rgba(41,128,185,.3);}
+
+/* MODE BADGE */
+.mode-badge-bar{display:flex;justify-content:center;gap:6px;margin-bottom:10px;}
+.mode-badge{font-family:'Share Tech Mono',monospace;font-size:9px;padding:4px 12px;border-radius:12px;letter-spacing:2px;
+  background:rgba(192,57,43,.1);color:var(--red2);border:1px solid rgba(192,57,43,.3);}
+
+/* PRESET BUTTONS */
+.preset-btns{display:flex;gap:6px;flex-wrap:wrap;padding:4px 0 2px 0;}
+.preset-btn{background:var(--bg3);border:1px solid #333;color:var(--t2);font-size:11px;padding:4px 9px;border-radius:20px;cursor:pointer;transition:all .15s;font-family:'Share Tech Mono',monospace;}
+.preset-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* WINNER */
+#winner-view{display:none;}
+.winner-box{background:var(--bg2);border-radius:12px;padding:24px 20px 18px;text-align:center;position:relative;overflow:hidden;border:1px solid var(--gold);box-shadow:0 0 50px rgba(212,160,23,.2);margin-top:10px;}
+.winner-crown{font-size:54px;margin-bottom:4px;display:block;animation:crownBounce .9s ease-in-out infinite alternate;}
+@keyframes crownBounce{from{transform:translateY(0) rotate(-4deg)}to{transform:translateY(-7px) rotate(4deg)}}
+.winner-title{font-family:'Bebas Neue',cursive;font-size:50px;color:var(--gold2);letter-spacing:5px;
+  text-shadow:0 0 30px rgba(240,192,64,.5);animation:titlePulse 1.6s ease-in-out infinite alternate;}
+@keyframes titlePulse{from{text-shadow:0 0 20px rgba(240,192,64,.35)}to{text-shadow:0 0 45px rgba(240,192,64,.75)}}
+.winner-sub{font-size:13px;color:var(--t3);margin-top:4px;letter-spacing:2px;}
+.winner-scores{display:flex;justify-content:center;gap:30px;margin:12px 0 4px;}
+.ws-item{text-align:center;}
+.ws-name{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--t3);}
+.ws-num{font-family:'Bebas Neue',cursive;font-size:36px;color:var(--text);}
+/* Victory scene */
+.victory-scene{width:100%;max-width:320px;margin:10px auto 0;display:block;}
+@keyframes floatIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.victory-scene{animation:floatIn .8s ease both .2s;}
+/* Confetti burst */
+@keyframes confettiFall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(180px) rotate(720deg);opacity:0}}
+.conf{position:absolute;top:0;width:8px;height:8px;border-radius:2px;animation:confettiFall 1.8s ease-in both;}
+.winner-btn-row{display:flex;gap:10px;margin-top:10px;}
+.winner-btn-row .btn{flex:1;}
+
+/* RIFF AUCTION */
+.bid-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0;}
+.bid-btn{background:var(--bg3);border:2px solid #333;border-radius:8px;padding:14px 0;font-family:'Bebas Neue',cursive;font-size:28px;color:var(--t2);cursor:pointer;transition:all .15s;}
+.bid-btn:hover,.bid-btn.sel{border-color:var(--gold);color:var(--gold);background:rgba(212,160,23,.12);}
+
+/* QUICK RIFF */
+.qr-turn-banner{font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:3px;text-align:center;padding:8px 0 2px;color:var(--gold);}
+.qr-countdown{font-family:'Bebas Neue',cursive;font-size:72px;color:var(--gold2);text-align:center;line-height:1;min-height:80px;text-shadow:0 0 30px rgba(240,192,64,.5);}
+
+/* GAME CONFIGURATOR */
+.gc-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #1a1a24;}
+.gc-row:last-child{border-bottom:none;}
+.gc-toggle{width:34px;height:18px;border-radius:9px;background:#1c1c28;border:1px solid #333;position:relative;cursor:pointer;flex-shrink:0;transition:background .2s;}
+.gc-toggle.on{background:rgba(39,174,96,.3);border-color:var(--green);}
+.gc-thumb{position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:var(--t3);transition:all .2s;}
+.gc-toggle.on .gc-thumb{left:18px;background:var(--green);}
+.gc-icon{font-size:16px;width:22px;text-align:center;flex-shrink:0;}
+.gc-name{font-family:'Bebas Neue',cursive;font-size:14px;letter-spacing:1px;color:var(--t2);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.gc-name.off{color:var(--t3);}
+.gc-rounds{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.gc-rounds-val{font-family:'Bebas Neue',cursive;font-size:18px;color:var(--gold);min-width:20px;text-align:center;}
+.gc-rounds-val.off{color:var(--t3);}
+.gc-btn{background:none;border:1px solid #333;color:var(--t2);width:22px;height:22px;border-radius:4px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;padding:0;transition:all .15s;}
+.gc-btn:hover{border-color:var(--gold);color:var(--gold);}
+.gc-btn:disabled{opacity:.25;cursor:default;}
+.gc-order{display:flex;flex-direction:column;gap:2px;flex-shrink:0;}
+.gc-order-btn{background:none;border:1px solid #252530;color:var(--t3);width:18px;height:14px;border-radius:3px;cursor:pointer;font-size:9px;display:flex;align-items:center;justify-content:center;padding:0;transition:all .12s;line-height:1;}
+.gc-order-btn:hover{border-color:var(--gold);color:var(--gold);}
+.gc-order-btn:disabled{opacity:.2;cursor:default;}
+
+/* BACKGROUND SLIDESHOW */
+#bg-slideshow{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.bg-slide{position:absolute;inset:0;opacity:0;transition:opacity 2.5s ease;background-size:cover;background-position:center;}
+.bg-slide.active{opacity:.12;}
+.app{position:relative;z-index:1;}
+
+/* STEM DETECTIVE diff badge */
+.diff-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:9px;letter-spacing:2px;}
+.diff-drums{background:rgba(46,204,113,.15);color:#2ecc71;border:1px solid #2ecc71;}
+.diff-rhythm{background:rgba(241,196,15,.15);color:var(--gold);border:1px solid var(--gold);}
+.diff-bass{background:rgba(192,57,43,.15);color:#e74c3c;border:1px solid #e74c3c;}
+
+/* AIR GUITAR stars */
+.star-row{display:flex;justify-content:center;gap:10px;margin:8px 0;}
+.star-btn{font-size:34px;cursor:pointer;opacity:.3;transition:all .15s;background:none;border:none;padding:0;}
+.star-btn.lit{opacity:1;}
+.star-btn:hover{transform:scale(1.2);}
+
+/* METRONOME */
+.metro-wrap{display:flex;flex-direction:column;align-items:center;padding:16px 0 8px;}
+.metro-bpm{font-family:'Bebas Neue',cursive;font-size:64px;color:var(--gold2);line-height:1;letter-spacing:2px;
+  text-shadow:0 0 30px rgba(240,192,64,.4);}
+.metro-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--t3);letter-spacing:3px;margin-top:2px;}
+.metro-beats{display:flex;gap:8px;margin:12px 0;}
+.beat-dot{width:16px;height:16px;border-radius:50%;background:var(--bg4);border:1px solid #222;transition:all .05s;}
+.beat-dot.on{background:var(--gold2);box-shadow:0 0 12px rgba(240,192,64,.7);transform:scale(1.3);}
+.beat-dot.accent{border-color:var(--red2);}
+.beat-dot.accent.on{background:var(--red);box-shadow:0 0 16px rgba(224,32,32,.8);}
+.metro-sig{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--t3);letter-spacing:2px;}
+
+/* HINTS */
+.hints-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:10px 0;}
+.hint-card{background:var(--bg3);border:1px solid #1c1c28;border-radius:8px;padding:12px;
+  position:relative;overflow:hidden;transition:all .4s;min-height:62px;}
+.hint-card.locked{opacity:.4;filter:blur(2px);}
+.hint-card.unlocked{border-color:var(--gold);animation:hintUnlock .5s ease;}
+.hint-card.unlocking{border-color:var(--red2);animation:hintPulse .4s ease;}
+@keyframes hintUnlock{0%{transform:scale(.96);opacity:.5}100%{transform:scale(1);opacity:1}}
+@keyframes hintPulse{0%,100%{box-shadow:0 0 0 transparent}50%{box-shadow:0 0 18px rgba(224,32,32,.4)}}
+.hint-num{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--t3);letter-spacing:2px;margin-bottom:4px;}
+.hint-val{font-family:'Bebas Neue',cursive;font-size:18px;color:var(--gold2);letter-spacing:2px;line-height:1.2;}
+.hint-key{font-size:9px;color:var(--t3);margin-top:3px;}
+.hint-icon{font-size:20px;float:right;opacity:.5;}
+.hint-reveal-in{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--t3);margin-top:4px;}
+
+/* MIC BUZZER */
+.mic-bar{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;
+  background:var(--bg3);border:1px solid #1a1a28;border-radius:8px;padding:10px;}
+.mic-indicator{width:10px;height:10px;border-radius:50%;background:var(--t3);transition:all .1s;}
+.mic-indicator.active{background:var(--green);box-shadow:0 0 10px var(--green);animation:micPulse .3s ease infinite alternate;}
+.mic-indicator.listening{background:var(--red);animation:micPulse .5s ease infinite alternate;}
+@keyframes micPulse{from{opacity:.5}to{opacity:1}}
+.mic-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--t3);letter-spacing:2px;}
+.mic-names{font-family:'Bebas Neue',cursive;font-size:11px;color:var(--t2);letter-spacing:1px;}
+.mic-toggle-row{display:flex;align-items:center;gap:10px;margin-top:8px;justify-content:center;}
+.toggle-wrap{display:flex;align-items:center;gap:8px;cursor:pointer;}
+.toggle-track{width:38px;height:20px;border-radius:10px;background:#1c1c28;border:1px solid #333;position:relative;transition:background .2s;cursor:pointer;}
+.toggle-track.on{background:rgba(39,174,96,.3);border-color:var(--green);}
+.toggle-thumb{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--t3);transition:all .2s;}
+.toggle-track.on .toggle-thumb{left:20px;background:var(--green);}
+.toggle-label2{font-size:11px;color:var(--t3);letter-spacing:1px;}
+
+/* FLASH */
+.flash{position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:0;}
+.flash.green{animation:flashG .4s ease;}
+.flash.red{animation:flashR .4s ease;}
+@keyframes flashG{0%{opacity:0;background:rgba(39,174,96,.18)}40%{opacity:1}100%{opacity:0}}
+@keyframes flashR{0%{opacity:0;background:rgba(224,32,32,.18)}40%{opacity:1}100%{opacity:0}}
+
+#s1v-guitar-btn{display:none}
+/* UTIL */
+.center{text-align:center;}
+.sep{height:1px;background:#14141e;margin:10px 0;}
+.text-gold{color:var(--gold);}
+.text-red{color:var(--red);}
+.text-dim{color:var(--t3);font-size:11px;}
+.mt6{margin-top:6px;}
+@media(max-width:480px){.sc-num{font-size:34px}.btn{font-size:17px;padding:11px}.quiz-choices{grid-template-columns:1fr}.mode-grid{grid-template-columns:1fr}}
+
+/* ── ONLINE LOBBY ── */
+.lobby-mode-row{display:flex;gap:10px;margin-top:12px;}
+.lobby-btn{flex:1;padding:14px 8px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:2px;cursor:pointer;color:var(--text);transition:all .2s;}
+.lobby-btn.red{border-color:var(--red);color:var(--red);}
+.lobby-btn.gold{border-color:var(--gold);color:var(--gold);}
+.lobby-btn:hover{filter:brightness(1.2);}
+.room-code-big{font-family:'Bebas Neue',cursive;font-size:52px;letter-spacing:8px;color:var(--gold);text-align:center;margin:10px 0 4px;}
+.room-code-hint{font-size:11px;color:var(--t3);text-align:center;letter-spacing:2px;margin-bottom:10px;}
+.room-player-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;background:var(--bg3);margin-bottom:6px;}
+.room-player-name{flex:1;font-family:'Bebas Neue',cursive;font-size:16px;letter-spacing:1px;}
+.room-player-badge{font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(212,160,23,.2);color:var(--gold);letter-spacing:1px;}
+.lobby-or{text-align:center;color:var(--t3);font-size:11px;letter-spacing:3px;margin:8px 0;}
+/* ── CLIENT PANEL (non-host during game) ── */
+#client-panel{display:none;position:relative;z-index:1;}
+.client-section-banner{font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:3px;color:var(--gold);text-align:center;padding:8px 0;}
+.client-turn-banner{text-align:center;font-family:'Bebas Neue',cursive;font-size:18px;padding:6px;border-radius:8px;margin:6px 0;}
+.client-turn-banner.yours{background:rgba(212,160,23,.15);color:var(--gold);border:1px solid rgba(212,160,23,.3);}
+.client-turn-banner.waiting{color:var(--t3);}
+#client-action-area{min-height:60px;}
+/* ── CHAT ── */
+#chat-panel{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(7,7,10,.95);border-top:1px solid #1e1e28;transform:translateY(calc(100% - 42px));transition:transform .3s ease;}
+#chat-panel.open{transform:translateY(0);}
+#chat-toggle{display:flex;align-items:center;gap:8px;padding:10px 16px;cursor:pointer;font-family:'Bebas Neue',cursive;font-size:14px;letter-spacing:2px;color:var(--t2);}
+#chat-badge{background:var(--red);color:#fff;font-size:10px;min-width:16px;height:16px;border-radius:8px;text-align:center;line-height:16px;padding:0 4px;display:none;}
+#chat-messages{height:200px;overflow-y:auto;padding:8px 12px;display:flex;flex-direction:column;gap:4px;}
+.chat-msg{font-size:12px;line-height:1.4;}
+.chat-msg-name{font-family:'Bebas Neue',cursive;font-size:13px;margin-right:6px;}
+.chat-input-row{display:flex;gap:8px;padding:8px 12px;border-top:1px solid #1e1e28;}
+.chat-input-row input{flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:13px;padding:7px 10px;border-radius:6px;font-family:inherit;}
+.chat-input-row button{padding:7px 14px;background:var(--red);border:none;border-radius:6px;color:#fff;font-family:'Bebas Neue',cursive;font-size:14px;cursor:pointer;}
+.app-with-chat{padding-bottom:48px;}
+</style>
+<script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+<div class="flash" id="flashEl"></div>
+
+<!-- BACKGROUND SLIDESHOW -->
+<div id="bg-slideshow">
+  <div class="bg-slide active" id="bg0"></div>
+  <div class="bg-slide" id="bg1"></div>
+  <div class="bg-slide" id="bg2"></div>
+  <div class="bg-slide" id="bg3"></div>
+  <div class="bg-slide" id="bg4"></div>
+</div>
+
+<div class="app" id="main-app">
+<div class="header-wrap">
+  <div class="logo">⚡ CHAOS A.D. BATTLE ⚡</div>
+  <div class="logo-sub">sepultura · 1993 · ultimate riff duel</div>
+</div>
+
+<!-- ═══════════ LOBBY VIEW ═══════════ -->
+<div class="view show" id="lobby-view">
+  <div class="card">
+    <div class="card-title">👤 TVOJE JMÉNO</div>
+    <input class="setup-input" id="online-name" value="Max" maxlength="14">
+    <div class="preset-btns">
+      <button class="preset-btn" onclick="document.getElementById('online-name').value='🎸 Max'">🎸 Max</button>
+      <button class="preset-btn" onclick="document.getElementById('online-name').value='🤘 Andreas'">🤘 Andreas</button>
+      <button class="preset-btn" onclick="document.getElementById('online-name').value='🥁 Igor'">🥁 Igor</button>
+      <button class="preset-btn" onclick="document.getElementById('online-name').value='🎸 Paulo'">🎸 Paulo</button>
+    </div>
+    <div class="lobby-mode-row">
+      <button class="lobby-btn red" onclick="createRoom()">🎮 VYTVOŘIT HRU</button>
+      <button class="lobby-btn gold" onclick="showJoinPanel()">🚀 PŘIPOJIT SE</button>
+    </div>
+    <div id="join-panel" style="display:none;margin-top:10px">
+      <input class="setup-input" id="room-code-in" placeholder="Kód místnosti (ABCD)" maxlength="4" style="text-transform:uppercase;letter-spacing:6px;text-align:center;font-size:22px;">
+      <button class="btn btn-gold" onclick="joinRoom()" style="margin-top:8px;width:100%">PŘIPOJIT →</button>
+    </div>
+    <div class="lobby-or">── nebo ──</div>
+    <button class="lobby-btn" onclick="goLocalGame()" style="font-size:16px;letter-spacing:1px">🖥️ LOKÁLNÍ HRA (bez internetu)</button>
+  </div>
+  <!-- Waiting room (after create/join) -->
+  <div class="card" id="waiting-card" style="display:none">
+    <div class="card-title">KÓD MÍSTNOSTI</div>
+    <div class="room-code-big" id="room-code-display">----</div>
+    <div class="room-code-hint">SDÍLEJ TENTO KÓD S PŘÁTELI</div>
+    <div id="room-players-list"></div>
+    <div class="status-lbl" id="lobby-status" style="text-align:center;margin:8px 0">⏳ Čekám na hráče...</div>
+    <button class="btn btn-red" id="start-online-btn" onclick="startOnlineGame()" style="display:none;margin-top:8px">⚡ START BATTLE ⚡</button>
+  </div>
+</div>
+
+<!-- ═══════════ CLIENT PANEL (non-host during game) ═══════════ -->
+<div id="client-panel">
+  <div id="client-scores-bar" class="scores-bar multi"></div>
+  <div class="status-bar">
+    <span class="status-section" id="client-section-lbl">🎸 RIFF CHALLENGE</span>
+    <span class="status-round" id="client-round-lbl">KOLO 1/5</span>
+  </div>
+  <div class="card" style="margin-top:8px">
+    <div class="client-section-banner" id="client-banner">Čekám na start...</div>
+    <div class="client-turn-banner waiting" id="client-turn-banner">⏳ Čekám na tah...</div>
+    <div id="client-action-area"></div>
+  </div>
+</div>
+
+<!-- ═══════════ CHAT PANEL ═══════════ -->
+<div id="chat-panel" style="display:none">
+  <div id="chat-toggle" onclick="toggleChat()">
+    💬 CHAT
+    <span id="chat-badge"></span>
+    <span style="margin-left:auto;font-size:11px" id="chat-arrow">▲</span>
+  </div>
+  <div id="chat-messages"></div>
+  <div class="chat-input-row">
+    <input id="chat-in" placeholder="Napiš zprávu..." maxlength="120" onkeydown="if(event.key==='Enter')sendChat()">
+    <button onclick="sendChat()">→</button>
+  </div>
+</div>
+
+<!-- ═══════════ SETUP VIEW ═══════════ -->
+<div class="view" id="setup-view">
+  <div class="card">
+    <div class="card-title">HRÁČI</div>
+    <div class="pcount-row">
+      <button class="pcount-btn sel" data-pc="2" onclick="setPCount(2)">2 hráči</button>
+      <button class="pcount-btn" data-pc="3" onclick="setPCount(3)">3 hráči</button>
+      <button class="pcount-btn" data-pc="4" onclick="setPCount(4)">4 hráči</button>
+    </div>
+    <div class="setup-row">
+      <div class="setup-label" style="color:var(--p1)">▶ HRÁČ 1</div>
+      <input class="setup-input" id="p1name" value="Max" maxlength="14">
+    </div>
+    <div class="preset-btns">
+      <button class="preset-btn" onclick="setPname(1,'Max','🎸')">🎸 Max</button>
+      <button class="preset-btn" onclick="setPname(1,'Andreas','🤘')">🤘 Andreas</button>
+      <button class="preset-btn" onclick="setPname(1,'Igor','🥁')">🥁 Igor</button>
+      <button class="preset-btn" onclick="setPname(1,'Paulo','🎸')">🎸 Paulo</button>
+    </div>
+    <div class="setup-row" style="margin-top:10px">
+      <div class="setup-label" style="color:var(--p2)">▶ HRÁČ 2</div>
+      <input class="setup-input" id="p2name" value="Andreas" maxlength="14">
+    </div>
+    <div class="preset-btns">
+      <button class="preset-btn" onclick="setPname(2,'Max','🎸')">🎸 Max</button>
+      <button class="preset-btn" onclick="setPname(2,'Andreas','🤘')">🤘 Andreas</button>
+      <button class="preset-btn" onclick="setPname(2,'Igor','🥁')">🥁 Igor</button>
+      <button class="preset-btn" onclick="setPname(2,'Paulo','🎸')">🎸 Paulo</button>
+    </div>
+    <div id="player-row-3" style="display:none">
+      <div class="setup-row" style="margin-top:10px">
+        <div class="setup-label" style="color:var(--p3)">▶ HRÁČ 3</div>
+        <input class="setup-input" id="p3name" value="Igor" maxlength="14">
+      </div>
+      <div class="preset-btns">
+        <button class="preset-btn" onclick="setPname(3,'Max','🎸')">🎸 Max</button>
+        <button class="preset-btn" onclick="setPname(3,'Andreas','🤘')">🤘 Andreas</button>
+        <button class="preset-btn" onclick="setPname(3,'Igor','🥁')">🥁 Igor</button>
+        <button class="preset-btn" onclick="setPname(3,'Paulo','🎸')">🎸 Paulo</button>
+      </div>
+    </div>
+    <div id="player-row-4" style="display:none">
+      <div class="setup-row" style="margin-top:10px">
+        <div class="setup-label" style="color:var(--p4)">▶ HRÁČ 4</div>
+        <input class="setup-input" id="p4name" value="Paulo" maxlength="14">
+      </div>
+      <div class="preset-btns">
+        <button class="preset-btn" onclick="setPname(4,'Max','🎸')">🎸 Max</button>
+        <button class="preset-btn" onclick="setPname(4,'Andreas','🤘')">🤘 Andreas</button>
+        <button class="preset-btn" onclick="setPname(4,'Igor','🥁')">🥁 Igor</button>
+        <button class="preset-btn" onclick="setPname(4,'Paulo','🎸')">🎸 Paulo</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">HERNÍ MÓD</div>
+    <div class="mode-grid">
+      <div class="mode-btn sel" data-mode="quick" onclick="selMode('quick')">
+        <span class="mode-icon">⚡</span>
+        <span class="mode-name">QUICK</span>
+        <span class="mode-desc2">5 kol / sekci</span>
+      </div>
+      <div class="mode-btn" data-mode="long" onclick="selMode('long')">
+        <span class="mode-icon">🔥</span>
+        <span class="mode-name">LONG</span>
+        <span class="mode-desc2">10 kol / sekci</span>
+      </div>
+      <div class="mode-btn" data-mode="timed" onclick="selMode('timed')">
+        <span class="mode-icon">⏱</span>
+        <span class="mode-name">TIMED</span>
+        <span class="mode-desc2">vlastní čas</span>
+      </div>
+    </div>
+    <div class="timer-row" id="timer-row" style="display:none">
+      <span class="timer-label">Délka hry (minuty):</span>
+      <input type="number" class="timer-in" id="timed-minutes" value="20" min="5" max="120">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+      <span>VÝBĚR A POŘADÍ HER</span>
+      <button class="gc-btn" style="width:auto;padding:2px 8px;font-size:9px;letter-spacing:1px" onclick="gcReset()">RESET</button>
+    </div>
+    <div id="gc-list"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">BUZZER SYSTÉM</div>
+    <div class="mic-toggle-row">
+      <div class="toggle-wrap" onclick="toggleMicMode()">
+        <div class="toggle-track" id="mic-toggle-track"><div class="toggle-thumb"></div></div>
+        <span class="toggle-label2">🎙 MIKROFON BUZZER</span>
+      </div>
+    </div>
+    <div id="mic-desc" style="font-size:10px;color:var(--t3);text-align:center;margin-top:6px;line-height:1.6;display:none">
+      Každý hráč vykřikne <strong style="color:var(--t2)">své jméno</strong> pro buzzer.<br>
+      Funguje v Chrome / Safari. Vyžaduje povolení mikrofonu.
+    </div>
+    <div style="font-size:10px;color:var(--t3);text-align:center;margin-top:6px;line-height:1.6;" id="kb-desc">
+      Klikni tlačítko buzzer nebo stiskni <strong style="color:var(--t2)">Q</strong> (P1) / <strong style="color:var(--t2)">P</strong> (P2) na klávesnici.
+    </div>
+  </div>
+
+  <button class="btn btn-red" onclick="startGame()" style="font-size:22px;margin-top:10px">⚡ START BATTLE ⚡</button>
+</div>
+
+<!-- ═══════════ GAME HEADER ═══════════ -->
+<div id="game-hud" style="display:none">
+  <div class="scores-bar" id="scores-bar">
+    <div class="sc p1 active" id="sc-p1"><div class="sc-name" id="sc-n1">P1</div><div class="sc-num" id="sc-v1">0</div><div class="sc-tag">bodů</div></div>
+    <div class="vs" id="hud-vs">VS</div>
+    <div class="sc p2" id="sc-p2"><div class="sc-name" id="sc-n2">P2</div><div class="sc-num" id="sc-v2">0</div><div class="sc-tag">bodů</div></div>
+    <div class="sc p3" id="sc-p3" style="display:none"><div class="sc-name" id="sc-n3">P3</div><div class="sc-num" id="sc-v3">0</div><div class="sc-tag">bodů</div></div>
+    <div class="sc p4" id="sc-p4" style="display:none"><div class="sc-name" id="sc-n4">P4</div><div class="sc-num" id="sc-v4">0</div><div class="sc-tag">bodů</div></div>
+  </div>
+  <div class="status-bar">
+    <span class="status-section" id="hud-section">🎸 RIFF CHALLENGE</span>
+    <span class="status-round" id="hud-round">KOLO 1 / 5</span>
+    <span class="status-timer" id="hud-timer" style="display:none">00:00</span>
+  </div>
+  <div class="section-dots" id="section-dots">
+    <div class="sdot active" id="dot-0"></div>
+    <div class="sdot" id="dot-1"></div>
+    <div class="sdot" id="dot-2"></div>
+  </div>
+</div>
+
+<!-- ═══════════ SECTION TRANSITION ═══════════ -->
+<div id="transition-view">
+  <span class="trans-icon" id="trans-icon">🎸</span>
+  <div class="trans-title" id="trans-title">RIFF CHALLENGE</div>
+  <div class="trans-sub" id="trans-sub">SEKCE 1 / 4</div>
+</div>
+
+<!-- ═══════════ SECTION 1: RIFF CHALLENGE ═══════════ -->
+<div class="view" id="s1-view">
+
+  <!-- State: QUESTION (only round 0) -->
+  <div id="s1-question" style="display:none">
+    <div class="card">
+      <div class="card-title" style="color:var(--gold)">⚡ ÚVODNÍ OTÁZKA — KDO JDE PRVNÍ?</div>
+      <div style="font-size:9px;color:var(--t3);letter-spacing:1px;margin-bottom:8px">Správná odpověď = právo začít hrát riff</div>
+      <div class="trivia-q" id="s1-q-text"></div>
+      <div id="s1-buzz-area">
+        <div class="buzz-hint">KDO DŘÍ KLIKNE — ODPOVÍDÁ</div>
+        <div class="row2">
+          <button class="btn btn-red"  onclick="s1Buzz(1)">🎸 BUZZ P1</button>
+          <button class="btn btn-blue" onclick="s1Buzz(2)">🎸 BUZZ P2</button>
+        </div>
+      </div>
+      <div id="s1-ans-area" style="display:none">
+        <div class="who-label" id="s1-who"></div>
+        <div class="quiz-choices" id="s1-choices"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- State: PREP (drums playing, countdown) -->
+  <div id="s1-prep" style="display:none">
+    <div class="card" style="margin-bottom:8px">
+      <div class="card-title">NA TAHU</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:22px;color:var(--gold);letter-spacing:2px" id="s1-prep-player"></div>
+      <div style="font-size:11px;color:var(--t2);margin-top:4px" id="s1-prep-riff-name"></div>
+    </div>
+    <div class="audio-section">
+      <div class="audio-hd"><span>🥁 BICÍ STEM</span><span class="audio-song" id="s1-song-lbl">???</span></div>
+      <div class="vis-wrap"><canvas class="vis" id="s1-vis"></canvas></div>
+      <div class="playbar">
+        <button class="play-btn" id="s1-pbtn" onclick="s1TogglePlay()">▶</button>
+        <div class="prog-wrap"><div class="prog-fill" id="s1-prog"></div></div>
+        <div class="time-disp" id="s1-time">0:00</div>
+        <div class="vol-wrap">🔊<input type="range" class="vol-in" id="s1-vol" min="0" max="1" step=".05" value=".9" oninput="s1SetVol(this.value)"></div>
+      </div>
+      <div class="audio-status" id="s1-status">Nahrávám bicí...</div>
+    </div>
+    <div class="prep-wrap">
+      <svg class="circ-svg" viewBox="0 0 100 100">
+        <circle class="circ-track" cx="50" cy="50" r="42"/>
+        <circle class="circ-fill" id="circ-fill" cx="50" cy="50" r="42"/>
+        <text class="circ-text" id="circ-text" x="50" y="46">30</text>
+        <text class="circ-label" x="50" y="60">PŘÍPRAVA</text>
+      </svg>
+      <div class="prep-hint">Bicí zahrají 2× — zapamatuj si riff. Pak zahraj live a porovnej s originálem.</div>
+    </div>
+    <button class="btn btn-ghost" id="s1-replay-btn" onclick="s1Replay()" disabled>🔁 Přehrát znovu (1×)</button>
+    <button class="btn btn-gold" id="s1-ready-btn" onclick="s1SkipToPlay()" disabled>⚡ PŘESKOČIT — HRAJU</button>
+  </div>
+
+  <!-- State: PLAY -->
+  <div id="s1-play" style="display:none">
+    <div class="play-instruction">
+      <span class="play-icon">🎸</span>
+      <div class="play-title">ZAHRAJ RIFF!</div>
+      <div class="play-sub" id="s1-play-who"></div>
+    </div>
+    <div class="card">
+      <div class="text-dim center">Soupeř sleduje a hodnotí. Zahraj, co sis zapamatoval z bicích.</div>
+    </div>
+    <button class="btn btn-green" onclick="s1GoVerify()">✓ ZAHRÁL JSEM</button>
+  </div>
+
+  <!-- State: VERIFY -->
+  <div id="s1-verify" style="display:none">
+    <div class="card" style="margin-bottom:8px">
+      <div style="font-size:9px;color:var(--t3);letter-spacing:2px;margin-bottom:6px">ZAHRÁL:</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:20px;color:var(--gold);letter-spacing:2px" id="s1v-player-lbl"></div>
+      <div style="font-size:11px;color:var(--t2);margin-top:3px" id="s1v-riff-lbl"></div>
+      <div style="font-size:9px;color:var(--t3);margin-top:2px" id="s1v-song-lbl"></div>
+    </div>
+    <div class="audio-section">
+      <div class="audio-hd">
+        <span>🥁 ORIGINÁL — DRUMS</span>
+        <div style="display:flex;gap:6px;align-items:center">
+          <button id="s1v-guitar-btn" onclick="s1AddGuitar()" style="font-family:'Bebas Neue',cursive;font-size:11px;letter-spacing:1px;background:var(--bg4);border:1px solid #333;color:var(--t3);padding:4px 10px;border-radius:4px;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="if(!this.classList.contains('on')){this.style.borderColor='#333';this.style.color='var(--t3)'}">🎸 + Kytara</button>
+        </div>
+      </div>
+      <div class="vis-wrap"><canvas class="vis" id="s1v-vis"></canvas></div>
+      <div class="playbar">
+        <button class="play-btn" id="s1v-pbtn" onclick="s1vToggle()">▶</button>
+        <div class="prog-wrap"><div class="prog-fill" id="s1v-prog"></div></div>
+        <div class="time-disp" id="s1v-time">0:00</div>
+        <div class="vol-wrap">🔊<input type="range" class="vol-in" id="s1v-vol" min="0" max="1" step=".05" value=".9" oninput="s1vSetVol(this.value)"></div>
+      </div>
+      <div class="audio-status" id="s1v-status">⏳ Načítám originál...</div>
+    </div>
+    <div class="card-title mt6" style="text-align:center">SOUPEŘ HODNOTÍ:</div>
+    <div class="row2">
+      <button class="btn btn-green"  onclick="s1Judge(true)">✓ SPRÁVNĚ</button>
+      <button class="btn btn-purple" onclick="s1Judge(false)">✗ ŠPATNĚ</button>
+    </div>
+  </div>
+
+  <div class="card mt6"><div class="card-title">PRŮBĚH</div><div class="history" id="s1-hist"></div></div>
+</div>
+
+<!-- ═══════════ SECTION 2: GUESS THE SONG ═══════════ -->
+<div class="view" id="s2-view">
+  <div class="card" style="text-align:center;padding:6px 10px 10px;">
+    <div class="card-title">TEMPO PÍSNĚ — UHÁDNI NÁZEV</div>
+    <div class="metro-wrap">
+      <div class="metro-bpm" id="s2-bpm">???</div>
+      <div class="metro-label">BPM — BEATS PER MINUTE</div>
+      <div class="metro-beats" id="s2-beats">
+        <div class="beat-dot accent" id="bd0"></div>
+        <div class="beat-dot" id="bd1"></div>
+        <div class="beat-dot" id="bd2"></div>
+        <div class="beat-dot" id="bd3"></div>
+      </div>
+      <div class="metro-sig" id="s2-sig">4 / 4</div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center;">
+      <button class="btn btn-ghost" id="s2-metro-btn" onclick="s2ToggleMetro()" style="width:auto;padding:8px 20px;font-size:14px;margin-top:0">▶ SPUSTIT</button>
+    </div>
+  </div>
+
+  <div class="hints-grid" id="s2-hints">
+    <div class="hint-card locked" id="hint0">
+      <div class="hint-num">NÁPOVĚDA 1 — ihned</div>
+      <div class="hint-val" id="hint0-val">?</div>
+      <div class="hint-key" id="hint0-key">Tonalita</div>
+      <span class="hint-icon">🎵</span>
+    </div>
+    <div class="hint-card locked" id="hint1">
+      <div class="hint-num">NÁPOVĚDA 2 — 10 sec</div>
+      <div class="hint-val" id="hint1-val">?</div>
+      <div class="hint-key" id="hint1-key">Ladění</div>
+      <span class="hint-icon">🎸</span>
+      <div class="hint-reveal-in" id="hint1-timer">odkryje se za 10s</div>
+    </div>
+    <div class="hint-card locked" id="hint2">
+      <div class="hint-num">NÁPOVĚDA 3 — 20 sec</div>
+      <div class="hint-val" id="hint2-val">?</div>
+      <div class="hint-key" id="hint2-key">Pozice na albu</div>
+      <span class="hint-icon">💿</span>
+      <div class="hint-reveal-in" id="hint2-timer">odkryje se za 20s</div>
+    </div>
+    <div class="hint-card locked" id="hint3">
+      <div class="hint-num">NÁPOVĚDA 4 — 30 sec</div>
+      <div class="hint-val" id="hint3-val">?</div>
+      <div class="hint-key" id="hint3-key">Extra hint</div>
+      <span class="hint-icon">🔑</span>
+      <div class="hint-reveal-in" id="hint3-timer">odkryje se za 30s</div>
+    </div>
+  </div>
+
+  <div id="s2-mic-bar" style="display:none" class="mic-bar">
+    <div class="mic-indicator" id="s2-mic-dot"></div>
+    <span class="mic-label">MIKROFON AKTIVNÍ — VYKŘIKNI</span>
+    <span class="mic-names" id="s2-mic-names"></span>
+  </div>
+
+  <div id="s2-buzz-area">
+    <div class="buzz-hint" id="s2-buzz-hint">SPUSŤ METRONÓM → POSLOUCHEJ → BUZZ!</div>
+    <div class="row2">
+      <button class="btn btn-red"  id="s2-bz1" onclick="s2Buzz(1)">🎵 BUZZ P1</button>
+      <button class="btn btn-blue" id="s2-bz2" onclick="s2Buzz(2)">🎵 BUZZ P2</button>
+    </div>
+  </div>
+  <div id="s2-ans-area" style="display:none">
+    <div class="who-label" id="s2-who"></div>
+    <div class="quiz-choices" id="s2-choices"></div>
+  </div>
+  <div class="card mt6"><div class="card-title">PRŮBĚH</div><div class="history" id="s2-hist"></div></div>
+</div>
+
+<!-- ═══════════ SECTION 3: QUIZ ═══════════ -->
+<div class="view" id="s3-view">
+  <div class="card">
+    <div class="card-title">OTÁZKA <span id="s3-qnum">1</span> / <span id="s3-qtot">20</span></div>
+    <div class="trivia-q" id="s3-q-text">...</div>
+    <div id="s3-buzz-area">
+      <div class="buzz-hint">KDO DŘÍ KLIKNE — ODPOVÍDÁ</div>
+      <div class="row2">
+        <button class="btn btn-red"  onclick="s3Buzz(1)">🎸 BUZZ P1</button>
+        <button class="btn btn-blue" onclick="s3Buzz(2)">🎸 BUZZ P2</button>
+      </div>
+    </div>
+    <div id="s3-ans-area" style="display:none">
+      <div class="who-label" id="s3-who"></div>
+      <div class="quiz-choices" id="s3-choices"></div>
+    </div>
+  </div>
+  <div class="card"><div class="card-title">PRŮBĚH</div><div class="history" id="s3-hist"></div></div>
+</div>
+
+<!-- ═══════════ SECTION 4: RIFF AUCTION ═══════════ -->
+<div class="view" id="s4-view">
+  <div class="card" id="s4-listen-card">
+    <div class="card-title">🎸 NASLOUCHEJ — RIFF AUCTION</div>
+    <div id="s4-riff-info" style="font-family:'Bebas Neue',cursive;font-size:18px;color:var(--gold);letter-spacing:2px;margin:6px 0"></div>
+    <div class="audio-section" style="margin-top:8px">
+      <div class="vis-wrap"><canvas id="s4-vis" class="vis-canvas"></canvas></div>
+      <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" id="s4-prog"></div></div><div class="time-lbl" id="s4-time">0:00</div></div>
+      <div class="status-lbl" id="s4-status">⏳ Načítám...</div>
+    </div>
+    <button class="btn btn-gold" id="s4-to-bid-btn" onclick="s4StartBid()" disabled style="margin-top:8px">⚡ ZAVRÍT SÁZKY</button>
+  </div>
+  <div id="s4-bid-card" class="card" style="display:none">
+    <div class="card-title" id="s4-bid-title">SÁZKA</div>
+    <div id="s4-bid-who" style="font-family:'Bebas Neue',cursive;font-size:22px;color:var(--gold);text-align:center;margin:8px 0"></div>
+    <div class="bid-grid" id="s4-bid-btns"></div>
+    <div id="s4-bid-done" style="display:none;text-align:center;padding:16px">
+      <div style="font-size:32px">✅</div>
+      <div style="color:var(--t3);font-size:11px;letter-spacing:2px;margin-top:6px">SÁZKA UZAVŘENA</div>
+      <button class="btn btn-gold" onclick="s4NextBidder()" style="margin-top:10px">▶ DALŠÍ HRÁČ</button>
+    </div>
+  </div>
+  <div id="s4-reveal-card" class="card" style="display:none;text-align:center">
+    <div class="card-title">VÝSLEDEK SÁZKY</div>
+    <div id="s4-reveal-html" style="margin:10px 0"></div>
+    <div style="font-size:11px;color:var(--t3);margin-bottom:10px" id="s4-reveal-sub"></div>
+    <button class="btn btn-green" onclick="s4JudgeOk()" style="margin-right:6px">✓ ZAHRÁL SPRÁVNĚ</button>
+    <button class="btn btn-red" onclick="s4JudgeWrong()">✗ CHYBNĚ</button>
+  </div>
+  <div class="card mt6"><div class="card-title">PRŮBĚH</div><div class="history" id="s4-hist"></div></div>
+</div>
+
+<!-- ═══════════ SECTION 5: QUICK RIFF ═══════════ -->
+<div class="view" id="s5-view">
+  <div class="card">
+    <div class="card-title">⚡ QUICK RIFF — <span id="s5-round-lbl">KOLO 1/5</span></div>
+    <div class="qr-turn-banner" id="s5-turn-banner"></div>
+    <div class="audio-section" style="margin-top:8px">
+      <div class="vis-wrap"><canvas id="s5-vis" class="vis-canvas"></canvas></div>
+      <div class="status-lbl" id="s5-status">⏳ Načítám...</div>
+    </div>
+    <div class="qr-countdown" id="s5-cd"></div>
+  </div>
+  <div class="card" id="s5-choices-card" style="display:none">
+    <div class="card-title">KTERÁ PÍSEŇ?</div>
+    <div class="quiz-choices" id="s5-choices"></div>
+  </div>
+  <div class="card mt6"><div class="card-title">PRŮBĚH</div><div class="history" id="s5-hist"></div></div>
+</div>
+
+<!-- ═══════════ SECTION 6: STEM DETECTIVE ═══════════ -->
+<div class="view" id="s6-view">
+  <div class="card" id="s6-diff-card">
+    <div class="card-title">🔍 STEM DETECTIVE</div>
+    <div style="font-size:11px;color:var(--t2);margin-bottom:12px;text-align:center">Vyber stem — uhodni píseň</div>
+    <div class="row2" style="gap:8px;flex-wrap:wrap">
+      <button class="btn btn-ghost" onclick="s6Start('drums')">🥁 Bicí<br><span style="font-size:9px;color:var(--t3)">1 bod</span></button>
+      <button class="btn btn-ghost" onclick="s6Start('rhythm')">🎸 Kytara<br><span style="font-size:9px;color:var(--t3)">2 body</span></button>
+      <button class="btn btn-ghost" onclick="s6Start('bass')">🎸 Basa<br><span style="font-size:9px;color:var(--t3)">3 body</span></button>
+    </div>
+  </div>
+  <div class="card" id="s6-play-card" style="display:none">
+    <div class="card-title">KDO JE TO? <span id="s6-diff-badge"></span></div>
+    <div class="audio-section">
+      <div class="vis-wrap"><canvas id="s6-vis" class="vis-canvas"></canvas></div>
+      <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" id="s6-prog"></div></div><div class="time-lbl" id="s6-time">0:00</div></div>
+      <div class="status-lbl" id="s6-status">⏳</div>
+    </div>
+    <div id="s6-buzz-area" style="margin-top:8px">
+      <div class="buzz-hint">KDO DŘÍ BUZZNE</div>
+      <div class="row2">
+        <button class="btn btn-red" onclick="s6Buzz(0)">🎸 BUZZ P1</button>
+        <button class="btn btn-blue" onclick="s6Buzz(1)">🎸 BUZZ P2</button>
+      </div>
+    </div>
+    <div id="s6-ans-area" style="display:none">
+      <div class="who-label" id="s6-who"></div>
+      <div class="quiz-choices" id="s6-choices"></div>
+    </div>
+  </div>
+  <div class="card mt6"><div class="card-title">PRŮBĚH</div><div class="history" id="s6-hist"></div></div>
+</div>
+
+<!-- ═══════════ SECTION 7: AIR GUITAR SHOW ═══════════ -->
+<div class="view" id="s7-view">
+  <div id="s7-perf-card" class="card" style="text-align:center">
+    <div class="card-title" id="s7-perf-title">AIR GUITAR SHOW 🤘</div>
+    <div id="s7-performer" style="font-family:'Bebas Neue',cursive;font-size:28px;color:var(--gold);margin:8px 0"></div>
+    <div class="audio-section">
+      <div class="vis-wrap"><canvas id="s7-vis" class="vis-canvas"></canvas></div>
+      <div class="status-lbl" id="s7-status">⏳ Načítám...</div>
+    </div>
+    <div id="s7-countdown" style="font-family:'Bebas Neue',cursive;font-size:64px;color:var(--gold2);margin:6px 0;min-height:76px"></div>
+    <button class="btn btn-gold" id="s7-done-btn" onclick="s7DonePerf()" style="display:none;margin-top:4px">✅ HOTOVO — HODNOTIT</button>
+  </div>
+  <div id="s7-rate-card" class="card" style="display:none;text-align:center">
+    <div class="card-title" id="s7-rate-title">HODNOCENÍ</div>
+    <div style="font-size:11px;color:var(--t3);letter-spacing:2px;margin-bottom:12px" id="s7-rate-sub"></div>
+    <div class="star-row" id="s7-stars"></div>
+    <div id="s7-rate-hidden-hint" style="font-size:9px;color:var(--t3);margin-top:6px;letter-spacing:1px">ostatní nevidí hodnocení</div>
+    <button class="btn btn-gold" id="s7-rate-confirm" onclick="s7ConfirmRate()" disabled style="margin-top:10px">✅ POTVRDIT</button>
+  </div>
+  <div id="s7-result-card" class="card" style="display:none;text-align:center">
+    <div class="card-title">VÝSLEDEK</div>
+    <div id="s7-result-html" style="margin:10px 0"></div>
+    <button class="btn btn-gold" onclick="s7Next()">▶ DALŠÍ KOLO</button>
+  </div>
+</div>
+
+<!-- ═══════════ WINNER VIEW ═══════════ -->
+<div id="winner-view">
+  <div class="winner-box" id="winner-box">
+    <span class="winner-crown" id="w-crown">🏆</span>
+    <div class="winner-title" id="w-name">VÍTĚZ</div>
+    <div class="winner-sub" id="w-sub"></div>
+    <div class="podium-list" id="podium-list"></div>
+    <!-- Victory scene SVG -->
+    <svg id="victory-svg" class="victory-scene" viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" style="display:none">
+      <!-- Ground -->
+      <rect x="0" y="140" width="320" height="20" fill="#1a1a1a" rx="4"/>
+      <!-- Loser (lying down) -->
+      <g id="svg-loser">
+        <!-- body -->
+        <ellipse cx="160" cy="138" rx="42" ry="9" fill="#c0392b" opacity=".7"/>
+        <!-- head -->
+        <circle cx="115" cy="133" r="11" fill="#e74c3c"/>
+        <text x="115" y="137" text-anchor="middle" font-size="11" fill="#fff">😵</text>
+        <!-- arms -->
+        <line x1="145" y1="136" x2="130" y2="148" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/>
+        <line x1="175" y1="135" x2="195" y2="146" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/>
+        <!-- legs -->
+        <line x1="195" y1="138" x2="215" y2="143" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/>
+        <line x1="200" y1="137" x2="218" y2="133" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/>
+        <text id="svg-loser-name" x="165" y="156" text-anchor="middle" font-size="8" fill="#e74c3c" font-family="monospace" letter-spacing="1">PORAŽENÝ</text>
+      </g>
+      <!-- Winner (standing on loser, fist up) -->
+      <g id="svg-winner">
+        <!-- legs -->
+        <line x1="158" y1="115" x2="152" y2="133" stroke="#f1c40f" stroke-width="5" stroke-linecap="round"/>
+        <line x1="162" y1="115" x2="168" y2="133" stroke="#f1c40f" stroke-width="5" stroke-linecap="round"/>
+        <!-- boot stomp -->
+        <ellipse cx="152" cy="134" rx="7" ry="4" fill="#f39c12"/>
+        <ellipse cx="168" cy="134" rx="7" ry="4" fill="#f39c12"/>
+        <!-- body -->
+        <rect x="148" y="90" width="24" height="28" fill="#f1c40f" rx="4"/>
+        <!-- guitar -->
+        <ellipse cx="178" cy="105" rx="9" ry="12" fill="#8B4513"/>
+        <rect x="175" y="80" width="3" height="28" fill="#5D3A1A" rx="1"/>
+        <line x1="174" y1="82" x2="181" y2="82" stroke="#f39c12" stroke-width="1"/>
+        <line x1="174" y1="85" x2="181" y2="85" stroke="#f39c12" stroke-width="1"/>
+        <line x1="174" y1="88" x2="181" y2="88" stroke="#f39c12" stroke-width="1"/>
+        <!-- arm holding guitar -->
+        <line x1="172" y1="98" x2="176" y2="105" stroke="#f1c40f" stroke-width="5" stroke-linecap="round"/>
+        <!-- fist up arm -->
+        <line x1="148" y1="96" x2="138" y2="75" stroke="#f1c40f" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="136" cy="72" r="7" fill="#f39c12"/>
+        <text x="136" y="76" text-anchor="middle" font-size="9">✊</text>
+        <!-- head -->
+        <circle cx="160" cy="82" r="13" fill="#f1c40f"/>
+        <text x="160" y="87" text-anchor="middle" font-size="14">😎</text>
+        <!-- crown -->
+        <text x="160" y="68" text-anchor="middle" font-size="14">👑</text>
+        <text id="svg-winner-name" x="160" y="22" text-anchor="middle" font-size="10" fill="#f1c40f" font-family="monospace" letter-spacing="1" font-weight="bold">VÍTĚZ</text>
+        <!-- stars -->
+        <text x="100" y="55" font-size="16" opacity=".8">⭐</text>
+        <text x="215" y="50" font-size="14" opacity=".7">⭐</text>
+        <text x="88" y="80" font-size="10" opacity=".6">✨</text>
+        <text x="228" y="75" font-size="12" opacity=".65">✨</text>
+      </g>
+    </svg>
+  </div>
+  <div class="winner-btn-row">
+    <button class="btn btn-gold" onclick="rematch()" style="font-size:18px">⚡ ODVETA</button>
+    <button class="btn btn-ghost" onclick="resetAll()" style="font-size:16px">🔄 NOVÁ HRA</button>
+  </div>
+</div>
+
+</div><!-- .app -->
+<script>
+// ════════════════ DATA ════════════════
+const CAD='/audio/';
+const SNIPPET_BASE='/snippets/';
+const SONGS=[
+  {title:'Refuse/Resist',bpm:118,key:'D minor',tuning:'Drop D (D A D G B E)',
+   drumsId:CAD+'01. Refuse , Resist-D minor-118bpm-444hz/01. Refuse , Resist-drums-D minor-118bpm-444hz.wav',
+   rhythmId:CAD+'01. Refuse , Resist-D minor-118bpm-444hz/01. Refuse , Resist-rhythm-D minor-118bpm-444hz.wav',
+   bassId:CAD+'01. Refuse , Resist-D minor-118bpm-444hz/01. Refuse , Resist-bass-D minor-118bpm-444hz.wav',
+   riffs:[
+    {name:'Intro_Outro',diff:'easy',tab:`D|--0-0---0-0---0-0---0-0--|
+A|--0-0---0-0---0-0---0-0--|
+E|-------------------------|`,desc:'Palm mute na prázdných strunách D, záraz na přizávce.',
+     drumsSnippet:SNIPPET_BASE+'Refuse_Resist_Intro_Outro_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Refuse_Resist_Intro_Outro_rhythm.mp3'},
+    {name:'Interlude_Tritonus',diff:'mid',tab:`D|--0---6-5---0---6-5--|
+A|--0---6-5---0---6-5--|
+E|---------------------|`,desc:'Chromatický skok Db→D, uvolnění palm mute na výšce.',
+     drumsSnippet:SNIPPET_BASE+'Refuse_Resist_Interlude_Tritonus_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Refuse_Resist_Interlude_Tritonus_rhythm.mp3'},
+    {name:'Verse_Palm_Mute',diff:'easy',tab:`D|--0-0-0---0-0-0-3--|
+A|--0-0-0---0-0-0-3--|
+E|-------------------|`,desc:'Synkopa na přizávce, těžká doražení spodní D struny.',
+     drumsSnippet:SNIPPET_BASE+'Refuse_Resist_Verse_Palm_Mute_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Refuse_Resist_Verse_Palm_Mute_rhythm.mp3'},
+  ]},
+  {title:'Territory',bpm:76,key:'D minor',tuning:'Standard Eb (Eb Ab Db Gb Bb Eb)',
+   drumsId:CAD+'02. Territory-D minor-76bpm-444hz/02. Territory-drums-D minor-76bpm-444hz.wav',
+   rhythmId:CAD+'02. Territory-D minor-76bpm-444hz/02. Territory-rhythm-D minor-76bpm-444hz.wav',
+   bassId:CAD+'02. Territory-D minor-76bpm-444hz/02. Territory-bass-D minor-76bpm-444hz.wav',
+   riffs:[
+    {name:'Verse_Slide',diff:'mid',tab:`G|--4-4-4--5-5--4-4--2--|
+D|--4-4-4--5-5--4-4--2--|
+A|--2-2-2--3-3--2-2--0--|`,desc:'Pomalé groove 76 BPM, důraz na čtvrtové přirazy.',
+     drumsSnippet:SNIPPET_BASE+'Territory_Verse_Slide_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Territory_Verse_Slide_rhythm.mp3'},
+    {name:'Chorus_Chords',diff:'mid',tab:`G|--9-9---7-7---5-5---|
+D|--9-9---7-7---5-5---|
+A|--7-7---5-5---3-3---|`,desc:'Výrazný bending na posledním akordu před opakováním.',
+     drumsSnippet:SNIPPET_BASE+'Territory_Chorus_Chords_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Territory_Chorus_Chords_rhythm.mp3'},
+  ]},
+  {title:'Slave New World',bpm:99,key:'Eb minor',tuning:'Drop Db',
+   drumsId:CAD+'03. Slave New World-Eb minor-99bpm-444hz/03. Slave New World-drums-Eb minor-99bpm-444hz.wav',
+   rhythmId:CAD+'03. Slave New World-Eb minor-99bpm-444hz/03. Slave New World-rhythm-Eb minor-99bpm-444hz.wav',
+   bassId:CAD+'03. Slave New World-Eb minor-99bpm-444hz/03. Slave New World-bass-Eb minor-99bpm-444hz.wav',
+   riffs:[
+    {name:'Intro_Power_Chords',diff:'easy',tab:`Db|--0-0---0-0---3-3---5-5--|
+Ab|--0-0---0-0---3-3---5-5--|`,desc:'Osminový pohon, těžká přizávka na 1 a 3.',
+     drumsSnippet:SNIPPET_BASE+'Slave_New_World_Intro_Power_Chords_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Slave_New_World_Intro_Power_Chords_rhythm.mp3'},
+    {name:'Verse_Syncopated',diff:'mid',tab:`Db|--0-x-0-x-0---0-x-0-x-0--|
+Ab|--0-x-0-x-0---0-x-0-x-0--|`,desc:'Synkopy s ghost-notami, přesný muting klíčový.',
+     drumsSnippet:SNIPPET_BASE+'Slave_New_World_Verse_Syncopated_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Slave_New_World_Verse_Syncopated_rhythm.mp3'},
+  ]},
+  {title:'Amen',bpm:81,key:'Eb minor',tuning:'Standard Eb',
+   drumsId:CAD+'04. Amen-Eb minor-81bpm-444hz/04. Amen-drums-Eb minor-81bpm-444hz.wav',
+   rhythmId:CAD+'04. Amen-Eb minor-81bpm-444hz/04. Amen-rhythm-Eb minor-81bpm-444hz.wav',
+   bassId:CAD+'04. Amen-Eb minor-81bpm-444hz/04. Amen-bass-Eb minor-81bpm-444hz.wav',
+   riffs:[
+    {name:'Intro_Tribal',diff:'easy',tab:`G|--6-6---6-6---4-4---4-4---|
+D|--6-6---6-6---4-4---4-4---|
+A|--4-4---4-4---2-2---2-2---|`,desc:'Opakující se 4-dob motiv, groove s drobným synkop na 4+.',
+     drumsSnippet:SNIPPET_BASE+'Amen_Intro_Tribal_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Amen_Intro_Tribal_rhythm.mp3'},
+    {name:'Heavy_Chorus',diff:'mid',tab:`G|--8-8-8--6---|
+D|--8-8-8--6---|
+A|--6-6-6--4---|`,desc:'Náhlý skok power chordů, maximální zkreslení.',
+     drumsSnippet:SNIPPET_BASE+'Amen_Heavy_Chorus_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Amen_Heavy_Chorus_rhythm.mp3'},
+  ]},
+  {title:'Kaiowas',bpm:71,key:'D major',tuning:'Standard D',
+   drumsId:CAD+'05. Kaiowas-D major-71bpm-431hz/05. Kaiowas-drums-D major-71bpm-431hz.wav',
+   rhythmId:CAD+'05. Kaiowas-D major-71bpm-431hz/05. Kaiowas-rhythm-D major-71bpm-431hz.wav',
+   bassId:CAD+'05. Kaiowas-D major-71bpm-431hz/05. Kaiowas-bass-D major-71bpm-431hz.wav',
+   riffs:[
+    {name:'Intro_Fingerpicking',diff:'hard',tab:`e|--0---2---3---2---0---|
+B|--1---3---3---3---1---|
+G|--2---2---0---2---2---|
+D|--2---0---0---0---2---|
+A|--0-----------0---0---|`,desc:'Fingerpicking D dur, hraj prsty; žádné trsátko.',
+     drumsSnippet:SNIPPET_BASE+'Kaiowas_Intro_Fingerpicking_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Kaiowas_Intro_Fingerpicking_rhythm.mp3'},
+    {name:'Main_Theme',diff:'hard',tab:`e|--7-9-10-9-7---5-7-9-7-5---|`,desc:'Pentatonika D dur, vibrato na vrcholových notách.',
+     drumsSnippet:SNIPPET_BASE+'Kaiowas_Main_Theme_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Kaiowas_Main_Theme_rhythm.mp3'},
+  ]},
+  {title:'Propaganda',bpm:77,key:'Eb minor',tuning:'Standard Eb',
+   drumsId:CAD+'06. Propaganda-Eb minor-77bpm-444hz/06. Propaganda-drums-Eb minor-77bpm-444hz.wav',
+   rhythmId:CAD+'06. Propaganda-Eb minor-77bpm-444hz/06. Propaganda-rhythm-Eb minor-77bpm-444hz.wav',
+   bassId:CAD+'06. Propaganda-Eb minor-77bpm-444hz/06. Propaganda-bass-Eb minor-77bpm-444hz.wav',
+   riffs:[
+    {name:'Intro_Tremolo',diff:'hard',tab:`e|--11-11-11-11-9-9-9-9-8-8-8-8--|`,desc:'Tremolo picking, rovnoměrné šestnáctiny.',
+     drumsSnippet:SNIPPET_BASE+'Propaganda_Intro_Tremolo_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Propaganda_Intro_Tremolo_rhythm.mp3'},
+    {name:'Main_Chromatic',diff:'mid',tab:`G|--4-4---3-3---2-2---|
+D|--4-4---3-3---2-2---|
+A|--2-2---1-1---0-0---|`,desc:'Chromat. sestup Eb→D→Db, těžký palm mute.',
+     drumsSnippet:SNIPPET_BASE+'Propaganda_Main_Chromatic_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Propaganda_Main_Chromatic_rhythm.mp3'},
+  ]},
+  {title:'Biotech Is Godzilla',bpm:118,key:'E minor',tuning:'Standard Eb',
+   drumsId:CAD+'07. Biotech Is Godzilla-E minor-118bpm-443hz/07. Biotech Is Godzilla-drums-E minor-118bpm-443hz.wav',
+   rhythmId:CAD+'07. Biotech Is Godzilla-E minor-118bpm-443hz/07. Biotech Is Godzilla-rhythm-E minor-118bpm-443hz.wav',
+   bassId:CAD+'07. Biotech Is Godzilla-E minor-118bpm-443hz/07. Biotech Is Godzilla-bass-E minor-118bpm-443hz.wav',
+   riffs:[
+    {name:'Intro_Slide',diff:'mid',tab:`G|--9-9-8-8-7-7-6-6-5-5--|
+D|--9-9-8-8-7-7-6-6-5-5--|
+A|--7-7-6-6-5-5-4-4-3-3--|`,desc:'Chromatický sestup ze Eb na Em, palm mute.',
+     drumsSnippet:SNIPPET_BASE+'Biotech_Is_Godzilla_Intro_Slide_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Biotech_Is_Godzilla_Intro_Slide_rhythm.mp3'},
+    {name:'Verse_Palm_Mute',diff:'easy',tab:`E|--0-0-0-3-0-0-5-3-0---|`,desc:'Rychlá šestnáctinová triola na prázdné struně.',
+     drumsSnippet:SNIPPET_BASE+'Biotech_Is_Godzilla_Verse_Palm_Mute_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Biotech_Is_Godzilla_Verse_Palm_Mute_rhythm.mp3'},
+  ]},
+  {title:'Nomad',bpm:81,key:'F major',tuning:'Standard Eb',
+   drumsId:CAD+'08. Nomad-F major-81bpm-444hz/08. Nomad-drums-F major-81bpm-444hz.wav',
+   rhythmId:CAD+'08. Nomad-F major-81bpm-444hz/08. Nomad-rhythm-F major-81bpm-444hz.wav',
+   bassId:CAD+'08. Nomad-F major-81bpm-444hz/08. Nomad-bass-F major-81bpm-444hz.wav',
+   riffs:[
+    {name:'Tribal_Palm_Mute',diff:'easy',tab:`E|--1-1-1---3-3---1-1-1--|`,desc:'F power chord, plynulý přechod do C, tribální rytmus.',
+     drumsSnippet:SNIPPET_BASE+'Nomad_Tribal_Palm_Mute_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Nomad_Tribal_Palm_Mute_rhythm.mp3'},
+    {name:'Rising_Figure',diff:'mid',tab:`G|--3-3---5-5---7-7---8-8--|
+D|--3-3---5-5---7-7---8-8--|
+A|--1-1---3-3---5-5---6-6--|`,desc:'Vzestupná sekvence F→G→A→Bb.',
+     drumsSnippet:SNIPPET_BASE+'Nomad_Rising_Figure_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Nomad_Rising_Figure_rhythm.mp3'},
+  ]},
+  {title:'We Who Are Not As Others',bpm:74,key:'C minor',tuning:'Standard Eb',
+   drumsId:CAD+'09. We Who Are Not As Others-C minor-74bpm-443hz/09. We Who Are Not As Others-drums-C minor-74bpm-443hz.wav',
+   rhythmId:CAD+'09. We Who Are Not As Others-C minor-74bpm-443hz/09. We Who Are Not As Others-rhythm-C minor-74bpm-443hz.wav',
+   bassId:CAD+'09. We Who Are Not As Others-C minor-74bpm-443hz/09. We Who Are Not As Others-bass-C minor-74bpm-443hz.wav',
+   riffs:[
+    {name:'Main_Groove',diff:'mid',tab:`G|--5-5---5-5---3-3---|
+D|--5-5---5-5---3-3---|
+A|--3-3---3-3---1-1---|`,desc:'Pomalý C moll groove, těžké doražení na 1 a 3.',
+     drumsSnippet:SNIPPET_BASE+'We_Who_Are_Not_As_Others_Main_Groove_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'We_Who_Are_Not_As_Others_Main_Groove_rhythm.mp3'},
+    {name:'High_Lead',diff:'hard',tab:`e|--8-10-12-10-8---6-8-10-8-6---|`,desc:'Melodická linka v C moll, plné vibrato na vrcholu.',
+     drumsSnippet:SNIPPET_BASE+'We_Who_Are_Not_As_Others_High_Lead_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'We_Who_Are_Not_As_Others_High_Lead_rhythm.mp3'},
+  ]},
+  {title:'Manifest',bpm:69,key:'F# minor',tuning:'Standard Eb',
+   drumsId:CAD+'10. Manifest-F# minor-69bpm-444hz/10. Manifest-drums-F# minor-69bpm-444hz.wav',
+   rhythmId:CAD+'10. Manifest-F# minor-69bpm-444hz/10. Manifest-rhythm-F# minor-69bpm-444hz.wav',
+   bassId:CAD+'10. Manifest-F# minor-69bpm-444hz/10. Manifest-bass-F# minor-69bpm-444hz.wav',
+   riffs:[
+    {name:'Intro_Palm_Mute',diff:'easy',tab:`E|--2-2-2---2-2---5-4---|`,desc:'F# power chord, minimalistický mute groove.',
+     drumsSnippet:SNIPPET_BASE+'Manifest_Intro_Palm_Mute_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Manifest_Intro_Palm_Mute_rhythm.mp3'},
+    {name:'Verse_Syncopated',diff:'mid',tab:`G|--6-6---4-4---2-2---|
+D|--6-6---4-4---2-2---|
+A|--4-4---2-2---0-0---|`,desc:'F#m→Em→Dm, silný synkop na 2+ a 4+.',
+     drumsSnippet:SNIPPET_BASE+'Manifest_Verse_Syncopated_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Manifest_Verse_Syncopated_rhythm.mp3'},
+  ]},
+  {title:'The Hunt',bpm:185,key:'D minor',tuning:'Standard Eb',
+   drumsId:CAD+'11. The Hunt-D minor-185bpm-445hz/11. The Hunt-drums-D minor-185bpm-445hz.wav',
+   rhythmId:CAD+'11. The Hunt-D minor-185bpm-445hz/11. The Hunt-rhythm-D minor-185bpm-445hz.wav',
+   bassId:CAD+'11. The Hunt-D minor-185bpm-445hz/11. The Hunt-bass-D minor-185bpm-445hz.wav',
+   riffs:[
+    {name:'Fast_Palm_Mute',diff:'hard',tab:`E|--0-0-0-0-3-3-0-0-5-5-3-3--|`,desc:'Extrémní tempo, alternating picking, pevný muting.',
+     drumsSnippet:SNIPPET_BASE+'The_Hunt_Fast_Palm_Mute_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'The_Hunt_Fast_Palm_Mute_rhythm.mp3'},
+    {name:'Heavy_Verse',diff:'mid',tab:`G|--7-7---5-5---3-3---|
+D|--7-7---5-5---3-3---|
+A|--5-5---3-3---1-1---|`,desc:'Dm power chord sekvence, downpicking.',
+     drumsSnippet:SNIPPET_BASE+'The_Hunt_Heavy_Verse_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'The_Hunt_Heavy_Verse_rhythm.mp3'},
+  ]},
+  {title:'Clenched Fist',bpm:100,key:'Eb minor',tuning:'Standard Eb',
+   drumsId:CAD+'12. Clenched Fist-Eb minor-100bpm-443hz/12. Clenched Fist-drums-Eb minor-100bpm-443hz.wav',
+   rhythmId:CAD+'12. Clenched Fist-Eb minor-100bpm-443hz/12. Clenched Fist-rhythm-Eb minor-100bpm-443hz.wav',
+   bassId:CAD+'12. Clenched Fist-Eb minor-100bpm-443hz/12. Clenched Fist-bass-Eb minor-100bpm-443hz.wav',
+   riffs:[
+    {name:'High_Lead',diff:'hard',tab:`e|--11-9-8---11-9-8---11-9-8-6--|`,desc:'Sestupná linka Ebm, trsátko dolů-nahoru.',
+     drumsSnippet:SNIPPET_BASE+'Clenched_Fist_High_Lead_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Clenched_Fist_High_Lead_rhythm.mp3'},
+    {name:'Rhythm_Groove',diff:'mid',tab:`G|--6-6---4-4---6-6---|
+D|--6-6---4-4---6-6---|
+A|--4-4---2-2---4-4---|`,desc:'Podpůrný rhythm part, pevný mute na 2 a 4.',
+     drumsSnippet:SNIPPET_BASE+'Clenched_Fist_Rhythm_Groove_drums.mp3',
+     rhythmSnippet:SNIPPET_BASE+'Clenched_Fist_Rhythm_Groove_rhythm.mp3'},
+  ]},
+];
+
+const QUIZ=[
+  // ── KAPELA ──────────────────────────────────────────────────
+  {q:'V jakém roce byla Sepultura founded? 🤘',icon:'📅',ans:'1984',opts:['1980','1982','1984','1986']},
+  {q:'Co znamená "Sepultura" v portugalštině? ⚰️',icon:'🇧🇷',ans:'Hrob',opts:['Smrt','Válka','Hrob','Krev']},
+  {q:'Ze kterého brazilského města pochází Sepultura? 🌆',icon:'🗺️',ans:'Belo Horizonte',opts:['São Paulo','Rio de Janeiro','Belo Horizonte','Brasília']},
+  {q:'Kdo je zpěvákem Sepultury na Chaos A.D.? 🎤',icon:'🎤',ans:'Max Cavalera',opts:['Derrick Green','Max Cavalera','Phil Anselmo','Tom Araya']},
+  {q:'Jak se jmenuje bubeník Sepultury na Chaos A.D.? 🥁',icon:'🥁',ans:'Igor Cavalera',opts:['Lars Ulrich','Dave Lombardo','Igor Cavalera','Nick Menza']},
+  {q:'Kdo hraje baskytaru v Sepultuře? 🎸',icon:'🎸',ans:'Paulo Jr.',opts:['Robert Trujillo','Jason Newsted','Paulo Jr.','Tom Araya']},
+  {q:'Jak se jmenuje kytarista Sepultury? 🎸',icon:'🎸',ans:'Andreas Kisser',opts:['Andreas Kisser','Phil Demmel','Mark Morton','Adam Jones']},
+  {q:'V jakém roce nahradil Derrick Green Maxe Cavaleru? 📅',icon:'📅',ans:'1998',opts:['1996','1997','1998','1999']},
+  {q:'Jaký vztah mají Max a Igor Cavalerovi? 👨‍👦',icon:'👥',ans:'Bratři',opts:['Otec a syn','Bratranec','Bratři','Žádný příbuzenský']},
+  {q:'Proč Max Cavalera opustil Sepulturu? 💔',icon:'❓',ans:'Spory o management (Gloria Cavalera)',opts:['Sólová kariéra','Spory o management (Gloria Cavalera)','Zdravotní problémy','Finanční spory']},
+  {q:'Jakou kapelu Max Cavalera founded po odchodu ze Sepultury? 🤘',icon:'🎸',ans:'Soulfly',opts:['Cavalera Conspiracy','Soulfly','Nailbomb','Killer Be Killed']},
+  {q:'Na jakém labelu vydala Sepultura Chaos A.D.? 🏷️',icon:'💿',ans:'Roadrunner Records',opts:['Century Media','Metal Blade','Roadrunner Records','Nuclear Blast']},
+  {q:'Kdo nahradil Jaira Guedze na kytaře v roce 1987? 🎸',icon:'🎸',ans:'Andreas Kisser',opts:['Andreas Kisser','Dimebag Darrell','Jeff Hanneman','Trey Azagthoth']},
+  {q:'Jaká je přezdívka Maxe Cavalery? 🤘',icon:'🎤',ans:'Max Steele',opts:['Thunderhawk','Max Steele','The Cavalera','Dark Max']},
+
+  // ── DISCOGRAPHY ─────────────────────────────────────────────
+  {q:'Jaké bylo první album Sepultury? 💿',icon:'💿',ans:'Morbid Visions (1986)',opts:['Schizophrenia','Morbid Visions (1986)','Bestial Devastation','Beneath the Remains']},
+  {q:'Které album předcházelo Chaos A.D.? 💿',icon:'💿',ans:'Arise (1991)',opts:['Schizophrenia','Beneath the Remains','Arise (1991)','Roots']},
+  {q:'Které album vydala Sepultura po Chaos A.D.? 💿',icon:'💿',ans:'Roots (1996)',opts:['Roots (1996)','Nation','Against','Roorback']},
+  {q:'Co bylo zlomové album pro Sepulturu — průlom do mainstreamu? 🌍',icon:'💿',ans:'Beneath the Remains (1989)',opts:['Schizophrenia (1987)','Beneath the Remains (1989)','Arise (1991)','Chaos A.D. (1993)']},
+  {q:'Které Sepultura album obsahuje cover Motorhead? 🎸',icon:'💿',ans:'Chaos A.D. (Orgasmatron)',opts:['Arise','Chaos A.D. (Orgasmatron)','Roots','Nation']},
+  {q:'V jakém roce vydala Sepultura album Roots? 📅',icon:'📅',ans:'1996',opts:['1994','1995','1996','1997']},
+
+  // ── CHAOS A.D. ALBUM ─────────────────────────────────────────
+  {q:'V jakém roce vyšlo album Chaos A.D.? 📅',icon:'📅',ans:'1993',opts:['1991','1993','1995','1998']},
+  {q:'Který producent nahrával a mixoval Chaos A.D.? 🎚️',icon:'🎚️',ans:'Andy Wallace',opts:['Rick Rubin','Andy Wallace','Terry Date','Ross Robinson']},
+  {q:'V jakém studiu bylo album Chaos A.D. nahráno? 🎙️',icon:'🎙️',ans:'Morrisound Recording, Tampa',opts:['Electric Lady','Morrisound Recording, Tampa','Sound City','Bearsville Studios']},
+  {q:'Kolik stop má album Chaos A.D.? 🎵',icon:'🔢',ans:'14',opts:['11','12','14','16']},
+  {q:'Jaký žánr nejlépe charakterizuje Chaos A.D.? 🤘',icon:'🤘',ans:'Groove / Thrash metal',opts:['Death metal','Nu metal','Groove / Thrash metal','Black metal']},
+  {q:'Které je číslo 1. tracku na albu? 🎵',icon:'🎵',ans:'Refuse/Resist',opts:['Territory','Slave New World','Refuse/Resist','Amen']},
+  {q:'Jaký je posledni track na albu Chaos A.D.? 🎵',icon:'🎵',ans:'Clenched Fist',opts:['Manifest','The Hunt','Clenched Fist','Amen']},
+  {q:'Která skladba na Chaos A.D. je akustická instrumentálka? 🎸',icon:'🎸',ans:'Kaiowas',opts:['Nomad','Kaiowas','Manifest','We Who Are Not As Others']},
+  {q:'Kolik BPM má The Hunt? ⚡',icon:'⏱️',ans:'185',opts:['150','165','185','200']},
+  {q:'Kolik BPM má Territory? 🐢',icon:'⏱️',ans:'76',opts:['60','76','92','100']},
+  {q:'Kolik BPM má Refuse/Resist? ⚡',icon:'⏱️',ans:'118',opts:['100','110','118','130']},
+  {q:'Kolik BPM má Manifest? 🐌',icon:'⏱️',ans:'69',opts:['60','69','80','90']},
+  {q:'Kolik BPM má Biotech Is Godzilla? ⚡',icon:'⏱️',ans:'118',opts:['100','118','130','145']},
+  {q:'Kolik BPM má Slave New World? 🥁',icon:'⏱️',ans:'99',opts:['90','99','110','120']},
+
+  // ── PÍSNĚ — OTÁZKY ─────────────────────────────────────────
+  {q:'O čem pojednává píseň Territory? 🌍',icon:'🗺️',ans:'Územních konfliktech a hranicích',opts:['Drogové závislosti','Územních konfliktech a hranicích','Korupci vlád','Válce ve Vietnamu']},
+  {q:'Komu vzdává hold píseň Kaiowas? 🪶',icon:'🪶',ans:'Kaiowá indiánům (Guaraní)',opts:['Amazoňanům','Aztékům','Kaiowá indiánům (Guaraní)','Mayům']},
+  {q:'Kdo napsal text k Biotech Is Godzilla? ✍️',icon:'✍️',ans:'Jello Biafra',opts:['Max Cavalera','Jello Biafra','Ice-T','Chuck D']},
+  {q:'Kdo je Jello Biafra? 🎤',icon:'🎤',ans:'Zpěvák Dead Kennedys',opts:['Zpěvák NOFX','Zpěvák Dead Kennedys','Zpěvák Rancid','Zpěvák Black Flag']},
+  {q:'Jaký je hlavní motiv textu Refuse/Resist? ✊',icon:'✊',ans:'Politický odpor a revoluce',opts:['Osobní ztráta','Politický odpor a revoluce','Ekologická zkáza','Náboženský fanatismus']},
+  {q:'Píseň Slave New World komentuje co? 🌐',icon:'🌐',ans:'Globalizaci a kulturní imperialismus',opts:['Otroctví v USA','Globalizaci a kulturní imperialismus','Válku drog','Fašismus']},
+  {q:'V čem je Kaiowas výjimečná na albu? 🎸',icon:'🎸',ans:'Akustická fingerpicking — žádné elektrická kytara',opts:['Je nejdelší','Akustická fingerpicking — žádné elektrická kytara','Má dětský sbor','Obsahuje sample']},
+  {q:'Co je We Who Are Not As Others? 📖',icon:'📖',ans:'Cover William S. Burroughs (+ Motörhead)',opts:['Původní song Sepultury','Brazilský folk song','Cover William S. Burroughs (+ Motörhead)','Hymna Kaiowá']},
+  {q:'Jaký tón využívá Refuse/Resist nejvíce? 🎸',icon:'🎸',ans:'Drop D — prázdná D struna',opts:['Open G','Drop D — prázdná D struna','E standard','Half-step down']},
+  {q:'Píseň Propaganda začíná čím? 🎸',icon:'🎸',ans:'Tremolo picking lead kytarou',opts:['Basovou linkou','Bubble sborem','Tremolo picking lead kytarou','Acoustic intro']},
+
+  // ── LADĚNÍ & TECHNICKÉ ──────────────────────────────────────
+  {q:'Jaké ladění má Refuse/Resist? 🎸',icon:'🎸',ans:'Drop D (D A D G B E)',opts:['Standard Eb','Drop D (D A D G B E)','Open D','Drop C']},
+  {q:'Jaké ladění má Territory? 🎸',icon:'🎸',ans:'Standard Eb (půl tón dolů)',opts:['Drop D','Standard Eb (půl tón dolů)','Drop Db','Open G']},
+  {q:'Jaké ladění má Slave New World? 🎸',icon:'🎸',ans:'Drop Db (Eb dolů)',opts:['Drop D','Drop C#/Db','Standard Eb (půl tón dolů)','Drop Db (Eb dolů)']},
+  {q:'Jaké ladění má Kaiowas? 🎸',icon:'🎸',ans:'Standard D (celý tón dolů)',opts:['Standard Eb','Open D','Standard D (celý tón dolů)','Drop D']},
+  {q:'Jaká tónina je Kaiowas? 🎵',icon:'🎵',ans:'D major',opts:['D minor','Eb minor','D major','F# minor']},
+  {q:'Jaká tónina je Territory? 🎵',icon:'🎵',ans:'D minor',opts:['D minor','Eb minor','F# minor','C minor']},
+  {q:'Jaká tónina je Slave New World? 🎵',icon:'🎵',ans:'Eb minor',opts:['D minor','Eb minor','F# minor','C minor']},
+  {q:'Jaká tónina je Manifest? 🎵',icon:'🎵',ans:'F# minor',opts:['D minor','Eb minor','F# minor','C minor']},
+  {q:'Jakou kytaru hrál Andreas Kisser? 🎸',icon:'🎸',ans:'Gibson SG',opts:['ESP M-II','Ibanez RG','Gibson SG','Jackson Soloist']},
+  {q:'Jak se jmenuje technika hry bez plektra? 🖐️',icon:'🖐️',ans:'Fingerpicking',opts:['Tapping','Sweep picking','Fingerpicking','Legato']},
+  {q:'Co je "palm mute" v kytarové technice? 🖐️',icon:'🖐️',ans:'Tlumení strun dlaní u kobylky',opts:['Vibrato levou rukou','Tlumení strun dlaní u kobylky','Ohýbání struny','Akord bez pohybu']},
+  {q:'Co je "Drop D" ladění? 🎸',icon:'🎸',ans:'Nejnižší struna E je snížena na D',opts:['Všechny struny půl tónu dolů','Nejnižší struna E je snížena na D','Dvě nejnižší struny na D','6. a 5. struna přeladěny']},
+
+  // ── VLIV & KONTEXT ──────────────────────────────────────────
+  {q:'Který politický kontext ovlivnil Chaos A.D.? 🌍',icon:'🌍',ans:'Sociální nepokoje v Brazílii a globální konflikty 90. let',opts:['Studená válka','Sociální nepokoje v Brazílii a globální konflikty 90. let','Pád berlínské zdi','Rwandská genocida']},
+  {q:'Která thrashmetalová kapela ovlivnila Sepulturu nejvíc? 🤘',icon:'🤘',ans:'Metallica & Slayer',opts:['Pantera','Metallica & Slayer','Testament','Anthrax']},
+  {q:'Jaký žánr Sepultura přidala do mixu na Roots (1996)? 🪘',icon:'🪘',ans:'Brazilský kmenový zvuk (Xavante indiáni)',opts:['Reggae','Hip-hop','Brazilský kmenový zvuk (Xavante indiáni)','Flamenco']},
+  {q:'S kým spolupracoval Max Cavalera na projektu Nailbomb? 🤘',icon:'🤘',ans:'Alex Newport',opts:['Dino Cazares','Alex Newport','Dave Grohl','Phil Anselmo']},
+  {q:'Který žánrový posun přinesl Chaos A.D. oproti Arise? 🎸',icon:'🎸',ans:'Pomalejší, groovovější, těžší — méně thrash',opts:['Rychlejší a techničtější','Pomalejší, groovovější, těžší — méně thrash','Death metal obrat','Čistší produkce']},
+  {q:'Jaký vliv měli Sepultura na latinskoamerický metal? 🌎',icon:'🌎',ans:'Otevřeli cestu pro latinský metal globálně',opts:['Žádný, byli izolovaní','Ovlivnili pouze Brazílii','Otevřeli cestu pro latinský metal globálně','Ovlivnili jen death metal']},
+
+  // ── LIVE / TOUR ─────────────────────────────────────────────
+  {q:'Na kterém festivalu Sepultura proslavila se v Evropě? 🎪',icon:'🎪',ans:'Donington (Monsters of Rock)',opts:['Glastonbury','Reading','Donington (Monsters of Rock)','Download']},
+  {q:'S kým šla Sepultura na turné při Chaos A.D.? 🎸',icon:'🎤',ans:'Pantera & White Zombie',opts:['Metallica & Motorhead','Pantera & White Zombie','Slayer & Biohazard','Machine Head & Sepultura']},
+  {q:'Jak se jmenuje live album Sepultury z roku 1994? 💿',icon:'💿',ans:'Under a Pale Grey Sky (neoficiální) / různé bootlegs',opts:['Live Noisy','Chaos Live','Under a Pale Grey Sky (neoficiální) / různé bootlegs','Live in Brazil']},
+
+  // ── MISC HARDCORE ────────────────────────────────────────────
+  {q:'V kolika letech začal Max Cavalera hrát metal? 🤘',icon:'🎸',ans:'14 let',opts:['10 let','12 let','14 let','16 let']},
+  {q:'Jak se jmenuje Maxova manažerka a manželka? 👩',icon:'👩',ans:'Gloria Cavalera',opts:['Maria Santos','Gloria Cavalera','Ana Cavalera','Claudia Moura']},
+  {q:'Které album přineslo Sepultuře Grammy nominaci? 🏆',icon:'🏆',ans:'Roots (1997) — Best Metal Performance',opts:['Chaos A.D.','Arise','Roots (1997) — Best Metal Performance','Nation']},
+  {q:'Kolik členů má Sepultura? 🤘',icon:'🎸',ans:'4',opts:['3','4','5','6']},
+  {q:'Jaká frekvence ladění se používá na Kaiowas? Hz 🎵',icon:'🎵',ans:'431 Hz',opts:['432 Hz','440 Hz','443 Hz','431 Hz']},
+  {q:'Jaká frekvence se nejčastěji používá na Chaos A.D.? Hz 🎵',icon:'🎵',ans:'444 Hz',opts:['440 Hz','443 Hz','444 Hz','432 Hz']},
+  {q:'Co je "groove metal" jako žánr? 🎸',icon:'🎸',ans:'Těžký riff-based metal s důrazem na rytmus a groove',opts:['Rychlý death metal','Elektro-metal','Těžký riff-based metal s důrazem na rytmus a groove','Stoner rock']},
+  {q:'Jaký efekt se hodně využívá na kytarách v Chaos A.D.? 🎛️',icon:'🎛️',ans:'Distortion + gate + flanger na leadech',opts:['Chorus','Reverb','Distortion + gate + flanger na leadech','Wah-wah']},
+  {q:'Odmítl Max Cavalera pozvání do Rock Hall of Fame? 🏛️',icon:'🏛️',ans:'Rock Hall of Fame neindukoval Sepulturu (zatím)',opts:['Ano, odmítl','Ano, byl vyloučen','Rock Hall of Fame neindukoval Sepulturu (zatím)','Ano, z politických důvodů']},
+  {q:'Na které struně je typicky palm-mutovaný riff Refuse/Resist? 🎸',icon:'🎸',ans:'Prázdná D struna (nejnižší v Drop D)',opts:['E struna','A struna','G struna','Prázdná D struna (nejnižší v Drop D)']},
+  {q:'Jaký tón kmitočtu má standardní A440 ladění? 🎵',icon:'🎵',ans:'440 Hz',opts:['432 Hz','438 Hz','440 Hz','444 Hz']},
+  {q:'Co je triton v harmonii? 🎵',icon:'🎵',ans:'Interval šesti půltónů — "ďáblův interval"',opts:['Kvinta','Interval šesti půltónů — "ďáblův interval"','Velká septima','Malá tercie']},
+  {q:'Která píseň na Chaos A.D. má nejvyšší BPM? ⚡',icon:'⚡',ans:'The Hunt (185 BPM)',opts:['Biotech Is Godzilla','Refuse/Resist','The Hunt (185 BPM)','Slave New World']},
+  {q:'Která píseň na Chaos A.D. má nejnižší BPM? 🐢',icon:'🐢',ans:'Manifest (69 BPM)',opts:['Territory','Kaiowas','Amen','Manifest (69 BPM)']},
+  {q:'Jaký hudební nástroj dominuje v Kaiowas? 🎸',icon:'🎸',ans:'Akustická kytara (fingerpicking)',opts:['Baskytara','Akustická kytara (fingerpicking)','Perkuse','Elektrická kytara']},
+  {q:'Clenched Fist má kolik kytarových partů? 🎸',icon:'🎸',ans:'2 (Lead + Rhythm)',opts:['1','2 (Lead + Rhythm)','3','4']},
+  {q:'V jakém ladění je Clenched Fist? 🎸',icon:'🎸',ans:'Standard Eb (půl tón dolů)',opts:['Drop D','Drop Db','Standard Eb (půl tón dolů)','Open G']},
+  {q:'Jaká je tónina Propaganda? 🎵',icon:'🎵',ans:'Eb minor',opts:['D minor','Eb minor','F# minor','C minor']},
+  {q:'Co znamená "thrash" v thrash metalu? 🎸',icon:'🎸',ans:'Pocitový výraz pro rychlou agresivní hru',opts:['Ničení nástrojů','Pocitový výraz pro rychlou agresivní hru','Konkrétní akord','Název kytarové techniky']},
+  {q:'Jaký BPM má Nomad? 🎵',icon:'⏱️',ans:'81',opts:['69','76','81','99']},
+  {q:'Jaká tónina je Nomad? 🎵',icon:'🎵',ans:'F major',opts:['D minor','Eb minor','F major','C minor']},
+  {q:'Co je "Orgasmatron" na Chaos A.D.? 🎸',icon:'💿',ans:'Cover skladby Motörhead',opts:['Původní song Sepultury','Cover Metallicy','Cover skladby Motörhead','Instrumentální outro']},
+];
+
+// ════════════════ GAME STATE ════════════════
+const G={
+  mode:'quick', timedMin:20,
+  roundsPS:5,       // rounds per section
+  section:0,        // 0-3
+  sectionRound:0,
+  scores:[0,0],
+  pNames:['Hráč 1','Hráč 2'],pCount:2,
+  turn:0,           // 0=P1, 1=P2
+  timerEnd:0, timerInt:null, timerExpired:false,
+  // queues
+  riffQ:[], songQ:[], trivQ:[], trivQS1:[],
+  s2SongQ:[],
+  // per-round state
+  buzzerP:0,
+  curSong:null, curRiff:null, curQ:null,
+  s1ClipStart:0, s1Replayed:false,
+  s1LoopCount:0, s1LoopMax:5, s1LoopDur:0, s1LoopRAF:null,
+  // mic + metro
+  micMode:false,
+  s1IntroAsked:false,
+};
+
+const SECTION_META=[
+  {id:'s1',title:'RIFF CHALLENGE',icon:'🎸'},
+  {id:'s3',title:'KVÍZ',icon:'🧠'},
+  {id:'s2',title:'GUESS THE SONG',icon:'🎵'},
+  {id:'s4',title:'RIFF AUCTION',icon:'💰'},
+  {id:'s5',title:'QUICK RIFF',icon:'⚡'},
+  {id:'s6',title:'STEM DETECTIVE',icon:'🔍'},
+  {id:'s7',title:'AIR GUITAR',icon:'🤘'},
+];
+
+// ════════════════ WEB AUDIO ════════════════
+let actx=null,analyser=null,masterGain=null;
+const visRAF={};
+const progInts={};
+
+function initAudio(){
+  if(actx)return;
+  actx=new AudioContext();
+  analyser=actx.createAnalyser();
+  analyser.fftSize=512;analyser.smoothingTimeConstant=.82;
+  masterGain=actx.createGain();
+  masterGain.connect(analyser);analyser.connect(actx.destination);
+}
+function connectEl(el){
+  // Legacy: only used for HTMLAudioElement (not needed for BufferSourceNode path)
+  if(!el||el._conn||!(el instanceof HTMLMediaElement))return;
+  initAudio();
+  if(actx.state==='suspended')actx.resume();
+  actx.createMediaElementSource(el).connect(masterGain);
+  el._conn=true;
+}
+function drawVis(mode){
+  const canvas=document.getElementById(mode+'-vis');
+  if(!canvas)return;
+  if(visRAF[mode])cancelAnimationFrame(visRAF[mode]);
+  const ctx=canvas.getContext('2d');
+  const bufLen=analyser?analyser.frequencyBinCount:128;
+  const data=new Uint8Array(bufLen);
+  function frame(){
+    visRAF[mode]=requestAnimationFrame(frame);
+    const W=canvas.parentElement.clientWidth||300,H=68;
+    if(canvas.width!==W)canvas.width=W;canvas.height=H;
+    ctx.fillStyle='#03030a';ctx.fillRect(0,0,W,H);
+    if(analyser)analyser.getByteFrequencyData(data);
+    const bars=80,bw=W/bars;
+    for(let i=0;i<bars;i++){
+      const di=Math.floor((i/bars)*(bufLen*.65));
+      const v=data[di]/255,h=v*H;
+      const g=Math.floor(v*180);
+      const clr=`rgb(220,${g},0)`;
+      ctx.shadowColor=clr;ctx.shadowBlur=h>10?8:0;
+      ctx.fillStyle=clr;ctx.fillRect(i*bw+1,H-h,bw-1,h);
+      if(h>2){ctx.fillStyle=`rgba(255,255,180,${v*.7})`;ctx.fillRect(i*bw+1,H-h,bw-1,2);}
+    }
+    ctx.shadowBlur=0;
+  }
+  frame();
+}
+function idleVis(mode){
+  const canvas=document.getElementById(mode+'-vis');
+  if(!canvas)return;
+  if(visRAF[mode]){cancelAnimationFrame(visRAF[mode]);delete visRAF[mode];}
+  const ctx=canvas.getContext('2d');
+  const W=canvas.parentElement.clientWidth||300,H=68;
+  canvas.width=W;canvas.height=H;
+  ctx.fillStyle='#03030a';ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(192,57,43,.2)';ctx.lineWidth=1;ctx.setLineDash([3,6]);
+  ctx.beginPath();ctx.moveTo(0,H/2);ctx.lineTo(W,H/2);ctx.stroke();ctx.setLineDash([]);
+}
+
+// ════════════════ GENERIC PLAYER ════════════════
+const players={};
+['s1','s1v','s2','s4','s5','s6','s7'].forEach(m=>{players[m]={audios:[],playing:false};});
+
+async function loadStems(mode,stems){
+  stopAudio(mode);
+  const p=players[mode];
+  p.audios=[];p.playing=false;
+  updatePbtn(mode,false);
+  setStatus(mode,'⏳ Načítám...');
+  const vol=parseFloat(document.getElementById(mode+'-vol')?.value||.9);
+  const srcs=stems.filter(Boolean);
+  if(!srcs.length){setStatus(mode,'⚠ Žádné audio');return false;}
+  // Fetch as ArrayBuffers — bypasses Chrome stalled/preload policy
+  let bufs;
+  try{
+    bufs=await Promise.all(srcs.map(async src=>{
+      const r=await fetch(src);
+      if(!r.ok)throw new Error(r.status);
+      return r.arrayBuffer();
+    }));
+  }catch{setStatus(mode,'⚠ Soubor nenalezen');return false;}
+  // Decode via AudioContext — works without user gesture
+  initAudio();
+  if(actx.state==='suspended')actx.resume();
+  let decoded;
+  try{
+    decoded=await Promise.all(bufs.map(b=>actx.decodeAudioData(b)));
+  }catch{setStatus(mode,'⚠ Chyba dekódování');return false;}
+  // Store decoded AudioBuffers — play() will use BufferSourceNode
+  p.audios=decoded;
+  p.audioSrcs=srcs;
+  p.vol=vol;
+  setStatus(mode,'✅ Připraveno — stiskni ▶');
+  return true;
+}
+
+function togglePlay(mode){
+  const p=players[mode];
+  if(!p.audios.length){setStatus(mode,'⚠ Nejdřív nahraj audio');return;}
+  if(p.playing)pauseAudio(mode);else playAudio(mode);
+}
+function _stopSources(p){
+  (p._sources||[]).forEach(s=>{try{s.stop();}catch{}});
+  p._sources=[];
+}
+function playAudio(mode){
+  const p=players[mode];
+  if(!p.audios.length)return;
+  initAudio();
+  if(actx.state==='suspended')actx.resume();
+  _stopSources(p);
+  p._offset=p._offset||0;
+  p._startTime=actx.currentTime;
+  p._gains=p.audios.map((_,i)=>{
+    const g=actx.createGain();
+    g.gain.value=(i===1&&p._rhythmVol!=null)?p._rhythmVol:p.vol;
+    g.connect(masterGain);
+    return g;
+  });
+  p._sources=p.audios.map((buf,i)=>{
+    const src=actx.createBufferSource();
+    src.buffer=buf;
+    src.connect(p._gains[i]);
+    src.start(0,p._offset);
+    return src;
+  });
+  p._sources[0].onended=()=>{
+    if(!p.playing)return;
+    p.playing=false;p._offset=0;
+    updatePbtn(mode,false);stopProg(mode);idleVis(mode);
+    if(p.onEnd){const cb=p.onEnd;p.onEnd=null;cb();}
+  };
+  p.playing=true;updatePbtn(mode,true);startProg(mode);drawVis(mode);
+}
+function pauseAudio(mode){
+  const p=players[mode];if(!p)return;
+  p._offset=(p._offset||0)+(actx?actx.currentTime-(p._startTime||actx.currentTime):0);
+  _stopSources(p);
+  p.playing=false;updatePbtn(mode,false);stopProg(mode);idleVis(mode);
+}
+function stopAudio(mode){
+  const p=players[mode];if(!p)return;
+  _stopSources(p);
+  p._offset=0;p._rhythmVol=null;
+  p.playing=false;updatePbtn(mode,false);stopProg(mode);idleVis(mode);
+}
+function seekAudio(e,mode){
+  const p=players[mode];
+  if(!p.audios.length)return;
+  const dur=p.audios[0]?.duration;if(!dur)return;
+  const rect=e.currentTarget.getBoundingClientRect();
+  p._offset=Math.max(0,((e.clientX-rect.left)/rect.width)*dur);
+  if(p.playing){_stopSources(p);p.playing=false;playAudio(mode);}
+}
+function setVol(mode,v){
+  const p=players[mode];if(!p)return;
+  p.vol=parseFloat(v);
+  (p._gains||[]).forEach((g,i)=>{if(i!==1||p._rhythmVol==null)g.gain.value=p.vol;});
+}
+function startProg(mode){
+  stopProg(mode);
+  progInts[mode]=setInterval(()=>{
+    const p=players[mode];if(!p?.audios[0])return;
+    const dur=p.audios[0].duration||1;
+    const cur=Math.min((p._offset||0)+(actx?actx.currentTime-(p._startTime||actx.currentTime):0),dur);
+    const pf=document.getElementById(mode+'-prog');if(pf)pf.style.width=Math.min(cur/dur*100,100)+'%';
+    const td=document.getElementById(mode+'-time');if(td)td.textContent=`${fmtT(cur)} / ${fmtT(dur)}`;
+  },100);
+}
+function stopProg(mode){
+  if(progInts[mode]){clearInterval(progInts[mode]);delete progInts[mode];}
+  const pf=document.getElementById(mode+'-prog');if(pf)pf.style.width='0%';
+  const td=document.getElementById(mode+'-time');if(td)td.textContent='0:00';
+}
+function updatePbtn(mode,playing){
+  const btn=document.getElementById(mode+'-pbtn');if(!btn)return;
+  btn.textContent=playing?'⏸':'▶';btn.classList.toggle('playing',playing);
+}
+function setStatus(mode,html){const el=document.getElementById(mode+'-status');if(el)el.innerHTML=html;}
+function fmtT(s){if(!s||isNaN(s))return'0:00';const m=Math.floor(s/60),sec=Math.floor(s%60);return`${m}:${sec.toString().padStart(2,'0')}`;}
+
+// ════════════════ GAME CONFIGURATOR ════════════════
+let gcConfig=[];
+
+function gcInit(){
+  gcConfig=SECTION_META.map(m=>({...m,enabled:true,rounds:5}));
+  gcRender();
+}
+
+function gcRender(){
+  const list=document.getElementById('gc-list');
+  if(!list)return;
+  const enabledCount=gcConfig.filter(g=>g.enabled).length;
+  list.innerHTML=gcConfig.map((g,i)=>`
+    <div class="gc-row">
+      <div class="gc-toggle ${g.enabled?'on':''}" onclick="gcToggle(${i})"><div class="gc-thumb"></div></div>
+      <span class="gc-icon">${g.icon}</span>
+      <span class="gc-name ${g.enabled?'':'off'}">${g.title}</span>
+      <div class="gc-rounds">
+        <button class="gc-btn" onclick="gcRounds(${i},-1)" ${!g.enabled||g.rounds<=1?'disabled':''}>−</button>
+        <span class="gc-rounds-val ${g.enabled?'':'off'}">${g.rounds}</span>
+        <button class="gc-btn" onclick="gcRounds(${i},1)" ${!g.enabled||g.rounds>=20?'disabled':''}>+</button>
+      </div>
+      <div class="gc-order">
+        <button class="gc-order-btn" onclick="gcMove(${i},-1)" ${i===0?'disabled':''}>▲</button>
+        <button class="gc-order-btn" onclick="gcMove(${i},1)" ${i===gcConfig.length-1?'disabled':''}>▼</button>
+      </div>
+    </div>
+  `).join('');
+  const startBtn=document.querySelector('#setup-view .btn-red');
+  if(startBtn)startBtn.disabled=enabledCount===0;
+}
+
+function gcToggle(i){
+  gcConfig[i].enabled=!gcConfig[i].enabled;
+  gcRender();
+}
+
+function gcRounds(i,delta){
+  gcConfig[i].rounds=Math.max(1,Math.min(20,gcConfig[i].rounds+delta));
+  gcRender();
+}
+
+function gcMove(i,dir){
+  const j=i+dir;
+  if(j<0||j>=gcConfig.length)return;
+  [gcConfig[i],gcConfig[j]]=[gcConfig[j],gcConfig[i]];
+  gcRender();
+}
+
+function gcReset(){
+  const rounds=G.mode==='long'?10:5;
+  gcConfig=SECTION_META.map(m=>({...m,enabled:true,rounds}));
+  gcRender();
+}
+
+// ════════════════ SETUP ════════════════
+function selMode(m){
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('sel'));
+  document.querySelector(`[data-mode="${m}"]`).classList.add('sel');
+  G.mode=m;
+  document.getElementById('timer-row').style.display=m==='timed'?'flex':'none';
+  if(m==='quick'){gcConfig.forEach(g=>g.rounds=5);gcRender();}
+  else if(m==='long'){gcConfig.forEach(g=>g.rounds=10);gcRender();}
+}
+
+function startGame(){
+  initAudio();
+  if(actx.state==='suspended')actx.resume();
+  const pc=G.pCount||2;
+  G.pCount=pc;
+  G.pNames=[];
+  for(let i=1;i<=pc;i++){
+    const el=document.getElementById('p'+i+'name');
+    G.pNames.push(el?el.value.trim()||'Hráč '+i:'Hráč '+i);
+  }
+  G.scores=Array(pc).fill(0);G.turn=0;
+  G.mode=document.querySelector('.mode-btn.sel')?.dataset.mode||'quick';
+  G.timedMin=parseInt(document.getElementById('timed-minutes').value)||20;
+
+  G.gameOrder=gcConfig.filter(g=>g.enabled).map(g=>({id:g.id,title:g.title,icon:g.icon,rounds:g.rounds}));
+  if(!G.gameOrder.length){alert('Vyber aspoň jednu hru!');return;}
+  G.roundsPS=G.gameOrder[0].rounds;
+
+  // Build queues
+  const allRiffs=SONGS.flatMap(s=>s.riffs.map(r=>({...r,song:s})));
+  G.riffQ=shuffle([...allRiffs]);
+  G.s2SongQ=shuffle([...SONGS]);
+  G.trivQ=shuffle([...QUIZ]);
+  G.trivQS1=shuffle([...QUIZ]);
+
+  G.section=0;G.sectionRound=0;
+  G.timerExpired=false;
+  G.s1IntroAsked=false;
+
+  showEl('setup-view',false);
+  showEl('game-hud',true);
+  updateHUD();
+
+  if(G.mode==='timed'){
+    G.timerEnd=Date.now()+G.timedMin*60*1000;
+    const timerEl=document.getElementById('hud-timer');
+    if(timerEl)timerEl.style.display='';
+    G.timerInt=setInterval(()=>{
+      const left=Math.max(0,Math.ceil((G.timerEnd-Date.now())/1000));
+      updateTimerDisplay(left);
+      if(left<=0){clearInterval(G.timerInt);G.timerExpired=true;}
+    },1000);
+  }
+
+  showSectionTransition(0,()=>startSection(0));
+}
+
+function updateTimerDisplay(sec){
+  const el=document.getElementById('hud-timer');if(!el)return;
+  const m=Math.floor(sec/60),s=sec%60;
+  el.textContent=`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+  el.classList.toggle('low',sec<60);
+}
+
+function updateHUD(){
+  const pc=G.pCount||2;
+  const bar=document.getElementById('scores-bar');
+  if(bar){bar.classList.toggle('multi',pc>2);}
+  const vsEl=document.getElementById('hud-vs');
+  if(vsEl)vsEl.style.display=pc>2?'none':'';
+  for(let i=1;i<=4;i++){
+    const box=document.getElementById('sc-p'+i);
+    if(!box)continue;
+    box.style.display=i<=pc?'':'none';
+    if(i<=pc){
+      document.getElementById('sc-n'+i).textContent=G.pNames[i-1]||'P'+i;
+      document.getElementById('sc-v'+i).textContent=G.scores[i-1]||0;
+      box.classList.toggle('active',G.turn===i-1);
+    }
+  }
+  const go=G.gameOrder||[];
+  const meta=go[G.section]||SECTION_META[G.section]||SECTION_META[0];
+  const rounds=meta.rounds||G.roundsPS;
+  document.getElementById('hud-section').textContent=`${meta.icon} ${meta.title}`;
+  document.getElementById('hud-round').textContent=`KOLO ${G.sectionRound+1} / ${rounds} · HRA ${G.section+1}/${go.length||1}`;
+  for(let i=0;i<3;i++){
+    const d=document.getElementById('dot-'+i);
+    if(d)d.className='sdot'+(i<G.section?' done':i===G.section?' active':'');
+  }
+}
+
+function bumpScore(p){
+  G.scores[p]++;
+  const el=document.getElementById('sc-v'+(p+1));
+  if(!el)return;
+  el.textContent=G.scores[p];
+  el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump');
+  el.addEventListener('animationend',()=>el.classList.remove('bump'),{once:true});
+  updateHUD();
+}
+
+function showSectionTransition(sec,cb){
+  hideAllSections();
+  const go=G.gameOrder||SECTION_META;
+  const meta=go[sec]||SECTION_META[0];
+  document.getElementById('trans-icon').textContent=meta.icon;
+  document.getElementById('trans-title').textContent=meta.title;
+  document.getElementById('trans-sub').textContent=`HRA ${sec+1} / ${go.length} · ${meta.rounds||G.roundsPS} kol`;
+  document.getElementById('transition-view').style.display='block';
+  setTimeout(()=>{
+    document.getElementById('transition-view').style.display='none';
+    cb();
+  },1800);
+}
+
+function hideAllSections(){
+  ['s1-view','s2-view','s3-view','s4-view','s5-view','s6-view','s7-view'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.classList.remove('show');
+  });
+}
+
+function showSection(id){
+  hideAllSections();
+  const el=document.getElementById(id+'-view');
+  if(el){el.classList.add('show');}
+  updateHUD();
+}
+
+function startSection(sec){
+  G.section=sec;
+  const go=G.gameOrder||SECTION_META;
+  const id=go[sec]?.id||'s1';
+  G.roundsPS=go[sec]?.rounds||G.roundsPS;
+  if(id==='s1')startS1();
+  else if(id==='s3')startS3();
+  else if(id==='s2')startS2();
+  else if(id==='s4')startS4();
+  else if(id==='s5')startS5();
+  else if(id==='s6')startS6();
+  else if(id==='s7')startS7();
+  updateHUD();
+}
+
+function nextRound(){
+  G.sectionRound++;
+  const go=G.gameOrder||SECTION_META;
+  const curRounds=go[G.section]?.rounds||G.roundsPS;
+  if(G.sectionRound>=curRounds){
+    G.sectionRound=0;
+    const nextSec=G.section+1;
+    if(G.mode!=='timed'&&nextSec>=go.length){endGame();return;}
+    if(G.mode==='timed'&&G.timerExpired){endGame();return;}
+    if(G.mode==='timed'&&nextSec>=go.length){
+      G.section=0; startSection(0); return;
+    }
+    showSectionTransition(nextSec,()=>startSection(nextSec));
+  }else{
+    startSection(G.section);
+  }
+}
+
+// ════════════════ SECTION 1: RIFF CHALLENGE ════════════════
+let prepTimerInt=null;
+const CIRC_R=42,CIRC_C=2*Math.PI*CIRC_R;
+
+function startS1(){
+  showSection('s1');
+  // Pick riff for this round
+  if(!G.riffQ.length)G.riffQ=shuffle(SONGS.flatMap(s=>s.riffs.map(r=>({...r,song:s}))));
+  G.curRiff=G.riffQ.pop();
+  G.curSong=G.curRiff.song;
+  stopAudio('s1');stopAudio('s1v');
+  if(G.s1LoopRAF){cancelAnimationFrame(G.s1LoopRAF);G.s1LoopRAF=null;}
+  idleVis('s1');idleVis('s1v');
+
+  if(!G.s1IntroAsked){
+    // Show intro question first (only once per game)
+    G.s1IntroAsked=true;
+    showS1Sub('question');
+    if(!G.trivQS1.length)G.trivQS1=shuffle([...QUIZ]);
+    G.curQ=G.trivQS1.pop();
+    document.getElementById('s1-q-text').textContent=G.curQ.q;
+    document.getElementById('s1-buzz-area').style.display='';
+    document.getElementById('s1-ans-area').style.display='none';
+    document.getElementById('s1-choices').innerHTML='';
+  } else {
+    // Straight to prep — alternate turns
+    s1GoPrep();
+  }
+}
+
+function showS1Sub(sub){
+  ['s1-question','s1-prep','s1-play','s1-verify'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.style.display=id==='s1-'+sub?'':'none';
+  });
+}
+
+function s1Buzz(p){
+  G.buzzerP=p;
+  document.getElementById('s1-buzz-area').style.display='none';
+  document.getElementById('s1-ans-area').style.display='';
+  document.getElementById('s1-who').textContent=`🔔 ${G.pNames[p-1]} odpovídá!`;
+  const c=document.getElementById('s1-choices');c.innerHTML='';
+  shuffle([...G.curQ.opts]).forEach(opt=>{
+    const b=document.createElement('button');
+    b.className='qc';b.textContent=opt;
+    b.onclick=()=>{
+      const ok=opt===G.curQ.ans;
+      b.classList.add(ok?'correct':'wrong');
+      c.querySelectorAll('.qc').forEach(x=>{
+        x.classList.add('disabled');
+        if(x.textContent===G.curQ.ans)x.classList.add('correct');
+      });
+      if(ok){
+        flash('green');
+        G.turn=p-1; // winner goes first
+        setTimeout(()=>s1GoPrep(),900);
+      }else{
+        flash('red');
+        setTimeout(()=>{
+          const other=p===1?2:1;
+          document.getElementById('s1-who').textContent=`🔔 ${G.pNames[other-1]} dostává šanci!`;
+          c.innerHTML='';
+          shuffle([...G.curQ.opts]).forEach(opt2=>{
+            const b2=document.createElement('button');
+            b2.className='qc';b2.textContent=opt2;
+            b2.onclick=()=>{
+              const ok2=opt2===G.curQ.ans;
+              b2.classList.add(ok2?'correct':'wrong');
+              c.querySelectorAll('.qc').forEach(x=>{x.classList.add('disabled');if(x.textContent===G.curQ.ans)x.classList.add('correct');});
+              if(ok2){
+                flash('green');
+                G.turn=other-1;
+                setTimeout(()=>s1GoPrep(),900);
+              } else {
+                flash('red');
+                // No one answered — random start
+                G.turn=Math.random()<.5?0:1;
+                setTimeout(()=>s1GoPrep(),1200);
+              }
+            };
+            c.appendChild(b2);
+          });
+        },800);
+      }
+    };
+    c.appendChild(b);
+  });
+}
+
+async function s1GoPrep(){
+  if(!G.curRiff||!G.curSong)return;
+  showS1Sub('prep');
+  G.s1Replayed=false;
+  document.getElementById('s1-replay-btn').disabled=true;
+  document.getElementById('s1-ready-btn').disabled=true;
+  document.getElementById('s1-song-lbl').textContent=G.curSong.title;
+  // Show who is playing + riff name (no tab)
+  const playerName=G.pNames[G.turn];
+  document.getElementById('s1-prep-player').textContent=`🎸 ${playerName}`;
+  document.getElementById('s1-prep-riff-name').textContent=`${G.curRiff.name} · ${G.curSong.title} · ${G.curSong.tuning}`;
+
+  const ok=await loadStems('s1',[G.curRiff.drumsSnippet||G.curSong.drumsId]);
+  if(!ok)return;
+
+  // 2× poslech přes onEnd callback chain
+  G.s1LoopCount=0;
+  G.s1LoopMax=2;
+  document.getElementById('s1-ready-btn').disabled=false;
+  updateLoopStatus();
+  setStatus('s1','🥁 Bicí hrají — poslouchej a uč se riff!');
+  s1PlayLoop();
+}
+
+function s1PlayLoop(){
+  const p=players['s1'];
+  p._offset=0;
+  p.onEnd=()=>{
+    G.s1LoopCount++;
+    if(G.s1LoopCount>=G.s1LoopMax){
+      s1GoPlay();
+    } else {
+      updateLoopStatus();
+      s1PlayLoop();
+    }
+  };
+  playAudio('s1');
+}
+function s1SkipToPlay(){
+  players['s1'].onEnd=null;
+  stopAudio('s1');
+  document.getElementById('s1-ready-btn').disabled=true;
+  s1GoPlay();
+}
+
+function updateLoopStatus(){
+  const remaining=G.s1LoopMax-G.s1LoopCount;
+  document.getElementById('s1-prep-riff-name').textContent=`${G.curRiff.name} · ${G.curSong.title} · Zbývá ${remaining} kol`;
+  // Update circular timer to show loop progress
+  const pct=(G.s1LoopCount/G.s1LoopMax)*100;
+  const fill=document.getElementById('circ-fill');
+  const txt=document.getElementById('circ-text');
+  if(fill){fill.style.strokeDashoffset=CIRC_C*(1-pct/100);}
+  if(txt){txt.textContent=remaining;}
+}
+
+function s1SetVol(v){setVol('s1',v);}
+function s1TogglePlay(){togglePlay('s1');}
+
+function s1Replay(){
+  if(G.s1Replayed)return;
+  G.s1Replayed=true;
+  document.getElementById('s1-replay-btn').disabled=true;
+  const audio=players['s1'].audios[0];
+  if(!audio)return;
+  stopAudio('s1');
+  G.s1LoopCount=0;
+  updateLoopStatus();
+  setStatus('s1','🔁 Přehrávám znovu...');
+  s1PlayLoop();
+}
+
+let prepTotalSec=30;
+function startPrepCountdown(sec){
+  if(prepTimerInt)clearInterval(prepTimerInt);
+  prepTotalSec=sec;let rem=sec;
+  updateCircTimer(rem,sec);
+  document.getElementById('s1-ready-btn').disabled=false;
+  prepTimerInt=setInterval(()=>{
+    rem--;
+    updateCircTimer(rem,sec);
+    if(rem<=0){clearInterval(prepTimerInt);s1GoPlay();}
+  },1000);
+}
+
+function updateCircTimer(rem,total){
+  const fill=document.getElementById('circ-fill');
+  const txt=document.getElementById('circ-text');
+  if(!fill||!txt)return;
+  const offset=CIRC_C*(1-rem/total);
+  fill.style.strokeDasharray=CIRC_C;
+  fill.style.strokeDashoffset=offset;
+  fill.classList.toggle('urgent',rem<=10);
+  txt.textContent=rem;
+}
+
+function s1GoPlay(){
+  if(prepTimerInt){clearInterval(prepTimerInt);prepTimerInt=null;}
+  if(G.s1LoopRAF){cancelAnimationFrame(G.s1LoopRAF);G.s1LoopRAF=null;}
+  stopAudio('s1');
+  showS1Sub('play');
+  document.getElementById('s1-play-who').textContent=`Hráč: ${G.pNames[G.turn]}`;
+}
+
+async function s1GoVerify(){
+  showS1Sub('verify');
+  if(G.s1LoopRAF){cancelAnimationFrame(G.s1LoopRAF);G.s1LoopRAF=null;}
+  idleVis('s1v');
+  // Fill in who played what (no tab)
+  document.getElementById('s1v-player-lbl').textContent=`🎸 ${G.pNames[G.turn]}`;
+  document.getElementById('s1v-riff-lbl').textContent=G.curRiff.name;
+  document.getElementById('s1v-song-lbl').textContent=`${G.curSong.title} · ${G.curSong.tuning} · ${G.curSong.bpm} BPM`;
+  // Hide guitar button — we auto-play full original
+  const gb=document.getElementById('s1v-guitar-btn');
+  if(gb){gb.style.display='none';}
+  // Bicí + kytara synchronizovaně — obě stopy začínají zároveň
+  setStatus('s1v','⏳ Načítám originál...');
+  const ok=await loadStems('s1v',[G.curRiff.drumsSnippet||G.curSong.drumsId, G.curRiff.rhythmSnippet||G.curSong.rhythmId]);
+  if(!ok)return;
+  playAudio('s1v');
+  setStatus('s1v','🎸 Originál hraje — porovnej!');
+}
+
+
+
+function s1vToggle(){togglePlay('s1v');}
+function s1vSetVol(v){
+  setVol('s1v',v);
+}
+
+function s1Judge(ok){
+  stopAudio('s1v');
+  if(G.s1LoopRAF){cancelAnimationFrame(G.s1LoopRAF);G.s1LoopRAF=null;}
+  if(ok){bumpScore(G.turn);flash('green');}
+  else flash('red');
+  addHist('s1-hist',ok,G.pNames[G.turn],G.curSong.title+' — '+G.curRiff.name);
+  G.turn=(G.turn+1)%(G.pCount||2);updateHUD();
+  setTimeout(()=>nextRound(),600);
+}
+
+// ════════════════ SECTION 2: GUESS THE SONG ════════════════
+let metroInt=null, metroBeat=0, metroRunning=false;
+let hintTimers=[];
+let s2HintsSec=0, s2HintInt=null;
+
+function startS2(){
+  showSection('s2');
+  stopMetronome();
+  hintTimers.forEach(t=>clearTimeout(t));hintTimers=[];
+  if(s2HintInt){clearInterval(s2HintInt);s2HintInt=null;}
+
+  if(!G.s2SongQ.length)G.s2SongQ=shuffle([...SONGS]);
+  G.curSong=G.s2SongQ.pop();
+  const song=G.curSong;
+
+  document.getElementById('s2-bpm').textContent=song.bpm;
+  document.getElementById('s2-sig').textContent='4 / 4';
+  document.getElementById('s2-metro-btn').textContent='▶ SPUSTIT';
+  document.getElementById('s2-buzz-area').style.display='';
+  document.getElementById('s2-ans-area').style.display='none';
+
+  // Build hints
+  const hints=[
+    {val:song.key,   key:'Tónina / Key',       icon:'🎵'},
+    {val:song.tuning,key:'Ladění',              icon:'🎸'},
+    {val:`Track #${SONGS.indexOf(song)+1} / 12`,key:'Pořadí na albu', icon:'💿'},
+    {val:s2ExtraHint(song), key:'Extra hint',  icon:'🔑'},
+  ];
+  hints.forEach((h,i)=>{
+    const card=document.getElementById('hint'+i);
+    card.className='hint-card locked';
+    document.getElementById('hint'+i+'-val').textContent='?';
+    document.getElementById('hint'+i+'-key').textContent=h.key;
+    document.querySelector('#hint'+i+' .hint-icon').textContent=h.icon;
+    const timerEl=document.getElementById('hint'+i+'-timer');
+    if(timerEl)timerEl.textContent=i===0?'odkryje se ihned':'odkryje se za '+(i*10)+'s';
+  });
+
+  // Unlock hint 0 immediately
+  setTimeout(()=>s2UnlockHint(0,hints[0]),100);
+  // Hints 1-3 after 10/20/30s (from metro start - handled in toggleMetro)
+  // Store hints for later unlock
+  s2HintsSec=0;
+  window._s2Hints=hints;
+  window._s2HintUnlocked=[true,false,false,false];
+
+  // Mic buzzer
+  const micBar=document.getElementById('s2-mic-bar');
+  if(G.micMode){
+    micBar.style.display='flex';
+    document.getElementById('s2-mic-names').textContent=`"${G.pNames[0]}" / "${G.pNames[1]}"`;
+    document.getElementById('s2-buzz-hint').textContent='VYKŘIKNI SVÉ JMÉNO PRO BUZZER!';
+  } else {
+    micBar.style.display='none';
+    document.getElementById('s2-buzz-hint').textContent='SPUSŤ METRONÓM → POSLOUCHEJ → BUZZ!';
+  }
+}
+
+function s2ExtraHint(song){
+  if(song.bpm>150)return'Nejrychlejší na albu!';
+  if(song.bpm<75)return'Jedno z nejpomalejších';
+  if(song.tuning.includes('Drop'))return'Riff na prázdné struně';
+  if(song.key.includes('major'))return'Dur tonalita — světlejší zvuk';
+  return`${song.bpm} BPM — střední tempo`;
+}
+
+function s2UnlockHint(i,hint){
+  const card=document.getElementById('hint'+i);
+  if(!card)return;
+  card.className='hint-card unlocking';
+  setTimeout(()=>{
+    document.getElementById('hint'+i+'-val').textContent=hint.val;
+    card.className='hint-card unlocked';
+    const timerEl=document.getElementById('hint'+i+'-timer');
+    if(timerEl)timerEl.textContent='';
+    window._s2HintUnlocked[i]=true;
+  },300);
+}
+
+function s2ToggleMetro(){
+  if(metroRunning){
+    stopMetronome();
+    document.getElementById('s2-metro-btn').textContent='▶ SPUSTIT';
+    if(s2HintInt){clearInterval(s2HintInt);s2HintInt=null;}
+  } else {
+    initAudio();
+    if(actx.state==='suspended')actx.resume();
+    startMetronome(G.curSong.bpm);
+    document.getElementById('s2-metro-btn').textContent='⏹ STOP';
+    // Start hint unlock timer
+    s2HintsSec=0;
+    s2HintInt=setInterval(()=>{
+      s2HintsSec++;
+      // Update countdown displays
+      [1,2,3].forEach(i=>{
+        if(!window._s2HintUnlocked[i]){
+          const rem=(i*10)-s2HintsSec;
+          const el=document.getElementById('hint'+i+'-timer');
+          if(el)el.textContent=rem>0?`odkryje se za ${rem}s`:'';
+          if(rem<=0&&!window._s2HintUnlocked[i]){
+            s2UnlockHint(i,window._s2Hints[i]);
+          }
+        }
+      });
+    },1000);
+    // Start mic if enabled
+    if(G.micMode)startMicBuzzerS2();
+  }
+}
+
+function startMetronome(bpm){
+  stopMetronome();
+  metroRunning=true;metroBeat=0;
+  const intervalMs=60000/bpm;
+  function tick(){
+    metroBeat++;
+    const beatInMeasure=(metroBeat-1)%4;
+    // Visual
+    document.querySelectorAll('.beat-dot').forEach((d,i)=>{
+      d.classList.toggle('on',i===beatInMeasure);
+    });
+    // Audio click
+    if(actx){
+      const osc=actx.createOscillator();
+      const g=actx.createGain();
+      osc.connect(g);g.connect(actx.destination);
+      osc.frequency.value=beatInMeasure===0?1100:880;
+      const now=actx.currentTime;
+      g.gain.setValueAtTime(beatInMeasure===0?.55:.35,now);
+      g.gain.exponentialRampToValueAtTime(.001,now+.04);
+      osc.start(now);osc.stop(now+.05);
+    }
+  }
+  tick();
+  metroInt=setInterval(tick,intervalMs);
+}
+
+function stopMetronome(){
+  if(metroInt){clearInterval(metroInt);metroInt=null;}
+  metroRunning=false;
+  document.querySelectorAll('.beat-dot').forEach(d=>d.classList.remove('on'));
+  stopMicBuzzer();
+}
+
+function s2Buzz(p){
+  if(!metroRunning)return; // must start metro first
+  G.buzzerP=p;
+  stopMetronome();
+  if(s2HintInt){clearInterval(s2HintInt);s2HintInt=null;}
+  document.getElementById('s2-metro-btn').textContent='▶ SPUSTIT';
+  document.getElementById('s2-buzz-area').style.display='none';
+  document.getElementById('s2-ans-area').style.display='';
+  document.getElementById('s2-who').textContent=`🔔 ${G.pNames[p-1]} odpovídá!`;
+  const c=document.getElementById('s2-choices');c.innerHTML='';
+  const song=G.curSong;
+  const opts=shuffle([song.title,...shuffle(SONGS.filter(s=>s.title!==song.title)).slice(0,3).map(s=>s.title)]);
+  opts.forEach(opt=>{
+    const b=document.createElement('button');b.className='qc';b.textContent=opt;
+    b.onclick=()=>{
+      const ok=opt===song.title;
+      b.classList.add(ok?'correct':'wrong');
+      c.querySelectorAll('.qc').forEach(x=>{x.classList.add('disabled');if(x.textContent===song.title)x.classList.add('correct');});
+      if(ok){bumpScore(p-1);flash('green');}else flash('red');
+      addHist('s2-hist',ok,G.pNames[p-1],song.title);
+      G.turn=(G.turn+1)%(G.pCount||2);updateHUD();
+      setTimeout(()=>nextRound(),1400);
+    };
+    c.appendChild(b);
+  });
+}
+
+// ════════════════ SECTION 3: QUIZ ════════════════
+function startS3(){
+  showSection('s3');
+  document.getElementById('s3-qtot').textContent=G.trivQ.length||'20';
+  if(!G.trivQ.length)G.trivQ=shuffle([...QUIZ]);
+  G.curQ=G.trivQ.pop();
+  document.getElementById('s3-qnum').textContent=QUIZ.length-(G.trivQ.length);
+  document.getElementById('s3-q-text').textContent=G.curQ.q;
+  document.getElementById('s3-buzz-area').style.display='';
+  document.getElementById('s3-ans-area').style.display='none';
+  document.getElementById('s3-choices').innerHTML='';
+}
+
+function s3Buzz(p){
+  G.buzzerP=p;
+  document.getElementById('s3-buzz-area').style.display='none';
+  document.getElementById('s3-ans-area').style.display='';
+  document.getElementById('s3-who').textContent=`🔔 ${G.pNames[p-1]} odpovídá!`;
+  const c=document.getElementById('s3-choices');c.innerHTML='';
+  shuffle([...G.curQ.opts]).forEach(opt=>{
+    const b=document.createElement('button');b.className='qc';b.textContent=opt;
+    b.onclick=()=>{
+      const ok=opt===G.curQ.ans;
+      b.classList.add(ok?'correct':'wrong');
+      c.querySelectorAll('.qc').forEach(x=>{x.classList.add('disabled');if(x.textContent===G.curQ.ans)x.classList.add('correct');});
+      if(ok){bumpScore(p-1);flash('green');}else flash('red');
+      addHist('s3-hist',ok,G.pNames[p-1],G.curQ.q.substring(0,45));
+      G.turn=(G.turn+1)%(G.pCount||2);updateHUD();
+      setTimeout(()=>nextRound(),1400);
+    };
+    c.appendChild(b);
+  });
+}
+
+// ════════════════ END GAME ════════════════
+function endGame(){
+  if(G.timerInt){clearInterval(G.timerInt);G.timerInt=null;}
+  if(prepTimerInt){clearInterval(prepTimerInt);prepTimerInt=null;}
+  if(s2HintInt){clearInterval(s2HintInt);s2HintInt=null;}
+  stopMetronome();
+  ['s1','s1v'].forEach(m=>stopAudio(m));
+  hideAllSections();
+  showEl('game-hud',false);
+  showEl('winner-view',true);
+
+  const pc=G.pCount||2;
+  const players=G.pNames.slice(0,pc).map((name,i)=>({name,score:G.scores[i]||0,idx:i}));
+  const sorted=[...players].sort((a,b)=>b.score-a.score);
+  const isDraw=sorted[0].score===sorted[1].score;
+  const medals=['🥇','🥈','🥉','🏅'];
+  const pColors=['var(--p1)','var(--p2)','var(--p3)','var(--p4)'];
+
+  // Podium list
+  const podiumEl=document.getElementById('podium-list');
+  if(podiumEl){
+    podiumEl.innerHTML=sorted.map((p,rank)=>`
+      <div class="podium-row ${rank===0&&!isDraw?'rank-1':''}" style="color:${pColors[p.idx]}">
+        <span class="podium-medal">${isDraw&&rank<2?'🤝':medals[rank]}</span>
+        <span class="podium-name">${p.name}</span>
+        <span class="podium-score">${p.score} bodů</span>
+      </div>`).join('');
+  }
+
+  if(!isDraw){
+    const winner=sorted[0], loser=sorted[pc-1];
+    document.getElementById('w-name').textContent=winner.name;
+    document.getElementById('w-crown').textContent='👑';
+    document.getElementById('w-sub').textContent=`🔥 ${winner.name} vítězí!`;
+    // SVG scene only for 2 players
+    const svg=document.getElementById('victory-svg');
+    if(pc===2){
+      svg.style.display='block';
+      document.getElementById('svg-winner-name').textContent=winner.name.toUpperCase();
+      document.getElementById('svg-loser-name').textContent=loser.name.toUpperCase();
+    } else {
+      svg.style.display='none';
+    }
+    spawnConfetti();
+    playFanfare();
+  } else {
+    document.getElementById('w-name').textContent='REMÍZA!';
+    document.getElementById('w-sub').textContent='Stejný počet bodů!';
+    document.getElementById('w-crown').textContent='🤝';
+    document.getElementById('victory-svg').style.display='none';
+  }
+}
+
+function spawnConfetti(){
+  const box=document.getElementById('winner-box');
+  const colors=['#f1c40f','#e74c3c','#e67e22','#2ecc71','#3498db','#9b59b6'];
+  for(let i=0;i<22;i++){
+    const c=document.createElement('div');
+    c.className='conf';
+    c.style.left=(5+Math.random()*90)+'%';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.animationDelay=(Math.random()*1.2)+'s';
+    c.style.animationDuration=(1.2+Math.random()*.8)+'s';
+    c.style.width=(5+Math.random()*6)+'px';
+    c.style.height=(5+Math.random()*6)+'px';
+    box.appendChild(c);
+    setTimeout(()=>c.remove(),2500);
+  }
+}
+
+function playFanfare(){
+  initAudio();
+  if(actx.state==='suspended')actx.resume();
+  const t=actx.currentTime;
+  // Metal victory riff — power chords ascending
+  const notes=[
+    [196,t,      .12],[196,t+.13,.10],[261,t+.26,.15],[329,t+.42,.15],
+    [261,t+.58,.10],[329,t+.69,.10],[392,t+.80,.30],[392,t+.82,.30], // octave unison
+    [523,t+1.15,.50]
+  ];
+  notes.forEach(([freq,when,dur])=>{
+    // distorted power chord: root + fifth + octave
+    [freq, freq*1.5, freq*2].forEach((f,hi)=>{
+      const osc=actx.createOscillator();
+      const g=actx.createGain();
+      const dist=actx.createWaveShaper();
+      // waveshaper distortion curve
+      const curve=new Float32Array(256);
+      for(let i=0;i<256;i++){const x=i*2/256-1;curve[i]=Math.tanh(x*4);}
+      dist.curve=curve;
+      osc.type='sawtooth';
+      osc.frequency.value=f;
+      g.gain.setValueAtTime(hi===0?.18:.08,when);
+      g.gain.exponentialRampToValueAtTime(.001,when+dur+.05);
+      osc.connect(dist);dist.connect(g);g.connect(masterGain);
+      osc.start(when);osc.stop(when+dur+.1);
+    });
+  });
+  // kick drum on beat
+  [t, t+.26, t+.58, t+.80, t+1.15].forEach(when=>{
+    const buf=actx.createBuffer(1,actx.sampleRate*.12,actx.sampleRate);
+    const d=buf.getChannelData(0);
+    for(let i=0;i<d.length;i++){d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,3)*.9;}
+    const src=actx.createBufferSource();
+    const g=actx.createGain();
+    src.buffer=buf;g.gain.value=.7;
+    src.connect(g);g.connect(masterGain);
+    src.start(when);
+  });
+}
+
+function rematch(){
+  const pc=G.pCount||2;
+  const players=G.pNames.slice(0,pc).map((name,i)=>({name,score:G.scores[i]||0,idx:i}));
+  const sorted=[...players].sort((a,b)=>b.score-a.score);
+  // Loser(s) go first — last place player starts
+  G.turn=sorted[pc-1].idx;
+  G.scores=Array(pc).fill(0);
+  G.riffQ=[];G.s2SongQ=[];G.s3Q=[];G.trivQS1=[];
+  showEl('winner-view',false);
+  startGame();
+}
+
+function setPname(player,name,icon){
+  document.getElementById('p'+player+'name').value=icon+' '+name;
+}
+
+function setPCount(n){
+  G.pCount=n;
+  document.querySelectorAll('.pcount-btn').forEach(b=>b.classList.toggle('sel',parseInt(b.dataset.pc)===n));
+  document.getElementById('player-row-3').style.display=n>=3?'':'none';
+  document.getElementById('player-row-4').style.display=n>=4?'':'none';
+}
+
+function resetAll(){
+  if(G.timerInt)clearInterval(G.timerInt);
+  if(prepTimerInt)clearInterval(prepTimerInt);
+  if(s2HintInt){clearInterval(s2HintInt);s2HintInt=null;}
+  stopMetronome();
+  ['s1','s1v'].forEach(m=>stopAudio(m));
+  ['s1','s2'].forEach(m=>idleVis(m));
+  showEl('winner-view',false);
+  hideAllSections();
+  showEl('game-hud',false);
+  document.getElementById('client-panel').style.display='none';
+  if(ON.isOnline){showEl('lobby-view',true);}
+  else{showEl('setup-view',true);}
+  document.getElementById('hud-timer').style.display='none';
+}
+
+// ════════════════ HISTORY ════════════════
+function addHist(id,ok,player,what){
+  const c=document.getElementById(id);if(!c)return;
+  const div=document.createElement('div');div.className='hist-item';
+  const isP1=player===G.pNames[0];
+  div.innerHTML=`<span class="${ok?'ok':'fail'}">${ok?'✓':'✗'}</span>
+    <span class="badge ${isP1?'bp1':'bp2'}">${player}</span>
+    <span class="hist-what">${what}</span>
+    <span class="${ok?'ok':'fail'}" style="font-size:10px">${ok?'+1':'–'}</span>`;
+  c.prepend(div);
+}
+
+// ════════════════ UTILS ════════════════
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function flash(cls){
+  const el=document.getElementById('flashEl');el.className='flash';
+  void el.offsetWidth;el.className='flash '+cls;
+  el.addEventListener('animationend',()=>el.className='flash',{once:true});
+}
+function showEl(id,show){const el=document.getElementById(id);if(el)el.style.display=show?'block':'none';}
+
+// ════════════════ MIC BUZZER ════════════════
+let speechRec=null;
+let micActive=false;
+
+function toggleMicMode(){
+  G.micMode=!G.micMode;
+  const track=document.getElementById('mic-toggle-track');
+  const desc=document.getElementById('mic-desc');
+  const kbDesc=document.getElementById('kb-desc');
+  if(track)track.classList.toggle('on',G.micMode);
+  if(desc)desc.style.display=G.micMode?'':'none';
+  if(kbDesc)kbDesc.style.display=G.micMode?'none':'';
+}
+
+function startMicBuzzerS2(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){alert('Prohlížeč nepodporuje rozpoznávání řeči. Zkuste Chrome.');return;}
+  stopMicBuzzer();
+  speechRec=new SR();
+  speechRec.continuous=true;
+  speechRec.interimResults=true;
+  speechRec.lang='cs-CZ';
+  micActive=true;
+  const dot=document.getElementById('s2-mic-dot');
+  if(dot)dot.classList.add('listening');
+  speechRec.onresult=(e)=>{
+    if(!micActive)return;
+    const last=e.results[e.results.length-1];
+    const t=last[0].transcript.toLowerCase().trim();
+    const p1=G.pNames[0].toLowerCase();
+    const p2=G.pNames[1].toLowerCase();
+    // Check if transcript contains player name
+    if(t.includes(p1.split(' ')[0])){micBuzzFire(1);}
+    else if(t.includes(p2.split(' ')[0])){micBuzzFire(2);}
+  };
+  speechRec.onerror=(e)=>{
+    if(e.error!=='aborted')console.warn('Speech error:',e.error);
+    if(dot)dot.classList.remove('listening');
+  };
+  speechRec.start();
+}
+
+function micBuzzFire(p){
+  if(!micActive)return;
+  micActive=false;
+  stopMicBuzzer();
+  const dot=document.getElementById('s2-mic-dot');
+  if(dot){dot.classList.remove('listening');dot.classList.add('active');}
+  // Flash player name
+  flash('green');
+  s2Buzz(p);
+}
+
+function stopMicBuzzer(){
+  micActive=false;
+  if(speechRec){try{speechRec.stop();}catch(e){}speechRec=null;}
+  const dot=document.getElementById('s2-mic-dot');
+  if(dot)dot.classList.remove('listening','active');
+}
+
+// ════════════════ KEYBOARD SHORTCUTS ════════════════
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('game-hud')||document.getElementById('game-hud').style.display==='none')return;
+  if(e.target.tagName==='INPUT')return;
+  const sec=G.section;
+  if(e.key.toLowerCase()==='q'){
+    // P1 buzz
+    if(sec===0&&document.getElementById('s1-buzz-area').style.display!=='none')s1Buzz(1);
+    else if(sec===1&&metroRunning)s2Buzz(1);
+    else if(sec===2&&document.getElementById('s3-buzz-area').style.display!=='none')s3Buzz(1);
+  }
+  if(e.key.toLowerCase()==='p'){
+    // P2 buzz
+    if(sec===0&&document.getElementById('s1-buzz-area').style.display!=='none')s1Buzz(2);
+    else if(sec===1&&metroRunning)s2Buzz(2);
+    else if(sec===2&&document.getElementById('s3-buzz-area').style.display!=='none')s3Buzz(2);
+  }
+  if(e.key===' '&&sec===1){e.preventDefault();s2ToggleMetro();}
+});
+
+// ════════════════ SECTION 4: RIFF AUCTION ════════════════
+function startS4(){
+  showSection('s4');
+  stopAudio('s4');
+  G.s4Bids=[null,null];
+  G.s4BidStep=0;
+  // Pick random riff + song
+  const allRiffs=SONGS.flatMap(s=>s.riffs.map(r=>({...r,song:s})));
+  G.curRiff=shuffle(allRiffs)[0];
+  G.curSong=G.curRiff.song;
+  document.getElementById('s4-riff-info').textContent=`${G.curRiff.name} · ${G.curSong.title}`;
+  document.getElementById('s4-listen-card').style.display='';
+  document.getElementById('s4-bid-card').style.display='none';
+  document.getElementById('s4-reveal-card').style.display='none';
+  setStatus('s4','⏳ Načítám snippet...');
+  const btn=document.getElementById('s4-to-bid-btn');
+  btn.disabled=true;
+  loadStems('s4',[G.curRiff.drumsSnippet||G.curSong.drumsId,G.curRiff.rhythmSnippet||G.curSong.rhythmId]).then(ok=>{
+    if(!ok)return;
+    playAudio('s4');
+    setStatus('s4','🎵 Posloucha — pak uzavři sázky');
+    btn.disabled=false;
+  });
+}
+
+function s4StartBid(){
+  stopAudio('s4');
+  document.getElementById('s4-listen-card').style.display='none';
+  document.getElementById('s4-bid-card').style.display='';
+  s4ShowBidder(0);
+}
+
+function s4ShowBidder(p){
+  G.s4BidStep=p;
+  const card=document.getElementById('s4-bid-card');
+  card.style.display='';
+  document.getElementById('s4-bid-title').textContent=`SÁZKA — HRÁČ ${p+1}`;
+  document.getElementById('s4-bid-who').textContent=`${G.pNames[p]}, kolik riskuješ?`;
+  document.getElementById('s4-bid-done').style.display='none';
+  const btns=document.getElementById('s4-bid-btns');
+  btns.innerHTML='';
+  for(let i=1;i<=5;i++){
+    const b=document.createElement('button');
+    b.className='bid-btn'; b.textContent=i;
+    b.onclick=()=>{
+      document.querySelectorAll('.bid-btn').forEach(x=>x.classList.remove('sel'));
+      b.classList.add('sel');
+      G.s4Bids[p]=i;
+      document.getElementById('s4-bid-done').style.display='';
+      btns.style.display='none';
+    };
+    btns.appendChild(b);
+  }
+  btns.style.display='grid';
+}
+
+function s4NextBidder(){
+  if(G.s4BidStep===0){
+    s4ShowBidder(1);
+  } else {
+    s4RevealBids();
+  }
+}
+
+function s4RevealBids(){
+  document.getElementById('s4-bid-card').style.display='none';
+  document.getElementById('s4-reveal-card').style.display='';
+  const [b0,b1]=G.s4Bids;
+  const winner=b0>b1?0:(b1>b0?1:0); // tie → P1
+  G.s4Challenger=winner;
+  const loser=1-winner;
+  document.getElementById('s4-reveal-html').innerHTML=
+    `<div style="font-family:'Bebas Neue',cursive;font-size:15px;color:var(--t3)">
+      <span style="color:var(--p1)">${G.pNames[0]}</span> vsadil <span style="color:var(--gold);font-size:22px">${b0}</span> &nbsp;|&nbsp;
+      <span style="color:var(--p2)">${G.pNames[1]}</span> vsadil <span style="color:var(--gold);font-size:22px">${b1}</span>
+    </div>
+    <div style="font-family:'Bebas Neue',cursive;font-size:26px;color:var(--gold);margin-top:10px">
+      ${G.pNames[winner]} hraje! (sázka: ${G.s4Bids[winner]} ${G.s4Bids[winner]===5?'🔥':''})
+    </div>`;
+  document.getElementById('s4-reveal-sub').textContent=
+    `${G.pNames[loser]} hodnotí. Správně = ${G.s4Bids[winner]} body, špatně = 0.`;
+  // Play snippet again for reference
+  loadStems('s4',[G.curRiff.drumsSnippet||G.curSong.drumsId,G.curRiff.rhythmSnippet||G.curSong.rhythmId]).then(ok=>{if(ok)playAudio('s4');});
+}
+
+function s4JudgeOk(){
+  stopAudio('s4');
+  bumpScoreBy(G.s4Challenger,G.s4Bids[G.s4Challenger]);
+  flash('green');
+  addHist('s4-hist',true,G.pNames[G.s4Challenger],`${G.curRiff.name} (+${G.s4Bids[G.s4Challenger]})`);
+  setTimeout(()=>nextRound(),700);
+}
+
+function s4JudgeWrong(){
+  stopAudio('s4');
+  flash('red');
+  addHist('s4-hist',false,G.pNames[G.s4Challenger],G.curRiff.name);
+  setTimeout(()=>nextRound(),700);
+}
+
+function bumpScoreBy(p,n){
+  G.scores[p]+=n;
+  const el=document.getElementById('sc-v'+(p+1));
+  if(el)el.textContent=G.scores[p];
+}
+
+// ════════════════ SECTION 5: QUICK RIFF ════════════════
+// 5 rounds alternating: G.turn → 1-G.turn → G.turn → ...
+let s5CdInt=null;
+function startS5(){
+  showSection('s5');
+  stopAudio('s5');
+  if(s5CdInt){clearInterval(s5CdInt);s5CdInt=null;}
+  // Build turn order: [startPlayer, other, startPlayer, other, startPlayer]
+  const pc=G.pCount||2;
+  G.s5Turns=Array.from({length:5},(_,i)=>(G.turn+i)%pc);
+  G.s5Idx=0;
+  document.getElementById('s5-choices-card').style.display='none';
+  s5DoRound();
+}
+
+async function s5DoRound(){
+  if(G.s5Idx>=5){nextRound();return;}
+  const p=G.s5Turns[G.s5Idx];
+  document.getElementById('s5-round-lbl').textContent=`KOLO ${G.s5Idx+1}/5`;
+  document.getElementById('s5-turn-banner').textContent=`🎸 ${G.pNames[p]}`;
+  document.getElementById('s5-turn-banner').style.color=p===0?'var(--p1)':'var(--p2)';
+  document.getElementById('s5-choices-card').style.display='none';
+  document.getElementById('s5-cd').textContent='';
+  // Pick random riff (has rhythmSnippet in /snippets/)
+  const allRiffsS5=SONGS.flatMap(s=>s.riffs.map(r=>({...r,song:s})));
+  const riffS5=shuffle([...allRiffsS5])[0];
+  G.curRiff=riffS5; G.curSong=riffS5.song;
+  setStatus('s5','⏳ Načítám...');
+  const ok=await loadStems('s5',[riffS5.rhythmSnippet]);
+  if(!ok)return;
+  // Play exactly 2 seconds then stop
+  setStatus('s5',`🎸 ${G.pNames[p]} — poslouchej!`);
+  playAudio('s5');
+  let rem=2;
+  document.getElementById('s5-cd').textContent=rem;
+  s5CdInt=setInterval(()=>{
+    rem--;
+    document.getElementById('s5-cd').textContent=rem>0?rem:'⏹';
+    if(rem<=0){
+      clearInterval(s5CdInt);s5CdInt=null;
+      stopAudio('s5');
+      s5ShowChoices(p);
+    }
+  },1000);
+}
+
+function s5ShowChoices(p){
+  document.getElementById('s5-cd').textContent='';
+  setStatus('s5',`${G.pNames[p]} — vyber píseň!`);
+  const correct=G.curSong.title;
+  const wrongs=shuffle(SONGS.filter(s=>s.title!==correct)).slice(0,3).map(s=>s.title);
+  const choices=shuffle([correct,...wrongs]);
+  const c=document.getElementById('s5-choices');
+  c.innerHTML='';
+  choices.forEach(ch=>{
+    const b=document.createElement('button');
+    b.className='qc'; b.textContent=ch;
+    b.onclick=()=>{
+      const ok=ch===correct;
+      b.classList.add(ok?'correct':'wrong');
+      c.querySelectorAll('.qc').forEach(x=>{x.classList.add('disabled');if(x.textContent===correct)x.classList.add('correct');});
+      if(ok){bumpScore(p);flash('green');}else flash('red');
+      addHist('s5-hist',ok,G.pNames[p],correct);
+      G.s5Idx++;
+      setTimeout(()=>s5DoRound(),1000);
+    };
+    c.appendChild(b);
+  });
+  document.getElementById('s5-choices-card').style.display='';
+}
+
+// ════════════════ SECTION 6: STEM DETECTIVE ════════════════
+function startS6(){
+  showSection('s6');
+  stopAudio('s6');
+  document.getElementById('s6-diff-card').style.display='';
+  document.getElementById('s6-play-card').style.display='none';
+  document.getElementById('s6-buzz-area').style.display='';
+  document.getElementById('s6-ans-area').style.display='none';
+}
+
+async function s6Start(stem){
+  document.getElementById('s6-diff-card').style.display='none';
+  document.getElementById('s6-play-card').style.display='';
+  const pts={drums:1,rhythm:2,bass:3}[stem];
+  G.s6Stem=stem;G.s6Pts=pts;
+  const badge=document.getElementById('s6-diff-badge');
+  badge.className='diff-badge diff-'+stem;
+  badge.textContent={drums:'🥁 BICÍ +1',rhythm:'🎸 KYTARA +2',bass:'🎸 BASA +3'}[stem];
+  // Random song
+  G.curSong=shuffle([...SONGS])[0];
+  const stemId=stem==='drums'?G.curSong.drumsId:stem==='rhythm'?G.curSong.rhythmId:G.curSong.bassId;
+  setStatus('s6','⏳ Načítám...');
+  document.getElementById('s6-buzz-area').style.display='';
+  document.getElementById('s6-ans-area').style.display='none';
+  const ok=await loadStems('s6',[stemId]);
+  if(!ok)return;
+  playAudio('s6');
+  setStatus('s6','🎵 Zaslech a buzzni!');
+}
+
+function s6Buzz(p){
+  stopAudio('s6');
+  document.getElementById('s6-buzz-area').style.display='none';
+  document.getElementById('s6-ans-area').style.display='';
+  document.getElementById('s6-who').textContent=`🔔 ${G.pNames[p]} odpovídá!`;
+  G.s6Buzzer=p;
+  // 4 choices: correct + 3 wrong
+  const correct=G.curSong.title;
+  const wrongs=shuffle(SONGS.filter(s=>s.title!==correct)).slice(0,3).map(s=>s.title);
+  const choices=shuffle([correct,...wrongs]);
+  const c=document.getElementById('s6-choices');c.innerHTML='';
+  choices.forEach(ch=>{
+    const b=document.createElement('button');b.className='qc';b.textContent=ch;
+    b.onclick=()=>{
+      stopAudio('s6');
+      const ok=ch===correct;
+      b.classList.add(ok?'correct':'wrong');
+      c.querySelectorAll('.qc').forEach(x=>{x.classList.add('disabled');if(x.textContent===correct)x.classList.add('correct');});
+      if(ok){bumpScoreBy(p,G.s6Pts);flash('green');}else flash('red');
+      addHist('s6-hist',ok,G.pNames[p],correct+' ('+G.s6Stem+')');
+      setTimeout(()=>nextRound(),900);
+    };
+    c.appendChild(b);
+  });
+}
+
+// ════════════════ SECTION 7: AIR GUITAR SHOW ════════════════
+let s7Timer=null;
+function startS7(){
+  showSection('s7');
+  stopAudio('s7');
+  G.s7Ratings=[null,null];
+  G.s7PerfIdx=0;
+  const allRiffs=SONGS.flatMap(s=>s.riffs.map(r=>({...r,song:s})));
+  G.curRiff=shuffle(allRiffs)[0];G.curSong=G.curRiff.song;
+  s7ShowPerformer(0);
+}
+
+async function s7ShowPerformer(p){
+  G.s7PerfIdx=p;
+  document.getElementById('s7-perf-card').style.display='';
+  document.getElementById('s7-rate-card').style.display='none';
+  document.getElementById('s7-result-card').style.display='none';
+  document.getElementById('s7-performer').textContent=`🎸 ${G.pNames[p]}`;
+  document.getElementById('s7-perf-title').textContent='AIR GUITAR SHOW 🤘';
+  document.getElementById('s7-countdown').textContent='';
+  document.getElementById('s7-done-btn').style.display='none';
+  setStatus('s7','⏳ Načítám riff...');
+  const ok=await loadStems('s7',[G.curRiff.drumsSnippet||G.curSong.drumsId,G.curRiff.rhythmSnippet||G.curSong.rhythmId]);
+  if(!ok)return;
+  setStatus('s7',`${G.pNames[p]} — SHRED! 🤘`);
+  playAudio('s7');
+  let rem=30;
+  document.getElementById('s7-countdown').textContent=rem;
+  if(s7Timer)clearInterval(s7Timer);
+  s7Timer=setInterval(()=>{
+    rem--;
+    document.getElementById('s7-countdown').textContent=rem>0?rem:'🤘';
+    if(rem<=0){
+      clearInterval(s7Timer);s7Timer=null;
+      stopAudio('s7');
+      document.getElementById('s7-done-btn').style.display='';
+      document.getElementById('s7-countdown').textContent='⏱️ ČAS!';
+    }
+  },1000);
+}
+
+function s7DonePerf(){
+  stopAudio('s7');
+  if(s7Timer){clearInterval(s7Timer);s7Timer=null;}
+  const p=G.s7PerfIdx;
+  const rater=1-p;
+  document.getElementById('s7-perf-card').style.display='none';
+  document.getElementById('s7-rate-card').style.display='';
+  document.getElementById('s7-rate-title').textContent='HODNOCENÍ';
+  document.getElementById('s7-rate-sub').textContent=`${G.pNames[rater]} hodnotí výkon ${G.pNames[p]}`;
+  G.s7CurRating=0;
+  const stars=document.getElementById('s7-stars');
+  stars.innerHTML='';
+  for(let i=1;i<=5;i++){
+    const b=document.createElement('button');b.className='star-btn';b.textContent='⭐';
+    b.onclick=()=>{
+      G.s7CurRating=i;
+      document.querySelectorAll('.star-btn').forEach((s,j)=>s.classList.toggle('lit',j<i));
+      document.getElementById('s7-rate-confirm').disabled=false;
+    };
+    stars.appendChild(b);
+  }
+  document.getElementById('s7-rate-confirm').disabled=true;
+}
+
+function s7ConfirmRate(){
+  G.s7Ratings[G.s7PerfIdx]=G.s7CurRating;
+  if(G.s7PerfIdx===0){
+    // P2 performs next
+    loadStems('s7',[G.curRiff.drumsSnippet||G.curSong.drumsId,G.curRiff.rhythmSnippet||G.curSong.rhythmId]).then(()=>s7ShowPerformer(1));
+  } else {
+    s7ShowResult();
+  }
+}
+
+function s7ShowResult(){
+  document.getElementById('s7-rate-card').style.display='none';
+  document.getElementById('s7-result-card').style.display='';
+  const [r0,r1]=G.s7Ratings;
+  const winner=r0>r1?0:(r1>r0?1:-1);
+  let html='';
+  G.pNames.forEach((n,i)=>{
+    html+=`<div style="margin:6px 0;font-family:'Bebas Neue',cursive;font-size:18px">
+      ${n} <span style="color:var(--gold)">${'⭐'.repeat(G.s7Ratings[i])}</span> (${G.s7Ratings[i]} ⭐)
+    </div>`;
+  });
+  if(winner>=0){
+    html+=`<div style="color:var(--gold);margin-top:10px;font-family:'Bebas Neue',cursive;font-size:22px">🏆 ${G.pNames[winner]} vyhrál kolo!</div>`;
+    bumpScore(winner);flash('green');
+  } else {
+    html+=`<div style="color:var(--t3);margin-top:10px">🤝 Remíza!</div>`;
+  }
+  document.getElementById('s7-result-html').innerHTML=html;
+}
+
+function s7Next(){nextRound();}
+
+// ════════════════ BACKGROUND SLIDESHOW ════════════════
+// Tribal SVG patterns inspired by Sepultura / Chaos A.D. aesthetic
+const BG_SVGS = [
+  // 1 — Tribal war drums circle
+  `<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'>
+    <rect width='600' height='600' fill='%23050508'/>
+    <circle cx='300' cy='300' r='220' fill='none' stroke='%23c0392b' stroke-width='2' opacity='.6'/>
+    <circle cx='300' cy='300' r='160' fill='none' stroke='%23c0392b' stroke-width='1' opacity='.4'/>
+    <circle cx='300' cy='300' r='90' fill='none' stroke='%23d4a017' stroke-width='1.5' opacity='.5'/>
+    ${Array.from({length:12},(_,i)=>{const a=i*30*Math.PI/180,x1=300+90*Math.cos(a),y1=300+90*Math.sin(a),x2=300+220*Math.cos(a),y2=300+220*Math.sin(a);return `<line x1='${x1}' y1='${y1}' x2='${x2}' y2='${y2}' stroke='%23c0392b' stroke-width='1' opacity='.35'/>`}).join('')}
+    ${Array.from({length:8},(_,i)=>{const a=i*45*Math.PI/180,cx=300+160*Math.cos(a),cy=300+160*Math.sin(a);return `<polygon points='${cx},${cy-10} ${cx-6},${cy+8} ${cx+6},${cy+8}' fill='%23c0392b' opacity='.5'/>`}).join('')}
+    <text x='300' y='316' text-anchor='middle' font-family='serif' font-size='48' fill='%23d4a017' opacity='.25' font-weight='bold'>S</text>
+  </svg>`,
+  // 2 — Chaos barbed wire grid
+  `<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'>
+    <rect width='600' height='600' fill='%23050508'/>
+    ${Array.from({length:7},(_,i)=>`<line x1='0' y1='${i*100}' x2='600' y2='${i*100}' stroke='%23c0392b' stroke-width='.6' opacity='.2'/>`).join('')}
+    ${Array.from({length:7},(_,i)=>`<line x1='${i*100}' y1='0' x2='${i*100}' y2='600' stroke='%23c0392b' stroke-width='.6' opacity='.2'/>`).join('')}
+    ${Array.from({length:30},(_,i)=>{const x=Math.random()*580,y=Math.random()*580,s=8+Math.random()*16;return `<polygon points='${x},${y-s} ${x+s*.6},${y+s*.4} ${x-s*.6},${y+s*.4}' fill='none' stroke='%23c0392b' stroke-width='1' opacity='${0.15+Math.random()*.25}'/>`}).join('')}
+    <text x='300' y='320' text-anchor='middle' font-family='serif' font-size='200' fill='%23c0392b' opacity='.04' font-weight='bold'>AD</text>
+  </svg>`,
+  // 3 — Sepultura S emblem with rays
+  `<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'>
+    <rect width='600' height='600' fill='%23050508'/>
+    ${Array.from({length:24},(_,i)=>{const a=i*15*Math.PI/180,x2=300+280*Math.cos(a),y2=300+280*Math.sin(a);return `<line x1='300' y1='300' x2='${x2}' y2='${y2}' stroke='%23d4a017' stroke-width='${i%3===0?1.5:.5}' opacity='${i%3===0?.3:.12}'/>`}).join('')}
+    <circle cx='300' cy='300' r='130' fill='%230a0a0f' stroke='%23d4a017' stroke-width='2' opacity='.5'/>
+    <text x='300' y='340' text-anchor='middle' font-family='Impact,serif' font-size='120' fill='%23d4a017' opacity='.35'>S</text>
+    <text x='300' y='420' text-anchor='middle' font-family='serif' font-size='22' fill='%23c0392b' opacity='.35' letter-spacing='8'>SEPULTURA</text>
+  </svg>`,
+  // 4 — Tribal masks pattern
+  `<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'>
+    <rect width='600' height='600' fill='%23050508'/>
+    ${Array.from({length:4},(_,i)=>{const x=150+i%2*300,y=150+Math.floor(i/2)*300;return `
+      <ellipse cx='${x}' cy='${y}' rx='55' ry='70' fill='none' stroke='%23c0392b' stroke-width='1.5' opacity='.35'/>
+      <ellipse cx='${x-18}' cy='${y-15}' rx='10' ry='13' fill='none' stroke='%23c0392b' stroke-width='1' opacity='.4'/>
+      <ellipse cx='${x+18}' cy='${y-15}' rx='10' ry='13' fill='none' stroke='%23c0392b' stroke-width='1' opacity='.4'/>
+      <path d='M${x-20},${y+20} Q${x},${y+38} ${x+20},${y+20}' fill='none' stroke='%23c0392b' stroke-width='1' opacity='.35'/>
+      ${Array.from({length:5},(_,j)=>`<line x1='${x-22+j*11}' y1='${y+48}' x2='${x-22+j*11}' y2='${y+62}' stroke='%23c0392b' stroke-width='1' opacity='.3'/>`).join('')}
+    `}).join('')}
+    <circle cx='300' cy='300' r='8' fill='%23d4a017' opacity='.3'/>
+  </svg>`,
+  // 5 — Chaos A.D. text + lightning
+  `<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'>
+    <rect width='600' height='600' fill='%23050508'/>
+    <text x='300' y='230' text-anchor='middle' font-family='Impact,Arial Black,sans-serif' font-size='90' fill='%23c0392b' opacity='.18' letter-spacing='-2'>CHAOS</text>
+    <text x='300' y='340' text-anchor='middle' font-family='Impact,Arial Black,sans-serif' font-size='90' fill='%23c0392b' opacity='.18' letter-spacing='-2'>A.D.</text>
+    <polyline points='260,80 235,220 265,220 230,360' fill='none' stroke='%23d4a017' stroke-width='3' stroke-linejoin='round' opacity='.3'/>
+    <polyline points='340,80 365,220 335,220 370,360' fill='none' stroke='%23d4a017' stroke-width='3' stroke-linejoin='round' opacity='.3'/>
+    ${Array.from({length:3},(_,i)=>`<circle cx='${150+i*150}' cy='480' r='${20+i*10}' fill='none' stroke='%23c0392b' stroke-width='1' opacity='.2'/>`).join('')}
+  </svg>`
+];
+
+(function initBgSlideshow(){
+  const slides=document.querySelectorAll('.bg-slide');
+  slides.forEach((s,i)=>{
+    const svg=BG_SVGS[i%BG_SVGS.length];
+    const encoded=svg.replace(/\n\s*/g,' ');
+    s.style.backgroundImage=`url("data:image/svg+xml,${encoded}")`;
+    s.style.backgroundSize='cover';
+  });
+  let cur=0;
+  setInterval(()=>{
+    slides[cur].classList.remove('active');
+    cur=(cur+1)%slides.length;
+    slides[cur].classList.add('active');
+  },7000);
+})();
+
+// ════════════════════════════════════════════════════════
+// ONLINE MULTIPLAYER — Socket.io
+// ════════════════════════════════════════════════════════
+let socket=null;
+const ON={isOnline:false,isHost:false,playerIdx:0,roomCode:'',players:[]};
+const P_COLORS=['var(--p1)','var(--p2)','var(--p3)','var(--p4)'];
+
+function initSocket(){
+  if(socket)return;
+  socket=window.io ? io() : null;
+  if(!socket){console.warn('Socket.io not available');return;}
+
+  socket.on('room-created',({code,players,playerIdx})=>{
+    ON.isOnline=true;ON.isHost=true;ON.roomCode=code;ON.playerIdx=playerIdx;ON.players=players;
+    showWaitingRoom(code,players,true);
+    enableChat();
+  });
+
+  socket.on('room-joined',({code,players,playerIdx})=>{
+    ON.isOnline=true;ON.isHost=false;ON.roomCode=code;ON.playerIdx=playerIdx;ON.players=players;
+    showWaitingRoom(code,players,false);
+    enableChat();
+  });
+
+  socket.on('room-error',(msg)=>{
+    document.getElementById('lobby-status').textContent='❌ '+msg;
+  });
+
+  socket.on('players-updated',(players)=>{
+    ON.players=players;
+    updateRoomPlayersList(players);
+    if(ON.isHost){
+      // Update G so start reflects actual players
+      G.pCount=players.length;
+      G.pNames=players.map(p=>p.name);
+      setPCount(players.length);
+      players.forEach((p,i)=>{
+        const el=document.getElementById('p'+(i+1)+'name');
+        if(el)el.value=p.name;
+      });
+    }
+    if(!ON.isHost) updateClientScores({pNames:players.map(p=>p.name),scores:G.scores,pCount:players.length});
+  });
+
+  socket.on('host-changed',(newHostId)=>{
+    if(socket.id===newHostId){
+      ON.isHost=true;
+      // Promote to host — show full game view
+    }
+  });
+
+  socket.on('game-state',(state)=>{
+    if(!ON.isHost) applyClientState(state);
+  });
+
+  socket.on('game-event',({type,data})=>{
+    if(!ON.isHost) handleClientEvent(type,data);
+  });
+
+  socket.on('player-action',(action)=>{
+    if(ON.isHost) handleOnlinePlayerAction(action);
+  });
+
+  socket.on('chat',(msg)=>{
+    appendChatMsg(msg);
+  });
+}
+
+// ── Lobby actions ──
+function createRoom(){
+  initSocket();
+  const name=document.getElementById('online-name').value.trim()||'Hráč 1';
+  if(!socket){goLocalGame();return;}
+  socket.emit('create-room',{name});
+}
+
+function showJoinPanel(){
+  const p=document.getElementById('join-panel');
+  p.style.display=p.style.display==='none'?'':'none';
+}
+
+function joinRoom(){
+  initSocket();
+  const code=document.getElementById('room-code-in').value.toUpperCase().trim();
+  const name=document.getElementById('online-name').value.trim()||'Hráč';
+  if(!code||code.length<4){document.getElementById('lobby-status').textContent='Zadej 4místný kód';return;}
+  if(!socket){goLocalGame();return;}
+  socket.emit('join-room',{code,name});
+}
+
+function goLocalGame(){
+  showEl('lobby-view',false);
+  const sv=document.getElementById('setup-view');
+  sv.classList.add('show');
+  sv.style.display='block';
+}
+
+function showWaitingRoom(code,players,isHost){
+  showEl('lobby-view',false);
+  document.getElementById('lobby-view').style.display='block';
+  document.getElementById('join-panel').style.display='none';
+  document.getElementById('waiting-card').style.display='block';
+  document.getElementById('room-code-display').textContent=code;
+  updateRoomPlayersList(players);
+  document.getElementById('start-online-btn').style.display=isHost?'':'none';
+  document.getElementById('lobby-status').textContent=isHost?'Čekej na hráče, pak stiskni START':'Čekám na hostitele...';
+}
+
+function updateRoomPlayersList(players){
+  const list=document.getElementById('room-players-list');
+  if(!list)return;
+  const pNames=['🔴','🔵','🟢','🟣'];
+  list.innerHTML=players.map((p,i)=>`
+    <div class="room-player-row">
+      <span style="color:${P_COLORS[i]};font-size:18px">${pNames[i]}</span>
+      <span class="room-player-name" style="color:${P_COLORS[i]}">${p.name}</span>
+      ${i===0?'<span class="room-player-badge">HOST</span>':''}
+    </div>`).join('');
+  // Update start button
+  const btn=document.getElementById('start-online-btn');
+  if(btn&&ON.isHost) btn.style.display=players.length>=2?'':'none';
+}
+
+function startOnlineGame(){
+  if(!ON.isHost)return;
+  // Push player names into setup form
+  G.pCount=ON.players.length;
+  G.pNames=ON.players.map(p=>p.name);
+  setPCount(ON.players.length);
+  ON.players.forEach((p,i)=>{
+    const el=document.getElementById('p'+(i+1)+'name');
+    if(el)el.value=p.name;
+  });
+  showEl('lobby-view',false);
+  startGame();
+  // Notify clients game is starting
+  emitGameState();
+}
+
+// ── State emission ──
+function emitGameState(){
+  if(!socket||!ON.isOnline||!ON.isHost)return;
+  const state={
+    scores:G.scores,turn:G.turn,section:G.section,
+    sectionRound:G.sectionRound,pNames:G.pNames,pCount:G.pCount,
+    gameOrder:G.gameOrder,roundsPS:G.roundsPS,
+    curSongTitle:G.curSong?G.curSong.title:null,
+    curRiffName:G.curRiff?G.curRiff.name:null,
+  };
+  socket.emit('game-state',state);
+}
+
+function emitGameEvent(type,data,targetIdx){
+  if(!socket||!ON.isOnline||!ON.isHost)return;
+  socket.emit('game-event',{type,data,targetIdx});
+}
+
+// ── Client state apply ──
+function applyClientState(state){
+  G.scores=state.scores||[];
+  G.turn=state.turn||0;
+  G.section=state.section||0;
+  G.sectionRound=state.sectionRound||0;
+  G.pNames=state.pNames||[];
+  G.pCount=state.pCount||2;
+  G.gameOrder=state.gameOrder||[];
+  G.roundsPS=state.roundsPS||5;
+  updateClientScores(state);
+  // Show client panel if game is running
+  if(!document.getElementById('client-panel').style.display||
+     document.getElementById('client-panel').style.display==='none'){
+    showClientPanel();
+  }
+}
+
+function updateClientScores(state){
+  const bar=document.getElementById('client-scores-bar');
+  if(!bar)return;
+  const pc=state.pCount||2;
+  bar.innerHTML=(state.pNames||[]).slice(0,pc).map((name,i)=>`
+    <div class="sc p${i+1} ${state.turn===i?'active':''}" style="flex:1;min-width:60px">
+      <div class="sc-name">${name}</div>
+      <div class="sc-num">${(state.scores||[])[i]||0}</div>
+      <div class="sc-tag">bodů</div>
+    </div>`).join('');
+  const go=state.gameOrder||[];
+  const meta=go[state.section]||{icon:'🎸',title:'...'};
+  const rounds=meta.rounds||state.roundsPS||5;
+  document.getElementById('client-section-lbl').textContent=`${meta.icon} ${meta.title}`;
+  document.getElementById('client-round-lbl').textContent=`KOLO ${(state.sectionRound||0)+1}/${rounds}`;
+  const isMyTurn=state.turn===ON.playerIdx;
+  const turnBanner=document.getElementById('client-turn-banner');
+  if(turnBanner){
+    turnBanner.className='client-turn-banner '+(isMyTurn?'yours':'waiting');
+    turnBanner.textContent=isMyTurn?'🎸 TVŮJ TAH!':'⏳ Tah: '+(state.pNames||[])[state.turn];
+  }
+}
+
+function showClientPanel(){
+  document.getElementById('setup-view').classList.remove('show');
+  showEl('lobby-view',false);
+  document.getElementById('client-panel').style.display='block';
+  document.getElementById('main-app').classList.add('app-with-chat');
+}
+
+// ── Client event handlers ──
+function handleClientEvent(type,data){
+  const area=document.getElementById('client-action-area');
+  const banner=document.getElementById('client-banner');
+  if(banner&&data&&data.section) banner.textContent=data.section;
+
+  if(type==='quiz-question'){
+    // Show 4 choices
+    if(data.playerIdx!==ON.playerIdx){area.innerHTML='<div class="text-dim" style="text-align:center;padding:16px">⏳ '+data.activePlayer+' odpovídá...</div>';return;}
+    area.innerHTML=`<div class="quiz-choices">${(data.choices||[]).map(c=>`
+      <button class="qc" onclick="clientAnswer('quiz','${c.replace(/'/g,"\\'")}',this)">${c}</button>`).join('')}</div>`;
+  }
+  else if(type==='quick-riff-choices'){
+    if(data.playerIdx!==ON.playerIdx){area.innerHTML='<div class="text-dim" style="text-align:center;padding:16px">⏳ '+data.activePlayer+' hádá...</div>';return;}
+    area.innerHTML=`<div class="quiz-choices">${(data.choices||[]).map(c=>`
+      <button class="qc" onclick="clientAnswer('quick-riff','${c.replace(/'/g,"\\'")}',this)">${c}</button>`).join('')}</div>`;
+  }
+  else if(type==='s1-ready'){
+    if(data.playerIdx!==ON.playerIdx){area.innerHTML='<div class="text-dim" style="text-align:center;padding:16px">⏳ '+data.activePlayer+' hraje riff...</div>';return;}
+    area.innerHTML=`<p style="text-align:center;color:var(--t2);margin-bottom:10px">Riff: <strong>${data.riffName}</strong></p>
+      <button class="btn btn-red" onclick="clientAnswer('s1-played','ok',this)">🎸 ODEHRÁL JSEM!</button>`;
+  }
+  else if(type==='buzz-open'){
+    area.innerHTML=`<button class="btn btn-gold" style="font-size:28px;padding:20px" onclick="clientBuzz()">⚡ BUZZER</button>`;
+  }
+  else if(type==='round-result'){
+    area.innerHTML=`<div style="text-align:center;padding:12px">
+      <div style="font-size:28px">${data.correct?'✅':'❌'}</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:18px;margin-top:4px;color:${data.correct?'var(--green)':'var(--red)'}">
+        ${data.correct?'+1 bod':data.correctAnswer||'Špatně'}
+      </div></div>`;
+  }
+  else if(type==='waiting'){
+    area.innerHTML=`<div class="text-dim" style="text-align:center;padding:20px">${data.msg||'⏳ Čekám...'}</div>`;
+  }
+  else if(type==='game-over'){
+    area.innerHTML='';
+    document.getElementById('client-panel').style.display='none';
+  }
+}
+
+function clientAnswer(type,value,btn){
+  if(!socket)return;
+  // Disable all buttons
+  btn.closest('.quiz-choices,#client-action-area').querySelectorAll('button').forEach(b=>b.disabled=true);
+  btn.classList.add('sel');
+  socket.emit('player-action',{type,value});
+}
+
+function clientBuzz(){
+  if(!socket)return;
+  socket.emit('player-action',{type:'buzz'});
+}
+
+// ── Host receives player action ──
+function handleOnlinePlayerAction({type,value,playerIdx}){
+  if(type==='quiz'){
+    // Simulate the correct quiz answer from that player
+    // The host's quiz logic needs to handle this
+    if(window._pendingOnlineQuizResolver) window._pendingOnlineQuizResolver(playerIdx,value);
+  } else if(type==='quick-riff'){
+    if(window._pendingQuickRiffResolver) window._pendingQuickRiffResolver(playerIdx,value);
+  } else if(type==='s1-played'){
+    if(window._pendingS1PlayedResolver) window._pendingS1PlayedResolver(playerIdx);
+  } else if(type==='buzz'){
+    if(window._buzzResolver) window._buzzResolver(playerIdx);
+  }
+}
+
+// ── Chat ──
+function enableChat(){
+  document.getElementById('chat-panel').style.display='block';
+  document.getElementById('main-app').classList.add('app-with-chat');
+}
+
+function toggleChat(){
+  const panel=document.getElementById('chat-panel');
+  const arrow=document.getElementById('chat-arrow');
+  const isOpen=panel.classList.toggle('open');
+  if(arrow)arrow.textContent=isOpen?'▼':'▲';
+  // Clear badge
+  if(isOpen){
+    const badge=document.getElementById('chat-badge');
+    badge.style.display='none';
+    badge.textContent='';
+  }
+}
+
+function sendChat(){
+  const input=document.getElementById('chat-in');
+  const msg=input.value.trim();
+  if(!msg||!socket)return;
+  socket.emit('chat',{msg});
+  input.value='';
+}
+
+function appendChatMsg({name,msg,idx}){
+  const msgs=document.getElementById('chat-messages');
+  if(!msgs)return;
+  const el=document.createElement('div');
+  el.className='chat-msg';
+  el.innerHTML=`<span class="chat-msg-name" style="color:${P_COLORS[idx]||'var(--t2)'}">${name}:</span>${msg}`;
+  msgs.appendChild(el);
+  msgs.scrollTop=msgs.scrollHeight;
+  // Show badge if chat is closed
+  const panel=document.getElementById('chat-panel');
+  if(!panel.classList.contains('open')){
+    const badge=document.getElementById('chat-badge');
+    badge.style.display='inline-block';
+    badge.textContent=parseInt(badge.textContent||0)+1;
+  }
+}
+
+// ── Hook emitState into key game functions ──
+const _origBumpScore=bumpScore;
+bumpScore=function(p){_origBumpScore(p);emitGameState();};
+const _origBumpScoreBy=bumpScoreBy;
+bumpScoreBy=function(p,n){_origBumpScoreBy(p,n);emitGameState();};
+const _origNextRound=nextRound;
+nextRound=function(){_origNextRound();emitGameState();};
+
+// ── Init game configurator
+gcInit();
+
+// Init idle vis
+setTimeout(()=>['s1-vis','s2-vis','s1v-vis'].forEach(id=>{
+  const c=document.getElementById(id);
+  if(c&&c.parentElement){idleVis(id.replace('-vis',''));}
+}),300);
+</script>
+</body>
+</html>

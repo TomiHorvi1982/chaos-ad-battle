@@ -1,0 +1,17 @@
+node_modules/
+*.wav
+audio/
+audio-snippets/
+.env
+.DS_Store
+.claude/
+worldmonitor/
+index-online.html
+patch_online.js
+make_drive_map.js
+cut_snippets.py
+extract_snippets.py
+build_snippets.sh
+make_snippets.sh
+sepultura_chaos_ad_ultimate_battle.html
+package-lock.json
