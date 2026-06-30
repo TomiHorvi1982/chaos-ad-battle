@@ -7,112 +7,184 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#07070a;--bg2:#0e0e14;--bg3:#16161f;--bg4:#1e1e28;
-  --red:#e02020;--red2:#c0392b;--red3:#8b1a12;
-  --gold:#d4a017;--gold2:#f0c040;
-  --blue:#2980b9;--blue2:#3498db;
-  --green:#27ae60;--purple:#8e44ad;
-  --text:#f0f0f0;--t2:#a0a0b0;--t3:#565668;
-  --p1:#e02020;--p2:#2980b9;--p3:#27ae60;--p4:#8e44ad;
-  --r:6px;
+  /* Core backgrounds */
+  --bg:#050508;--bg2:#0a0a10;--bg3:#111118;--bg4:#18181f;
+  /* Reds */
+  --red:#ff2020;--red2:#c0392b;--red3:#7a1212;
+  /* Gold */
+  --gold:#d4a017;--gold2:#f5c842;
+  /* Purple dimension */
+  --purple-deep:#0d0718;--purple-mid:#1e0f35;--purple:#7b2ff7;--purple2:#a855f7;
+  /* Neon accent */
+  --neon:#ff2d55;--neon2:#ff6080;
+  /* Supporting */
+  --blue:#2980b9;--blue2:#3498db;--green:#27ae60;
+  /* Players */
+  --p1:#ff2020;--p2:#2980b9;--p3:#27ae60;--p4:#a855f7;
+  /* Text */
+  --text:#f2f0ef;--t2:#8a8a9a;--t3:#3f3f52;
+  /* Border */
+  --border:#1a1a28;
+  /* Geometry */
+  --r:5px;
+  /* Glow shortcuts */
+  --glow-red:0 0 22px rgba(255,32,32,.45),0 0 60px rgba(192,57,43,.2);
+  --glow-gold:0 0 22px rgba(245,200,66,.45),0 0 60px rgba(212,160,23,.2);
+  --glow-purple:0 0 22px rgba(168,85,247,.45),0 0 60px rgba(123,47,247,.2);
+  --glow-neon:0 0 16px rgba(255,45,85,.6),0 0 40px rgba(255,45,85,.25);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;font-weight:600;min-height:100vh;
-  background-image:radial-gradient(ellipse at 15% 40%,rgba(192,57,43,.06) 0%,transparent 55%),
-                   radial-gradient(ellipse at 85% 60%,rgba(41,128,185,.06) 0%,transparent 55%);}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--red3);border-radius:2px}
+  background-image:
+    repeating-linear-gradient(0deg,transparent 0px,transparent 3px,rgba(255,255,255,.012) 3px,rgba(255,255,255,.012) 4px),
+    repeating-linear-gradient(90deg,transparent 0px,transparent 7px,rgba(255,255,255,.005) 7px,rgba(255,255,255,.005) 8px),
+    radial-gradient(ellipse 70% 80% at 10% 50%,rgba(192,57,43,.18) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 70% at 90% 45%,rgba(123,47,247,.14) 0%,transparent 55%),
+    radial-gradient(ellipse 40% 30% at 50% 0%,rgba(212,160,23,.08) 0%,transparent 60%),
+    linear-gradient(180deg,#060608 0%,#04040a 100%);}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--red3),var(--purple));border-radius:2px}
 .app{max-width:760px;margin:0 auto;padding:10px 10px 50px;}
 
 /* HEADER */
-.logo{font-family:'Bebas Neue',cursive;font-size:clamp(32px,7vw,50px);letter-spacing:5px;
-  background:linear-gradient(130deg,#fff 0%,var(--gold2) 45%,var(--red) 100%);
+.logo{font-family:'Bebas Neue',cursive;font-size:clamp(38px,9vw,62px);letter-spacing:8px;
+  background:linear-gradient(125deg,#ffffff 0%,var(--gold2) 30%,var(--red) 65%,var(--purple2) 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  line-height:1;filter:drop-shadow(0 0 22px rgba(224,32,32,.35));
-  animation:logoGlow 3.5s ease-in-out infinite alternate;text-align:center;}
-@keyframes logoGlow{from{filter:drop-shadow(0 0 12px rgba(224,32,32,.25))}to{filter:drop-shadow(0 0 30px rgba(240,192,64,.5))}}
-.logo-sub{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:5px;color:var(--t3);margin-top:4px;text-align:center;}
-.header-wrap{padding:16px 0 12px;position:relative;margin-bottom:12px;}
-.header-wrap::after{content:'';position:absolute;bottom:0;left:10%;right:10%;height:1px;
-  background:linear-gradient(90deg,transparent,var(--red2),var(--gold),var(--red2),transparent);}
+  line-height:1;filter:drop-shadow(0 0 24px rgba(255,32,32,.4));
+  animation:logoGlow 3s ease-in-out infinite alternate;text-align:center;}
+@keyframes logoGlow{
+  from{filter:drop-shadow(0 0 10px rgba(255,32,32,.3)) drop-shadow(0 0 30px rgba(212,160,23,.15));}
+  to{filter:drop-shadow(0 0 28px rgba(245,200,66,.6)) drop-shadow(0 0 60px rgba(123,47,247,.2));}}
+.logo-sub{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:7px;color:var(--t3);margin-top:6px;text-align:center;text-transform:uppercase;}
+.header-wrap{padding:20px 0 16px;position:relative;margin-bottom:14px;text-align:center;}
+.header-wrap::after{content:'';position:absolute;bottom:0;left:5%;right:5%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--red2) 20%,var(--gold) 50%,var(--purple2) 80%,transparent);
+  box-shadow:0 -1px 0 rgba(212,160,23,.08);}
 
 /* SCORES */
-.scores-bar{display:grid;grid-template-columns:1fr 28px 1fr;gap:6px;align-items:center;margin-bottom:12px;}
-.sc{background:var(--bg3);border:1px solid #1c1c28;border-radius:var(--r);padding:9px 13px;position:relative;overflow:hidden;transition:border-color .3s,box-shadow .3s;}
-.sc::after{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;}
-.sc.p1::after{background:linear-gradient(135deg,rgba(224,32,32,.1),transparent 60%)}
-.sc.p2{text-align:right}.sc.p2::after{background:linear-gradient(225deg,rgba(41,128,185,.1),transparent 60%)}
-.sc.p1.active{color:var(--p1);border-color:var(--p1);box-shadow:0 0 16px rgba(224,32,32,.2);}
-.sc.p2.active{color:var(--p2);border-color:var(--p2);box-shadow:0 0 16px rgba(41,128,185,.2);}
-.sc.p3.active{color:var(--p3);border-color:var(--p3);box-shadow:0 0 16px rgba(39,174,96,.2);}
-.sc.p4.active{color:var(--p4);border-color:var(--p4);box-shadow:0 0 16px rgba(142,68,173,.2);}
-.sc.p3::after{background:linear-gradient(135deg,rgba(39,174,96,.1),transparent 60%)}
-.sc.p4::after{background:linear-gradient(225deg,rgba(142,68,173,.1),transparent 60%)}
-.scores-bar.multi{flex-wrap:wrap;gap:4px;justify-content:center;}
-.scores-bar.multi .sc{min-width:70px;flex:1;}
+.scores-bar{display:grid;grid-template-columns:1fr 28px 1fr;gap:6px;align-items:center;margin-bottom:14px;}
+.sc{background:var(--bg2);
+  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+  border:none;padding:10px 14px;position:relative;overflow:hidden;transition:box-shadow .3s,background .3s;}
+.sc::before{content:'';position:absolute;inset:0;
+  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+  border:1px solid rgba(255,255,255,.06);pointer-events:none;z-index:1;}
+.sc::after{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;}
+.sc.p1::after{background:linear-gradient(135deg,rgba(255,32,32,.12),transparent 60%)}
+.sc.p2{text-align:right}.sc.p2::after{background:linear-gradient(225deg,rgba(41,128,185,.12),transparent 60%)}
+.sc.p3::after{background:linear-gradient(135deg,rgba(39,174,96,.12),transparent 60%)}
+.sc.p4{text-align:right}.sc.p4::after{background:linear-gradient(225deg,rgba(168,85,247,.12),transparent 60%)}
+.sc.p1.active{box-shadow:var(--glow-red);}
+.sc.p2.active{box-shadow:0 0 22px rgba(41,128,185,.45),0 0 60px rgba(41,128,185,.2);}
+.sc.p3.active{box-shadow:0 0 22px rgba(39,174,96,.45),0 0 60px rgba(39,174,96,.2);}
+.sc.p4.active{box-shadow:var(--glow-purple);}
+.scores-bar.multi{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;}
+.scores-bar.multi .sc{min-width:70px;flex:1;clip-path:none;border-radius:var(--r);border:1px solid rgba(255,255,255,.06);}
 .scores-bar.multi .vs{display:none;}
 .album-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
-.album-btn{flex:1;min-width:80px;padding:8px 4px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--t3);font-size:11px;font-family:'Bebas Neue',cursive;letter-spacing:1px;cursor:pointer;text-align:center;transition:all .2s;}
-.album-btn.sel{background:rgba(212,160,23,.15);border-color:var(--gold);color:var(--gold);}
-.album-btn .ab-year{display:block;font-size:9px;color:var(--t3);letter-spacing:0;font-family:sans-serif;margin-top:2px;}
-.album-btn.sel .ab-year{color:var(--gold2);}
+.album-btn{flex:1;min-width:80px;padding:10px 6px;background:var(--bg2);border:1px solid rgba(255,255,255,.05);
+  border-bottom:2px solid transparent;border-radius:6px;color:var(--t3);font-size:11px;
+  font-family:'Bebas Neue',cursive;letter-spacing:1px;cursor:pointer;text-align:center;transition:all .2s;}
+.album-btn:hover{border-color:rgba(212,160,23,.3);color:var(--t2);}
+.album-btn.sel{background:rgba(212,160,23,.1);border-color:rgba(212,160,23,.5);border-bottom-color:var(--gold2);color:var(--gold2);box-shadow:0 0 14px rgba(212,160,23,.15);}
+.album-btn .ab-year{display:block;font-size:9px;color:var(--t3);letter-spacing:0;font-family:sans-serif;margin-top:3px;}
+.album-btn.sel .ab-year{color:var(--gold);}
 .pcount-row{display:flex;gap:8px;margin-bottom:10px;}
-.pcount-btn{flex:1;padding:8px 4px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--t3);font-size:13px;font-family:'Bebas Neue',cursive;letter-spacing:1px;cursor:pointer;}
-.pcount-btn.sel{background:rgba(212,160,23,.15);border-color:var(--gold);color:var(--gold);}
+.pcount-btn{flex:1;padding:9px 4px;background:var(--bg2);border:1px solid rgba(255,255,255,.05);
+  border-radius:6px;color:var(--t3);font-size:15px;font-family:'Bebas Neue',cursive;letter-spacing:2px;cursor:pointer;transition:all .2s;text-align:center;}
+.pcount-btn:hover{border-color:rgba(212,160,23,.3);color:var(--t2);}
+.pcount-btn.sel{background:rgba(212,160,23,.1);border-color:rgba(212,160,23,.5);color:var(--gold2);box-shadow:0 0 12px rgba(212,160,23,.15);}
 .podium-list{display:flex;flex-direction:column;gap:6px;margin:12px 0;}
-.podium-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;background:var(--bg2);border:1px solid var(--border);}
+.podium-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:5px;
+  background:var(--bg2);border:1px solid rgba(255,255,255,.04);border-top:1px solid rgba(255,255,255,.07);}
 .podium-medal{font-size:22px;width:28px;text-align:center;}
 .podium-name{flex:1;font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;}
-.podium-score{font-family:'Bebas Neue',cursive;font-size:20px;color:var(--gold);}
-.podium-row.rank-1{border-color:var(--gold);background:rgba(212,160,23,.1);}
-.bp3{background:rgba(39,174,96,.12);color:var(--p3);border:1px solid rgba(39,174,96,.3);}
-.bp4{background:rgba(142,68,173,.12);color:var(--p4);border:1px solid rgba(142,68,173,.3);}
+.podium-score{font-family:'Bebas Neue',cursive;font-size:22px;color:var(--gold);text-shadow:0 0 10px rgba(212,160,23,.3);}
+.podium-row.rank-1{border-color:rgba(212,160,23,.4);background:rgba(212,160,23,.08);box-shadow:0 0 20px rgba(212,160,23,.12);}
+.bp3{background:rgba(39,174,96,.1);color:var(--p3);border:1px solid rgba(39,174,96,.25);}
+.bp4{background:rgba(168,85,247,.1);color:var(--p4);border:1px solid rgba(168,85,247,.25);}
 .sc.active::after{opacity:1}
-.sc-name{font-family:'Bebas Neue',cursive;font-size:14px;letter-spacing:2px;color:currentColor;}
-.sc-num{font-family:'Bebas Neue',cursive;font-size:40px;line-height:1;color:var(--text);}
-.sc-num.bump{animation:scoreBump .45s ease;}
-@keyframes scoreBump{0%{transform:scale(1)}40%{transform:scale(1.45);color:var(--gold2)}100%{transform:scale(1)}}
-.sc-tag{font-size:8px;color:var(--t3);letter-spacing:2px;}
-.vs{font-family:'Bebas Neue',cursive;font-size:18px;color:var(--red2);text-align:center;opacity:.5;}
+.sc-name{font-family:'Bebas Neue',cursive;font-size:13px;letter-spacing:3px;color:currentColor;opacity:.7;}
+.sc-num{font-family:'Bebas Neue',cursive;font-size:44px;line-height:1;color:var(--text);text-shadow:0 2px 12px rgba(0,0,0,.6);}
+.sc-num.bump{animation:scoreBump .45s cubic-bezier(.36,.07,.19,.97);}
+@keyframes scoreBump{0%{transform:scale(1)}20%{transform:scale(1.5) rotate(-2deg);color:var(--gold2);text-shadow:var(--glow-gold)}60%{transform:scale(1.35) rotate(1deg)}100%{transform:scale(1)}}
+.sc-tag{font-size:7px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;}
+.vs{font-family:'Bebas Neue',cursive;font-size:20px;text-align:center;color:var(--neon);opacity:.8;
+  text-shadow:var(--glow-neon);animation:vsPulse 2.4s ease-in-out infinite alternate;}
+@keyframes vsPulse{from{opacity:.5;text-shadow:0 0 8px rgba(255,45,85,.3)}to{opacity:1;text-shadow:var(--glow-neon)}}
 
 /* SECTION STATUS BAR */
 .status-bar{display:flex;align-items:center;justify-content:space-between;
-  background:var(--bg2);border:1px solid #14141e;border-radius:var(--r);
-  padding:8px 14px;margin-bottom:10px;}
-.status-section{font-family:'Bebas Neue',cursive;font-size:14px;letter-spacing:2px;color:var(--gold);}
-.status-round{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--t3);}
-.status-timer{font-family:'Bebas Neue',cursive;font-size:18px;color:var(--red);letter-spacing:2px;}
-.status-timer.low{color:var(--red);animation:timerPulse .5s ease-in-out infinite alternate;}
-@keyframes timerPulse{from{opacity:1}to{opacity:.4}}
+  background:var(--bg2);border-top:1px solid rgba(255,255,255,.06);border-right:1px solid rgba(255,255,255,.03);
+  border-bottom:1px solid rgba(0,0,0,.5);border-left:2px solid var(--red2);
+  border-radius:0 var(--r) var(--r) 0;padding:9px 16px 9px 14px;margin-bottom:12px;position:relative;}
+.status-bar::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:2px;
+  background:var(--red2);box-shadow:0 0 10px var(--red2),0 0 20px rgba(192,57,43,.5);border-radius:1px;}
+.status-section{font-family:'Bebas Neue',cursive;font-size:15px;letter-spacing:3px;color:var(--gold2);
+  text-shadow:0 0 12px rgba(245,200,66,.3);}
+.status-round{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;}
+.status-timer{font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:3px;color:var(--red);
+  text-shadow:0 0 16px rgba(255,32,32,.4);}
+.status-timer.low{color:var(--neon);text-shadow:var(--glow-neon);animation:timerPulse .4s ease-in-out infinite alternate;}
+@keyframes timerPulse{from{opacity:1;transform:scale(1)}to{opacity:.55;transform:scale(.96)}}
 
-/* SECTION DOTS */
-.section-dots{display:flex;gap:6px;justify-content:center;margin-bottom:12px;}
-.sdot{width:10px;height:10px;border-radius:50%;background:var(--bg4);border:1px solid #222;transition:all .3s;}
-.sdot.done{background:var(--red3);border-color:var(--red2);}
-.sdot.active{background:var(--gold);border-color:var(--gold2);box-shadow:0 0 8px rgba(240,192,64,.5);}
+/* SECTION DOTS — guitar picks */
+.section-dots{display:flex;gap:10px;justify-content:center;margin-bottom:14px;align-items:center;}
+.sdot{width:12px;height:16px;background:var(--bg4);border:1px solid var(--t3);
+  clip-path:polygon(50% 0%,100% 40%,50% 100%,0% 40%);
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);}
+.sdot.done{background:var(--red3);border-color:var(--red2);box-shadow:0 0 6px rgba(192,57,43,.4);transform:scale(.85);}
+.sdot.active{background:linear-gradient(160deg,var(--gold2),var(--gold));border-color:var(--gold2);
+  box-shadow:var(--glow-gold);transform:scale(1.35);animation:pickFlare 1.2s ease-in-out infinite alternate;}
+@keyframes pickFlare{
+  from{box-shadow:0 0 10px rgba(245,200,66,.5),0 0 20px rgba(212,160,23,.2);}
+  to{box-shadow:0 0 20px rgba(245,200,66,.9),0 0 40px rgba(212,160,23,.4);}}
 
 /* VIEWS */
-.view{display:none;}.view.show{display:block;animation:fadeUp .22s ease;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.view{display:none;}.view.show{display:block;animation:fadeUp .28s cubic-bezier(.22,1,.36,1);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-/* CARD */
-.card{background:var(--bg2);border:1px solid #14141e;border-radius:8px;padding:13px;margin-bottom:10px;}
-.card-title{font-family:'Bebas Neue',cursive;font-size:11px;letter-spacing:3px;color:var(--t3);margin-bottom:9px;}
+/* CARD — glassmorphism + metal bevel */
+.card{
+  background:linear-gradient(145deg,rgba(18,18,28,.95) 0%,rgba(10,10,18,.98) 100%);
+  border-top:1px solid rgba(255,255,255,.09);border-left:1px solid rgba(255,255,255,.06);
+  border-right:1px solid rgba(0,0,0,.6);border-bottom:1px solid rgba(0,0,0,.7);
+  border-radius:6px;padding:14px;margin-bottom:10px;position:relative;overflow:hidden;backdrop-filter:blur(2px);}
+.card::before{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.025),transparent);
+  transform:skewX(-20deg);pointer-events:none;}
+.card::after{content:'';position:absolute;bottom:0;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(123,47,247,.25),transparent);pointer-events:none;}
+.card-title{font-family:'Bebas Neue',cursive;font-size:10px;letter-spacing:4px;color:var(--t3);margin-bottom:10px;text-transform:uppercase;}
 
 /* BUTTONS */
-.btn{width:100%;padding:13px;border:none;border-radius:var(--r);font-family:'Bebas Neue',cursive;
-  font-size:19px;letter-spacing:3px;color:#fff;cursor:pointer;transition:all .15s;margin-top:6px;
-  position:relative;overflow:hidden;}
-.btn::before{content:'';position:absolute;top:0;left:0;right:0;height:40%;background:rgba(255,255,255,.07);pointer-events:none;}
-.btn:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.18);}
-.btn:active:not(:disabled){transform:translateY(1px);filter:brightness(.9);}
-.btn:disabled{opacity:.28;cursor:not-allowed;transform:none;filter:none;}
-.btn-red{background:linear-gradient(150deg,#c84b3e,var(--red2));box-shadow:0 4px 16px rgba(192,57,43,.3);}
-.btn-green{background:linear-gradient(150deg,#1a7040,var(--green));box-shadow:0 4px 16px rgba(39,174,96,.25);}
-.btn-blue{background:linear-gradient(150deg,#145880,var(--blue));box-shadow:0 4px 16px rgba(41,128,185,.25);}
-.btn-gold{background:linear-gradient(150deg,#a07010,var(--gold));box-shadow:0 4px 16px rgba(212,160,23,.25);color:#0a0a0a;}
-.btn-purple{background:linear-gradient(150deg,#5a2080,#8e44ad);box-shadow:0 4px 16px rgba(142,68,173,.25);}
-.btn-ghost{background:var(--bg3);border:1px solid #222230;color:var(--t3);box-shadow:none;}
-.btn-ghost:hover:not(:disabled){border-color:var(--red2);color:var(--t2);}
+.btn{width:100%;padding:14px;border:none;border-radius:var(--r);font-family:'Bebas Neue',cursive;
+  font-size:20px;letter-spacing:4px;color:#fff;cursor:pointer;
+  transition:transform .12s ease,box-shadow .12s ease,filter .12s ease;margin-top:6px;
+  position:relative;overflow:hidden;border-top:1px solid rgba(255,255,255,.15);}
+.btn::before{content:'';position:absolute;top:0;left:-120%;width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);
+  transform:skewX(-20deg);transition:left .4s ease;pointer-events:none;}
+.btn:hover:not(:disabled)::before{left:160%;}
+.btn:hover:not(:disabled){transform:translateY(-3px);filter:brightness(1.2);}
+.btn:active:not(:disabled){transform:translateY(1px) scale(.99);filter:brightness(.88);}
+.btn:disabled{opacity:.25;cursor:not-allowed;transform:none;filter:none;}
+.btn-red{background:linear-gradient(150deg,#b03030,var(--red2) 60%,#8b1a12);
+  box-shadow:0 4px 20px rgba(192,57,43,.35),inset 0 1px 0 rgba(255,100,100,.15);}
+.btn-red:hover:not(:disabled){box-shadow:0 6px 28px rgba(255,32,32,.5),0 0 40px rgba(192,57,43,.3);}
+.btn-green{background:linear-gradient(150deg,#155a30,var(--green) 70%);
+  box-shadow:0 4px 20px rgba(39,174,96,.28),inset 0 1px 0 rgba(100,255,160,.1);}
+.btn-green:hover:not(:disabled){box-shadow:0 6px 28px rgba(39,174,96,.5);}
+.btn-blue{background:linear-gradient(150deg,#124470,var(--blue) 70%);
+  box-shadow:0 4px 20px rgba(41,128,185,.28),inset 0 1px 0 rgba(100,180,255,.1);}
+.btn-blue:hover:not(:disabled){box-shadow:0 6px 28px rgba(41,128,185,.5);}
+.btn-gold{background:linear-gradient(150deg,#8a6010,var(--gold) 60%,var(--gold2));
+  box-shadow:0 4px 20px rgba(212,160,23,.3),inset 0 1px 0 rgba(255,230,120,.2);color:#0a0808;}
+.btn-gold:hover:not(:disabled){box-shadow:var(--glow-gold);}
+.btn-purple{background:linear-gradient(150deg,#3a1070,#7b2ff7 60%,var(--purple2));
+  box-shadow:0 4px 20px rgba(123,47,247,.3),inset 0 1px 0 rgba(200,150,255,.1);}
+.btn-purple:hover:not(:disabled){box-shadow:var(--glow-purple);}
+.btn-ghost{background:var(--bg3);border:1px solid rgba(255,255,255,.07);color:var(--t2);box-shadow:none;}
+.btn-ghost:hover:not(:disabled){border-color:var(--red2);color:var(--text);box-shadow:0 0 14px rgba(192,57,43,.2);}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
 
 /* MODE SELECT */
@@ -241,12 +313,23 @@ canvas.vis{width:100%;height:100%;display:block;}
 
 /* WINNER */
 #winner-view{display:none;}
-.winner-box{background:var(--bg2);border-radius:12px;padding:24px 20px 18px;text-align:center;position:relative;overflow:hidden;border:1px solid var(--gold);box-shadow:0 0 50px rgba(212,160,23,.2);margin-top:10px;}
-.winner-crown{font-size:54px;margin-bottom:4px;display:block;animation:crownBounce .9s ease-in-out infinite alternate;}
-@keyframes crownBounce{from{transform:translateY(0) rotate(-4deg)}to{transform:translateY(-7px) rotate(4deg)}}
-.winner-title{font-family:'Bebas Neue',cursive;font-size:50px;color:var(--gold2);letter-spacing:5px;
-  text-shadow:0 0 30px rgba(240,192,64,.5);animation:titlePulse 1.6s ease-in-out infinite alternate;}
-@keyframes titlePulse{from{text-shadow:0 0 20px rgba(240,192,64,.35)}to{text-shadow:0 0 45px rgba(240,192,64,.75)}}
+.winner-box{
+  background:linear-gradient(145deg,rgba(14,10,4,.97),rgba(8,6,2,.99));
+  border-radius:10px;padding:28px 20px 20px;text-align:center;position:relative;overflow:hidden;
+  border:1px solid rgba(212,160,23,.3);
+  box-shadow:0 0 40px rgba(212,160,23,.18),0 0 80px rgba(212,160,23,.08),inset 0 0 60px rgba(212,160,23,.04);
+  margin-top:10px;}
+.winner-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold2),var(--gold),var(--gold2),transparent);
+  box-shadow:0 0 20px var(--gold);}
+.winner-box::after{content:'';position:absolute;top:-20%;left:20%;right:20%;height:50%;
+  background:radial-gradient(ellipse at 50% 0%,rgba(212,160,23,.12),transparent 70%);pointer-events:none;}
+.winner-crown{font-size:60px;margin-bottom:6px;display:block;animation:crownBounce .9s ease-in-out infinite alternate;
+  filter:drop-shadow(0 0 20px rgba(212,160,23,.7));}
+@keyframes crownBounce{from{transform:translateY(0) rotate(-5deg)}to{transform:translateY(-8px) rotate(5deg)}}
+.winner-title{font-family:'Bebas Neue',cursive;font-size:54px;color:var(--gold2);letter-spacing:6px;
+  text-shadow:0 0 30px rgba(245,200,66,.6),0 0 80px rgba(212,160,23,.3);animation:titlePulse 1.8s ease-in-out infinite alternate;}
+@keyframes titlePulse{from{text-shadow:0 0 20px rgba(245,200,66,.4),0 0 50px rgba(212,160,23,.15)}to{text-shadow:0 0 50px rgba(245,200,66,.9),0 0 100px rgba(212,160,23,.4)}}
 .winner-sub{font-size:13px;color:var(--t3);margin-top:4px;letter-spacing:2px;}
 .winner-scores{display:flex;justify-content:center;gap:30px;margin:12px 0 4px;}
 .ws-item{text-align:center;}
@@ -361,6 +444,115 @@ canvas.vis{width:100%;height:100%;display:block;}
 @keyframes flashG{0%{opacity:0;background:rgba(39,174,96,.18)}40%{opacity:1}100%{opacity:0}}
 @keyframes flashR{0%{opacity:0;background:rgba(224,32,32,.18)}40%{opacity:1}100%{opacity:0}}
 
+/* ── REDESIGN v2: new keyframes ── */
+@keyframes strobe{0%,18%,22%,25%,53%,57%,100%{opacity:1}20%,24%,55%{opacity:.12}}
+@keyframes metalWarp{
+  0%{filter:hue-rotate(0deg) brightness(1) skewX(0deg)}
+  15%{filter:hue-rotate(20deg) brightness(1.4) skewX(-1.5deg)}
+  30%{filter:hue-rotate(-10deg) brightness(.8) skewX(1deg)}
+  60%{filter:hue-rotate(5deg) brightness(1.1) skewX(-.5deg)}
+  100%{filter:hue-rotate(0deg) brightness(1) skewX(0deg)}}
+@keyframes flicker{0%,19%,21%,23%,25%,54%,56%,100%{opacity:1}20%,24%,55%{opacity:.7;text-shadow:none}}
+.sc-num.surge{animation:scoreSurge .6s cubic-bezier(.36,.07,.19,.97);}
+@keyframes scoreSurge{0%{transform:scale(1)}20%{transform:scale(1.6);color:var(--gold2);text-shadow:var(--glow-gold)}75%{transform:scale(1.15) rotate(1deg)}100%{transform:scale(1)}}
+
+/* ── EFFECT 1: Score ghost ── */
+.score-ghost{position:fixed;pointer-events:none;z-index:8000;
+  font-family:'Bebas Neue',cursive;font-size:36px;font-weight:900;
+  text-shadow:0 0 20px currentColor;
+  animation:ghostRise 1.1s cubic-bezier(.2,.8,.4,1) forwards;}
+@keyframes ghostRise{
+  0%{opacity:1;transform:translateY(0) scale(1);}
+  60%{opacity:.9;transform:translateY(-55px) scale(1.25);}
+  100%{opacity:0;transform:translateY(-100px) scale(.8);}
+}
+
+/* ── EFFECT 2: Lobby metal quotes ── */
+#lobby-metal-quote{
+  font-family:'Bebas Neue',cursive;font-size:13px;letter-spacing:3px;
+  color:var(--red2);text-align:center;padding:8px 0 2px;min-height:22px;
+  animation:quoteFade .6s ease;}
+@keyframes quoteFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+#lobby-awaiting-pulse{
+  display:flex;align-items:center;justify-content:center;gap:6px;margin:4px 0;}
+.await-dot{width:6px;height:6px;border-radius:50%;background:var(--red2);
+  animation:awaitBounce 1.2s ease-in-out infinite both;}
+.await-dot:nth-child(2){animation-delay:.18s;background:var(--gold);}
+.await-dot:nth-child(3){animation-delay:.36s;background:var(--red2);}
+@keyframes awaitBounce{0%,80%,100%{transform:scaleY(.5);opacity:.4}40%{transform:scaleY(1.4);opacity:1}}
+
+/* ── EFFECT 3: Section transition metal shutter ── */
+#metal-shutter{position:fixed;inset:0;z-index:5000;pointer-events:none;display:none;
+  overflow:hidden;}
+.shutter-bar{position:absolute;left:0;right:0;height:16.7%;background:var(--bg);}
+.shutter-bar:nth-child(1){top:0%}.shutter-bar:nth-child(2){top:16.7%}.shutter-bar:nth-child(3){top:33.4%}
+.shutter-bar:nth-child(4){top:50.1%}.shutter-bar:nth-child(5){top:66.8%}.shutter-bar:nth-child(6){top:83.5%}
+#shutter-slash{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  opacity:0;}
+.shutter-sec-icon{font-size:80px;line-height:1;filter:drop-shadow(0 0 30px rgba(240,192,64,.7));}
+.shutter-sec-name{font-family:'Bebas Neue',cursive;font-size:clamp(28px,8vw,52px);
+  letter-spacing:6px;color:var(--gold2);text-shadow:0 0 40px rgba(240,192,64,.6);
+  margin-left:16px;}
+#metal-shutter.animate .shutter-bar{animation:shutterIn .18s ease forwards;}
+#metal-shutter.animate .shutter-bar:nth-child(1){animation-delay:.00s}
+#metal-shutter.animate .shutter-bar:nth-child(2){animation-delay:.03s}
+#metal-shutter.animate .shutter-bar:nth-child(3){animation-delay:.06s}
+#metal-shutter.animate .shutter-bar:nth-child(4){animation-delay:.09s}
+#metal-shutter.animate .shutter-bar:nth-child(5){animation-delay:.12s}
+#metal-shutter.animate .shutter-bar:nth-child(6){animation-delay:.15s}
+#metal-shutter.open .shutter-bar{animation:shutterOut .2s ease forwards;}
+#metal-shutter.open .shutter-bar:nth-child(1){animation-delay:.00s}
+#metal-shutter.open .shutter-bar:nth-child(2){animation-delay:.03s}
+#metal-shutter.open .shutter-bar:nth-child(3){animation-delay:.06s}
+#metal-shutter.open .shutter-bar:nth-child(4){animation-delay:.09s}
+#metal-shutter.open .shutter-bar:nth-child(5){animation-delay:.12s}
+#metal-shutter.open .shutter-bar:nth-child(6){animation-delay:.15s}
+@keyframes shutterIn{from{transform:scaleX(0);transform-origin:left}to{transform:scaleX(1);transform-origin:left}}
+@keyframes shutterOut{from{transform:scaleX(1);transform-origin:right}to{transform:scaleX(0);transform-origin:right}}
+
+/* ── EFFECT 4: Timer danger vignette + shake ── */
+#danger-vignette{position:fixed;inset:0;pointer-events:none;z-index:7000;opacity:0;
+  background:radial-gradient(ellipse at center,transparent 55%,rgba(192,57,43,.55) 100%);}
+#danger-vignette.active{animation:vigPulse .5s ease-in-out infinite alternate;}
+@keyframes vigPulse{from{opacity:0}to{opacity:1}}
+.shake{animation:screenShake .35s cubic-bezier(.36,.07,.19,.97) both;}
+@keyframes screenShake{
+  10%,90%{transform:translate3d(-2px,0,0)}
+  20%,80%{transform:translate3d(3px,0,0)}
+  30%,50%,70%{transform:translate3d(-4px,0,0)}
+  40%,60%{transform:translate3d(4px,0,0)}
+}
+.status-timer.danger{
+  color:var(--red)!important;
+  font-size:24px!important;
+  animation:timerDanger .3s ease-in-out infinite alternate!important;
+  text-shadow:0 0 12px var(--red);}
+@keyframes timerDanger{from{opacity:1;transform:scale(1)}to{opacity:.6;transform:scale(1.15)}}
+
+/* ── EFFECT 5: Konami easter egg — tribal mode ── */
+#tribal-overlay{position:fixed;inset:0;z-index:9500;pointer-events:none;
+  display:none;overflow:hidden;}
+#tribal-overlay.active{display:block;}
+.tribal-text{position:absolute;font-family:'Bebas Neue',cursive;
+  color:var(--gold);opacity:0;white-space:nowrap;letter-spacing:4px;
+  animation:tribalFloat 3s ease-in-out infinite;}
+#tribal-banner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:'Bebas Neue',cursive;font-size:clamp(32px,9vw,60px);
+  letter-spacing:8px;color:var(--red);text-shadow:0 0 40px rgba(192,57,43,.9);
+  text-align:center;opacity:0;animation:tribalBannerIn .4s ease .2s forwards,tribalBannerPulse 1.4s ease .6s infinite alternate;}
+@keyframes tribalFloat{0%{transform:translateY(0) rotate(0deg);opacity:.7}100%{transform:translateY(-120vh) rotate(15deg);opacity:0}}
+@keyframes tribalBannerIn{from{transform:translate(-50%,-50%) scale(.5);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+@keyframes tribalBannerPulse{from{text-shadow:0 0 20px rgba(192,57,43,.6)}to{text-shadow:0 0 60px rgba(240,192,64,.9);color:var(--gold2)}}
+
+/* ── EFFECT 6: Victory title letter-by-letter explosion ── */
+#winner-view .winner-title .w-letter{
+  display:inline-block;
+  animation:letterExplode .5s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes letterExplode{
+  from{transform:scale(3) rotate(var(--r,0deg));opacity:0;filter:blur(4px);}
+  to{transform:scale(1) rotate(0deg);opacity:1;filter:blur(0);}
+}
+
 #s1v-guitar-btn{display:none}
 /* UTIL */
 .center{text-align:center;}
@@ -402,11 +594,157 @@ canvas.vis{width:100%;height:100%;display:block;}
 .chat-input-row input{flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:13px;padding:7px 10px;border-radius:6px;font-family:inherit;}
 .chat-input-row button{padding:7px 14px;background:var(--red);border:none;border-radius:6px;color:#fff;font-family:'Bebas Neue',cursive;font-size:14px;cursor:pointer;}
 .app-with-chat{padding-bottom:48px;}
+
+/* ══════════════════════════════════════════
+   LOBBY REDESIGN — metal concert entrance
+   ══════════════════════════════════════════ */
+.lby-section-label{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:4px;color:var(--t3);text-transform:uppercase;margin-bottom:8px;}
+.lby-name-input-wrap .setup-input{font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:4px;text-align:center;padding:12px 16px;border-color:#22223a;border-radius:8px;width:100%;}
+.lby-name-input-wrap .setup-input:focus{border-color:var(--red2);box-shadow:0 0 16px rgba(192,57,43,.18);}
+.band-preset-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px;}
+.band-preset{background:var(--bg3);border:1px solid #22223a;border-radius:8px;padding:8px 4px;cursor:pointer;text-align:center;transition:all .18s;color:var(--t2);}
+.band-preset:hover{border-color:var(--gold);color:var(--gold);background:rgba(212,160,23,.08);}
+.band-preset:active{transform:scale(.95);}
+.band-preset-icon{font-size:18px;display:block;margin-bottom:2px;}
+.band-preset-name{font-family:'Bebas Neue',cursive;font-size:13px;letter-spacing:1px;display:block;}
+.band-preset-role{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--t3);display:block;margin-top:1px;letter-spacing:1px;}
+.lby-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0 14px;}
+.lby-action-btn{padding:0;background:none;border:none;cursor:pointer;text-align:center;transition:all .2s;width:100%;}
+.lby-action-btn:hover .lby-action-inner{transform:translateY(-3px);}
+.lby-action-btn:active .lby-action-inner{transform:translateY(1px);}
+.lby-action-inner{border-radius:12px;padding:18px 8px 14px;border:2px solid;position:relative;overflow:hidden;transition:all .2s;}
+.lby-action-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:40%;background:rgba(255,255,255,.05);pointer-events:none;}
+.lby-action-btn.create .lby-action-inner{border-color:var(--red2);background:linear-gradient(160deg,rgba(192,57,43,.18),rgba(192,57,43,.06));box-shadow:0 6px 24px rgba(192,57,43,.22);}
+.lby-action-btn.join .lby-action-inner{border-color:var(--gold);background:linear-gradient(160deg,rgba(212,160,23,.18),rgba(212,160,23,.06));box-shadow:0 6px 24px rgba(212,160,23,.18);}
+.lby-action-btn.create:hover .lby-action-inner{border-color:var(--red);box-shadow:0 8px 30px rgba(192,57,43,.35);}
+.lby-action-btn.join:hover .lby-action-inner{border-color:var(--gold2);box-shadow:0 8px 30px rgba(240,192,64,.28);}
+.lby-action-icon{font-size:32px;display:block;margin-bottom:6px;}
+.lby-action-title{font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:3px;display:block;}
+.lby-action-sub{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--t3);display:block;margin-top:3px;letter-spacing:1px;}
+.lby-action-btn.create .lby-action-title{color:var(--red);}
+.lby-action-btn.join .lby-action-title{color:var(--gold);}
+.lby-separator{display:flex;align-items:center;gap:10px;margin:4px 0 14px;}
+.lby-separator::before,.lby-separator::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,#22223a);}
+.lby-separator::after{background:linear-gradient(90deg,#22223a,transparent);}
+.lby-separator span{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--t3);letter-spacing:3px;white-space:nowrap;}
+.lby-local-btn{width:100%;padding:12px;background:var(--bg3);border:1px solid #22223a;border-radius:10px;font-family:'Bebas Neue',cursive;font-size:16px;letter-spacing:2px;color:var(--t2);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;flex-direction:column;}
+.lby-local-btn:hover{border-color:#444;color:var(--text);background:var(--bg4);}
+.lby-local-sub{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--t3);}
+#join-panel{margin-top:10px;}
+#room-code-in{font-family:'Bebas Neue',cursive;font-size:36px;letter-spacing:10px;text-align:center;text-transform:uppercase;width:100%;background:var(--bg3);border:2px solid var(--gold);border-radius:10px;padding:14px;color:var(--gold);outline:none;display:block;}
+#room-code-in:focus{box-shadow:0 0 20px rgba(212,160,23,.2);}
+#room-code-in::placeholder{color:rgba(212,160,23,.22);letter-spacing:6px;}
+/* Waiting room */
+.room-code-label{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:4px;color:var(--t3);margin-bottom:6px;text-align:center;}
+.room-code-value{font-family:'Bebas Neue',cursive;font-size:72px;letter-spacing:12px;line-height:1;text-align:center;background:linear-gradient(130deg,var(--gold2),var(--gold),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 18px rgba(212,160,23,.35));animation:codeGlow 2s ease-in-out infinite alternate;}
+@keyframes codeGlow{from{filter:drop-shadow(0 0 8px rgba(212,160,23,.25))}to{filter:drop-shadow(0 0 28px rgba(240,192,64,.6))}}
+.room-code-copy{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:6px 16px;background:rgba(212,160,23,.1);border:1px solid rgba(212,160,23,.3);border-radius:20px;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:2px;cursor:pointer;transition:all .2s;}
+.room-code-copy:hover{background:rgba(212,160,23,.18);border-color:var(--gold);}
+.room-code-copy.copied{background:rgba(39,174,96,.12);border-color:var(--green);color:var(--green);}
+.room-code-share-hint{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--t3);letter-spacing:3px;margin-top:8px;text-transform:uppercase;text-align:center;}
+.waiting-players-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0;}
+.waiting-slot{border-radius:10px;padding:12px;border:2px dashed #22223a;background:var(--bg3);min-height:64px;display:flex;align-items:center;gap:10px;transition:all .4s;}
+.waiting-slot.filled{border-style:solid;border-color:#333;animation:slotFill .4s ease;}
+@keyframes slotFill{0%{transform:scale(.95);opacity:.5}100%{transform:scale(1);opacity:1}}
+.waiting-slot.p1-slot.filled{border-color:rgba(224,32,32,.45);background:rgba(224,32,32,.06);}
+.waiting-slot.p2-slot.filled{border-color:rgba(41,128,185,.45);background:rgba(41,128,185,.06);}
+.waiting-slot.p3-slot.filled{border-color:rgba(39,174,96,.45);background:rgba(39,174,96,.06);}
+.waiting-slot.p4-slot.filled{border-color:rgba(142,68,173,.45);background:rgba(142,68,173,.06);}
+.waiting-slot-icon{font-size:24px;opacity:.3;}
+.waiting-slot.filled .waiting-slot-icon{opacity:1;}
+.waiting-slot-info{flex:1;min-width:0;}
+.waiting-slot-name{font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;color:var(--text);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.waiting-slot-empty-lbl{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--t3);letter-spacing:2px;}
+.waiting-slot-badge{font-family:'Share Tech Mono',monospace;font-size:8px;padding:2px 6px;border-radius:3px;background:rgba(212,160,23,.15);color:var(--gold);letter-spacing:1px;margin-top:3px;display:inline-block;}
+.waiting-slot-badge.host-badge{background:rgba(224,32,32,.15);color:var(--red);}
+.waiting-status{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--t3);letter-spacing:2px;text-align:center;margin:4px 0 12px;min-height:18px;}
+.waiting-dots::after{content:'';animation:waitDots 1.4s steps(4,end) infinite;}
+@keyframes waitDots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}100%{content:''}}
+/* ══════════════════════════════════════════
+   SETUP REDESIGN — band formation / setlist
+   ══════════════════════════════════════════ */
+.album-forge{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:6px;}
+.album-forge-btn{background:var(--bg3);border:2px solid #22223a;border-radius:12px;padding:14px 6px 12px;cursor:pointer;text-align:center;transition:all .22s;position:relative;overflow:hidden;}
+.album-forge-btn::after{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;}
+.album-forge-btn[data-album="chaos-ad"]::after{background:radial-gradient(ellipse at 50% 110%,rgba(192,57,43,.28),transparent 70%);}
+.album-forge-btn[data-album="roots"]::after{background:radial-gradient(ellipse at 50% 110%,rgba(39,174,96,.22),transparent 70%);}
+.album-forge-btn[data-album="arise"]::after{background:radial-gradient(ellipse at 50% 110%,rgba(41,128,185,.22),transparent 70%);}
+.album-forge-btn:hover::after,.album-forge-btn.sel::after{opacity:1;}
+.album-forge-btn[data-album="chaos-ad"].sel{border-color:var(--red2);box-shadow:0 4px 20px rgba(192,57,43,.3);}
+.album-forge-btn[data-album="roots"].sel{border-color:var(--green);box-shadow:0 4px 20px rgba(39,174,96,.22);}
+.album-forge-btn[data-album="arise"].sel{border-color:var(--blue2);box-shadow:0 4px 20px rgba(41,128,185,.22);}
+.album-forge-glyph{font-size:34px;display:block;margin-bottom:5px;line-height:1;position:relative;z-index:1;}
+.album-forge-name{font-family:'Bebas Neue',cursive;font-size:14px;letter-spacing:2px;color:var(--t2);display:block;line-height:1.1;position:relative;z-index:1;}
+.album-forge-year{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--t3);display:block;margin-top:3px;letter-spacing:1px;position:relative;z-index:1;}
+.album-forge-btn[data-album="chaos-ad"].sel .album-forge-name{color:var(--red);}
+.album-forge-btn[data-album="roots"].sel .album-forge-name{color:var(--green);}
+.album-forge-btn[data-album="arise"].sel .album-forge-name{color:var(--blue2);}
+.album-forge-tick{position:absolute;top:6px;right:8px;font-size:11px;opacity:0;transition:opacity .2s;z-index:2;}
+.album-forge-btn.sel .album-forge-tick{opacity:1;}
+.album-forge-count{font-family:'Share Tech Mono',monospace;font-size:9px;text-align:center;color:var(--t3);letter-spacing:2px;margin-top:2px;}
+.pcount-forge{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.pcount-forge-btn{padding:10px 4px;background:var(--bg3);border:2px solid #22223a;border-radius:10px;cursor:pointer;text-align:center;transition:all .18s;}
+.pcount-forge-btn .pcount-num{font-family:'Bebas Neue',cursive;font-size:28px;color:var(--t2);display:block;line-height:1;}
+.pcount-forge-btn .pcount-lbl{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--t3);letter-spacing:1px;}
+.pcount-forge-btn.sel{border-color:var(--gold);background:rgba(212,160,23,.08);}
+.pcount-forge-btn.sel .pcount-num{color:var(--gold);}
+.pcount-forge-btn.sel .pcount-lbl{color:rgba(212,160,23,.6);}
+.pcount-forge-btn:hover:not(.sel){border-color:#333;}
+.band-lineup{display:flex;flex-direction:column;gap:10px;}
+.band-member-card{background:var(--bg3);border:1px solid #22223a;border-radius:10px;padding:12px;border-left:3px solid;transition:border-color .2s;}
+.band-member-card.pm1{border-left-color:var(--p1);}
+.band-member-card.pm2{border-left-color:var(--p2);}
+.band-member-card.pm3{border-left-color:var(--p3);}
+.band-member-card.pm4{border-left-color:var(--p4);}
+.band-member-header{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.band-member-num{font-family:'Bebas Neue',cursive;font-size:11px;letter-spacing:2px;padding:2px 8px;border-radius:4px;}
+.pm1 .band-member-num{background:rgba(224,32,32,.15);color:var(--p1);}
+.pm2 .band-member-num{background:rgba(41,128,185,.15);color:var(--p2);}
+.pm3 .band-member-num{background:rgba(39,174,96,.15);color:var(--p3);}
+.pm4 .band-member-num{background:rgba(142,68,173,.15);color:var(--p4);}
+.band-member-card .setup-input{font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:3px;padding:9px 12px;width:100%;margin-bottom:6px;}
+.band-member-card .preset-btns{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;}
+.band-member-card .preset-btn{padding:5px 4px;font-size:10px;border-radius:6px;text-align:center;}
+.setlist-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.setlist-btn{background:var(--bg3);border:2px solid #22223a;border-radius:10px;padding:16px 6px 12px;cursor:pointer;text-align:center;transition:all .22s;position:relative;overflow:hidden;}
+.setlist-btn:hover{border-color:#333;}
+.setlist-btn.sel{border-color:var(--gold);background:rgba(212,160,23,.07);}
+.setlist-icon{font-size:28px;display:block;margin-bottom:6px;}
+.setlist-name{font-family:'Bebas Neue',cursive;font-size:16px;letter-spacing:2px;color:var(--t2);display:block;}
+.setlist-detail{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--t3);letter-spacing:1px;display:block;margin-top:3px;}
+.setlist-btn.sel .setlist-name{color:var(--gold2);}
+.setlist-check{position:absolute;top:7px;right:9px;font-size:11px;opacity:0;color:var(--gold);transition:opacity .2s;}
+.setlist-btn.sel .setlist-check{opacity:1;}
+.start-battle-wrap{margin-top:14px;}
+.start-battle-btn{width:100%;padding:18px;background:linear-gradient(150deg,#8b1a12,var(--red2),#c0392b);border:none;border-radius:12px;font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:6px;color:#fff;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 6px 28px rgba(192,57,43,.45),inset 0 1px 0 rgba(255,255,255,.08);transition:all .2s;}
+.start-battle-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:45%;background:rgba(255,255,255,.08);pointer-events:none;}
+.start-battle-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.05),transparent);transform:translateX(-100%);transition:transform .5s ease;}
+.start-battle-btn:hover{transform:translateY(-3px);box-shadow:0 10px 36px rgba(192,57,43,.55);}
+.start-battle-btn:hover::after{transform:translateX(100%);}
+.start-battle-btn:active{transform:translateY(1px);box-shadow:0 3px 16px rgba(192,57,43,.4);}
 </style>
 <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
 <div class="flash" id="flashEl"></div>
+
+<!-- EFFECT 3: Metal shutter -->
+<div id="metal-shutter">
+  <div class="shutter-bar"></div><div class="shutter-bar"></div><div class="shutter-bar"></div>
+  <div class="shutter-bar"></div><div class="shutter-bar"></div><div class="shutter-bar"></div>
+  <div id="shutter-slash" style="display:flex">
+    <span class="shutter-sec-icon" id="shutter-icon">🎸</span>
+    <span class="shutter-sec-name" id="shutter-name">RIFF CHALLENGE</span>
+  </div>
+</div>
+
+<!-- EFFECT 4: Danger vignette -->
+<div id="danger-vignette"></div>
+
+<!-- EFFECT 5: Konami tribal overlay -->
+<div id="tribal-overlay">
+  <div id="tribal-banner">ROOTS BLOODY ROOTS</div>
+</div>
 
 <!-- BACKGROUND SLIDESHOW -->
 <div id="bg-slideshow">
@@ -425,35 +763,92 @@ canvas.vis{width:100%;height:100%;display:block;}
 
 <!-- ═══════════ LOBBY VIEW ═══════════ -->
 <div class="view show" id="lobby-view">
+
+  <!-- ENTRANCE CARD: name + band presets + action buttons -->
   <div class="card">
-    <div class="card-title">👤 TVOJE JMÉNO</div>
-    <input class="setup-input" id="online-name" value="Max" maxlength="14">
-    <div class="preset-btns">
-      <button class="preset-btn" onclick="document.getElementById('online-name').value='🎸 Max'">🎸 Max</button>
-      <button class="preset-btn" onclick="document.getElementById('online-name').value='🤘 Andreas'">🤘 Andreas</button>
-      <button class="preset-btn" onclick="document.getElementById('online-name').value='🥁 Igor'">🥁 Igor</button>
-      <button class="preset-btn" onclick="document.getElementById('online-name').value='🎸 Paulo'">🎸 Paulo</button>
+    <div class="lby-section-label">Tvoje jméno v kapele</div>
+    <div class="lby-name-input-wrap">
+      <input class="setup-input" id="online-name" value="Max" maxlength="14" placeholder="JMÉNO">
     </div>
-    <div class="lobby-mode-row">
-      <button class="lobby-btn red" onclick="createRoom()">🎮 VYTVOŘIT HRU</button>
-      <button class="lobby-btn gold" onclick="showJoinPanel()">🚀 PŘIPOJIT SE</button>
+    <div class="band-preset-grid" style="margin-top:10px">
+      <button class="band-preset" onclick="document.getElementById('online-name').value='Max'">
+        <span class="band-preset-icon">🎸</span>
+        <span class="band-preset-name">Max</span>
+        <span class="band-preset-role">GUITAR</span>
+      </button>
+      <button class="band-preset" onclick="document.getElementById('online-name').value='Andreas'">
+        <span class="band-preset-icon">🤘</span>
+        <span class="band-preset-name">Andreas</span>
+        <span class="band-preset-role">GUITAR</span>
+      </button>
+      <button class="band-preset" onclick="document.getElementById('online-name').value='Igor'">
+        <span class="band-preset-icon">🥁</span>
+        <span class="band-preset-name">Igor</span>
+        <span class="band-preset-role">DRUMS</span>
+      </button>
+      <button class="band-preset" onclick="document.getElementById('online-name').value='Paulo'">
+        <span class="band-preset-icon">🎸</span>
+        <span class="band-preset-name">Paulo</span>
+        <span class="band-preset-role">BASS</span>
+      </button>
     </div>
-    <div id="join-panel" style="display:none;margin-top:10px">
-      <input class="setup-input" id="room-code-in" placeholder="Kód místnosti (ABCD)" maxlength="4" style="text-transform:uppercase;letter-spacing:6px;text-align:center;font-size:22px;">
-      <button class="btn btn-gold" onclick="joinRoom()" style="margin-top:8px;width:100%">PŘIPOJIT →</button>
+
+    <!-- Primary actions: create or join -->
+    <div class="lby-actions">
+      <button class="lby-action-btn create" onclick="createRoom()">
+        <div class="lby-action-inner">
+          <span class="lby-action-icon">🎮</span>
+          <span class="lby-action-title">VYTVOŘIT</span>
+          <span class="lby-action-sub">nová hra · ty jsi hostitel</span>
+        </div>
+      </button>
+      <button class="lby-action-btn join" onclick="showJoinPanel()">
+        <div class="lby-action-inner">
+          <span class="lby-action-icon">🚀</span>
+          <span class="lby-action-title">PŘIPOJIT</span>
+          <span class="lby-action-sub">zadej kód místnosti</span>
+        </div>
+      </button>
     </div>
-    <div class="lobby-or">── nebo ──</div>
-    <button class="lobby-btn" onclick="goLocalGame()" style="font-size:16px;letter-spacing:1px">🖥️ LOKÁLNÍ HRA (bez internetu)</button>
+
+    <!-- Join code panel (hidden until showJoinPanel()) -->
+    <div id="join-panel" style="display:none">
+      <input id="room-code-in" placeholder="ABCD" maxlength="4">
+      <button class="btn btn-gold" onclick="joinRoom()" style="margin-top:8px;width:100%">PŘIPOJIT SE →</button>
+    </div>
+
+    <!-- Divider -->
+    <div class="lby-separator"><span>nebo</span></div>
+
+    <!-- Local / offline game -->
+    <button class="lby-local-btn" onclick="goLocalGame()">
+      <span>🖥️ LOKÁLNÍ HRA</span>
+      <span class="lby-local-sub">bez internetu · jeden telefon / počítač</span>
+    </button>
   </div>
-  <!-- Waiting room (after create/join) -->
+
+  <!-- WAITING ROOM (shown after createRoom / joinRoom) -->
   <div class="card" id="waiting-card" style="display:none">
-    <div class="card-title">KÓD MÍSTNOSTI</div>
-    <div class="room-code-big" id="room-code-display">----</div>
-    <div class="room-code-hint">SDÍLEJ TENTO KÓD S PŘÁTELI</div>
-    <div id="room-players-list"></div>
-    <div class="status-lbl" id="lobby-status" style="text-align:center;margin:8px 0">⏳ Čekám na hráče...</div>
-    <button class="btn btn-red" id="start-online-btn" onclick="startOnlineGame()" style="display:none;margin-top:8px">⚡ START BATTLE ⚡</button>
+    <!-- Room code hero block -->
+    <div style="text-align:center">
+      <div class="room-code-label">KÓD MÍSTNOSTI</div>
+      <div class="room-code-value" id="room-code-display">----</div>
+      <button class="room-code-copy" id="room-code-copy-btn" onclick="copyRoomCode(this)">
+        📋 KOPÍROVAT KÓD
+      </button>
+      <div class="room-code-share-hint">pošli kód přátelům · připojí se za chvíli</div>
+    </div>
+
+    <!-- Player slots grid (JS populates this via renderWaitingSlots()) -->
+    <div class="waiting-players-grid" id="room-players-list"></div>
+
+    <!-- Animated status line -->
+    <div class="waiting-status waiting-dots" id="lobby-status">Čekám na hráče</div>
+
+    <!-- Start button (only host sees this when 2+ players joined) -->
+    <button class="btn btn-red" id="start-online-btn" onclick="startOnlineGame()" style="display:none;margin-top:4px">⚡ START BATTLE ⚡</button>
   </div>
+
 </div>
 
 <!-- ═══════════ CLIENT PANEL (non-host during game) ═══════════ -->
@@ -486,100 +881,144 @@ canvas.vis{width:100%;height:100%;display:block;}
 
 <!-- ═══════════ SETUP VIEW ═══════════ -->
 <div class="view" id="setup-view">
+
+  <!-- ALBA — concert poster selector -->
   <div class="card">
-    <div class="card-title">ALBA</div>
-    <div class="album-row">
-      <button class="album-btn sel" data-album="chaos-ad" onclick="toggleAlbum('chaos-ad',this)">
-        💀 CHAOS A.D.<span class="ab-year">1993</span>
+    <div class="card-title">VYBER ALBA</div>
+    <div class="album-forge">
+      <button class="album-forge-btn sel" data-album="chaos-ad" onclick="toggleAlbum('chaos-ad',this)">
+        <span class="album-forge-tick">✔</span>
+        <span class="album-forge-glyph">💀</span>
+        <span class="album-forge-name">CHAOS A.D.</span>
+        <span class="album-forge-year">1993</span>
       </button>
-      <button class="album-btn" data-album="roots" onclick="toggleAlbum('roots',this)">
-        🌿 ROOTS<span class="ab-year">1996</span>
+      <button class="album-forge-btn" data-album="roots" onclick="toggleAlbum('roots',this)">
+        <span class="album-forge-tick">✔</span>
+        <span class="album-forge-glyph">🌿</span>
+        <span class="album-forge-name">ROOTS</span>
+        <span class="album-forge-year">1996</span>
       </button>
-      <button class="album-btn" data-album="arise" onclick="toggleAlbum('arise',this)">
-        ⚡ ARISE<span class="ab-year">1991</span>
+      <button class="album-forge-btn" data-album="arise" onclick="toggleAlbum('arise',this)">
+        <span class="album-forge-tick">✔</span>
+        <span class="album-forge-glyph">⚡</span>
+        <span class="album-forge-name">ARISE</span>
+        <span class="album-forge-year">1991</span>
       </button>
     </div>
-    <div id="album-count" style="font-size:10px;color:var(--t3);text-align:center;margin-top:2px">12 songů vybráno</div>
+    <div id="album-count" class="album-forge-count">12 songů vybráno</div>
   </div>
 
+  <!-- KAPELA — band member formation -->
   <div class="card">
-    <div class="card-title">HRÁČI</div>
-    <div class="pcount-row">
-      <button class="pcount-btn sel" data-pc="2" onclick="setPCount(2)">2 hráči</button>
-      <button class="pcount-btn" data-pc="3" onclick="setPCount(3)">3 hráči</button>
-      <button class="pcount-btn" data-pc="4" onclick="setPCount(4)">4 hráči</button>
+    <div class="card-title">FORMUJ KAPELU</div>
+    <div class="pcount-forge">
+      <button class="pcount-forge-btn sel" data-pc="2" onclick="setPCount(2)">
+        <span class="pcount-num">2</span>
+        <span class="pcount-lbl">hráči</span>
+      </button>
+      <button class="pcount-forge-btn" data-pc="3" onclick="setPCount(3)">
+        <span class="pcount-num">3</span>
+        <span class="pcount-lbl">hráči</span>
+      </button>
+      <button class="pcount-forge-btn" data-pc="4" onclick="setPCount(4)">
+        <span class="pcount-num">4</span>
+        <span class="pcount-lbl">hráči</span>
+      </button>
     </div>
-    <div class="setup-row">
-      <div class="setup-label" style="color:var(--p1)">▶ HRÁČ 1</div>
-      <input class="setup-input" id="p1name" value="Max" maxlength="14">
-    </div>
-    <div class="preset-btns">
-      <button class="preset-btn" onclick="setPname(1,'Max','🎸')">🎸 Max</button>
-      <button class="preset-btn" onclick="setPname(1,'Andreas','🤘')">🤘 Andreas</button>
-      <button class="preset-btn" onclick="setPname(1,'Igor','🥁')">🥁 Igor</button>
-      <button class="preset-btn" onclick="setPname(1,'Paulo','🎸')">🎸 Paulo</button>
-    </div>
-    <div class="setup-row" style="margin-top:10px">
-      <div class="setup-label" style="color:var(--p2)">▶ HRÁČ 2</div>
-      <input class="setup-input" id="p2name" value="Andreas" maxlength="14">
-    </div>
-    <div class="preset-btns">
-      <button class="preset-btn" onclick="setPname(2,'Max','🎸')">🎸 Max</button>
-      <button class="preset-btn" onclick="setPname(2,'Andreas','🤘')">🤘 Andreas</button>
-      <button class="preset-btn" onclick="setPname(2,'Igor','🥁')">🥁 Igor</button>
-      <button class="preset-btn" onclick="setPname(2,'Paulo','🎸')">🎸 Paulo</button>
-    </div>
-    <div id="player-row-3" style="display:none">
-      <div class="setup-row" style="margin-top:10px">
-        <div class="setup-label" style="color:var(--p3)">▶ HRÁČ 3</div>
-        <input class="setup-input" id="p3name" value="Igor" maxlength="14">
+
+    <div class="band-lineup">
+      <!-- Member 1 -->
+      <div class="band-member-card pm1">
+        <div class="band-member-header">
+          <span class="band-member-num">ČLEN 1</span>
+        </div>
+        <input class="setup-input" id="p1name" value="Max" maxlength="14" placeholder="JMÉNO">
+        <div class="preset-btns">
+          <button class="preset-btn" onclick="setPname(1,'Max','🎸')">🎸 Max</button>
+          <button class="preset-btn" onclick="setPname(1,'Andreas','🤘')">🤘 Andreas</button>
+          <button class="preset-btn" onclick="setPname(1,'Igor','🥁')">🥁 Igor</button>
+          <button class="preset-btn" onclick="setPname(1,'Paulo','🎸')">🎸 Paulo</button>
+        </div>
       </div>
-      <div class="preset-btns">
-        <button class="preset-btn" onclick="setPname(3,'Max','🎸')">🎸 Max</button>
-        <button class="preset-btn" onclick="setPname(3,'Andreas','🤘')">🤘 Andreas</button>
-        <button class="preset-btn" onclick="setPname(3,'Igor','🥁')">🥁 Igor</button>
-        <button class="preset-btn" onclick="setPname(3,'Paulo','🎸')">🎸 Paulo</button>
+
+      <!-- Member 2 -->
+      <div class="band-member-card pm2">
+        <div class="band-member-header">
+          <span class="band-member-num">ČLEN 2</span>
+        </div>
+        <input class="setup-input" id="p2name" value="Andreas" maxlength="14" placeholder="JMÉNO">
+        <div class="preset-btns">
+          <button class="preset-btn" onclick="setPname(2,'Max','🎸')">🎸 Max</button>
+          <button class="preset-btn" onclick="setPname(2,'Andreas','🤘')">🤘 Andreas</button>
+          <button class="preset-btn" onclick="setPname(2,'Igor','🥁')">🥁 Igor</button>
+          <button class="preset-btn" onclick="setPname(2,'Paulo','🎸')">🎸 Paulo</button>
+        </div>
       </div>
-    </div>
-    <div id="player-row-4" style="display:none">
-      <div class="setup-row" style="margin-top:10px">
-        <div class="setup-label" style="color:var(--p4)">▶ HRÁČ 4</div>
-        <input class="setup-input" id="p4name" value="Paulo" maxlength="14">
+
+      <!-- Member 3 (hidden by default) -->
+      <div id="player-row-3" style="display:none">
+        <div class="band-member-card pm3">
+          <div class="band-member-header">
+            <span class="band-member-num">ČLEN 3</span>
+          </div>
+          <input class="setup-input" id="p3name" value="Igor" maxlength="14" placeholder="JMÉNO">
+          <div class="preset-btns">
+            <button class="preset-btn" onclick="setPname(3,'Max','🎸')">🎸 Max</button>
+            <button class="preset-btn" onclick="setPname(3,'Andreas','🤘')">🤘 Andreas</button>
+            <button class="preset-btn" onclick="setPname(3,'Igor','🥁')">🥁 Igor</button>
+            <button class="preset-btn" onclick="setPname(3,'Paulo','🎸')">🎸 Paulo</button>
+          </div>
+        </div>
       </div>
-      <div class="preset-btns">
-        <button class="preset-btn" onclick="setPname(4,'Max','🎸')">🎸 Max</button>
-        <button class="preset-btn" onclick="setPname(4,'Andreas','🤘')">🤘 Andreas</button>
-        <button class="preset-btn" onclick="setPname(4,'Igor','🥁')">🥁 Igor</button>
-        <button class="preset-btn" onclick="setPname(4,'Paulo','🎸')">🎸 Paulo</button>
+
+      <!-- Member 4 (hidden by default) -->
+      <div id="player-row-4" style="display:none">
+        <div class="band-member-card pm4">
+          <div class="band-member-header">
+            <span class="band-member-num">ČLEN 4</span>
+          </div>
+          <input class="setup-input" id="p4name" value="Paulo" maxlength="14" placeholder="JMÉNO">
+          <div class="preset-btns">
+            <button class="preset-btn" onclick="setPname(4,'Max','🎸')">🎸 Max</button>
+            <button class="preset-btn" onclick="setPname(4,'Andreas','🤘')">🤘 Andreas</button>
+            <button class="preset-btn" onclick="setPname(4,'Igor','🥁')">🥁 Igor</button>
+            <button class="preset-btn" onclick="setPname(4,'Paulo','🎸')">🎸 Paulo</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- SETLIST — game mode as concert setlist length -->
   <div class="card">
-    <div class="card-title">HERNÍ MÓD</div>
-    <div class="mode-grid">
-      <div class="mode-btn sel" data-mode="quick" onclick="selMode('quick')">
-        <span class="mode-icon">⚡</span>
-        <span class="mode-name">QUICK</span>
-        <span class="mode-desc2">5 kol / sekci</span>
+    <div class="card-title">SETLIST</div>
+    <div class="setlist-grid">
+      <div class="setlist-btn sel" data-mode="quick" onclick="selMode('quick')">
+        <span class="setlist-check">✔</span>
+        <span class="setlist-icon">⚡</span>
+        <span class="setlist-name">RYCHLÝ</span>
+        <span class="setlist-detail">5 kol / sekci</span>
       </div>
-      <div class="mode-btn" data-mode="long" onclick="selMode('long')">
-        <span class="mode-icon">🔥</span>
-        <span class="mode-name">LONG</span>
-        <span class="mode-desc2">10 kol / sekci</span>
+      <div class="setlist-btn" data-mode="long" onclick="selMode('long')">
+        <span class="setlist-check">✔</span>
+        <span class="setlist-icon">🔥</span>
+        <span class="setlist-name">KLASICKÝ</span>
+        <span class="setlist-detail">10 kol / sekci</span>
       </div>
-      <div class="mode-btn" data-mode="timed" onclick="selMode('timed')">
-        <span class="mode-icon">⏱</span>
-        <span class="mode-name">TIMED</span>
-        <span class="mode-desc2">vlastní čas</span>
+      <div class="setlist-btn" data-mode="timed" onclick="selMode('timed')">
+        <span class="setlist-check">✔</span>
+        <span class="setlist-icon">⏱</span>
+        <span class="setlist-name">MARATON</span>
+        <span class="setlist-detail">vlastní čas</span>
       </div>
     </div>
-    <div class="timer-row" id="timer-row" style="display:none">
+    <div class="timer-row" id="timer-row" style="display:none;margin-top:12px">
       <span class="timer-label">Délka hry (minuty):</span>
       <input type="number" class="timer-in" id="timed-minutes" value="20" min="5" max="120">
     </div>
   </div>
 
+  <!-- VÝBĚR A POŘADÍ HER -->
   <div class="card">
     <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
       <span>VÝBĚR A POŘADÍ HER</span>
@@ -588,6 +1027,7 @@ canvas.vis{width:100%;height:100%;display:block;}
     <div id="gc-list"></div>
   </div>
 
+  <!-- BUZZER -->
   <div class="card">
     <div class="card-title">BUZZER SYSTÉM</div>
     <div class="mic-toggle-row">
@@ -605,7 +1045,11 @@ canvas.vis{width:100%;height:100%;display:block;}
     </div>
   </div>
 
-  <button class="btn btn-red" onclick="startGame()" style="font-size:22px;margin-top:10px">⚡ START BATTLE ⚡</button>
+  <!-- START -->
+  <div class="start-battle-wrap">
+    <button class="start-battle-btn" onclick="startGame()">⚡ START BATTLE ⚡</button>
+  </div>
+
 </div>
 
 <!-- ═══════════ GAME HEADER ═══════════ -->
@@ -1724,7 +2168,7 @@ function gcRender(){
       </div>
     </div>
   `).join('');
-  const startBtn=document.querySelector('#setup-view .btn-red');
+  const startBtn=document.querySelector('#setup-view .start-battle-btn');
   if(startBtn)startBtn.disabled=enabledCount===0;
 }
 
@@ -1753,7 +2197,7 @@ function gcReset(){
 
 // ════════════════ SETUP ════════════════
 function selMode(m){
-  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('sel'));
+  document.querySelectorAll('.setlist-btn').forEach(b=>b.classList.remove('sel'));
   document.querySelector(`[data-mode="${m}"]`).classList.add('sel');
   G.mode=m;
   document.getElementById('timer-row').style.display=m==='timed'?'flex':'none';
@@ -1772,7 +2216,7 @@ function startGame(){
     G.pNames.push(el?el.value.trim()||'Hráč '+i:'Hráč '+i);
   }
   G.scores=Array(pc).fill(0);G.turn=0;
-  G.mode=document.querySelector('.mode-btn.sel')?.dataset.mode||'quick';
+  G.mode=document.querySelector('.setlist-btn.sel')?.dataset.mode||'quick';
   G.timedMin=parseInt(document.getElementById('timed-minutes').value)||20;
 
   G.gameOrder=gcConfig.filter(g=>g.enabled).map(g=>({id:g.id,title:g.title,icon:g.icon,rounds:g.rounds}));
@@ -2482,7 +2926,7 @@ function setPname(player,name,icon){
 
 function setPCount(n){
   G.pCount=n;
-  document.querySelectorAll('.pcount-btn').forEach(b=>b.classList.toggle('sel',parseInt(b.dataset.pc)===n));
+  document.querySelectorAll('.pcount-forge-btn').forEach(b=>b.classList.toggle('sel',parseInt(b.dataset.pc)===n));
   document.getElementById('player-row-3').style.display=n>=3?'':'none';
   document.getElementById('player-row-4').style.display=n>=4?'':'none';
 }
@@ -3111,7 +3555,7 @@ function goLocalGame(){
   const el=document.getElementById('album-count');
   if(el)el.textContent=total+' songů vybráno';
   // Sync album button states
-  document.querySelectorAll('.album-btn').forEach(b=>{
+  document.querySelectorAll('.album-forge-btn').forEach(b=>{
     b.classList.toggle('sel',G.selectedAlbums.includes(b.dataset.album));
   });
 }
@@ -3130,16 +3574,66 @@ function showWaitingRoom(code,players,isHost){
 function updateRoomPlayersList(players){
   const list=document.getElementById('room-players-list');
   if(!list)return;
-  const pNames=['🔴','🔵','🟢','🟣'];
-  list.innerHTML=players.map((p,i)=>`
-    <div class="room-player-row">
-      <span style="color:${P_COLORS[i]};font-size:18px">${pNames[i]}</span>
-      <span class="room-player-name" style="color:${P_COLORS[i]}">${p.name}</span>
-      ${i===0?'<span class="room-player-badge">HOST</span>':''}
-    </div>`).join('');
+  // Icons per slot role
+  const slotIcons=['🎸','🤘','🥁','🎸'];
+  const slotColors=['p1-slot','p2-slot','p3-slot','p4-slot'];
+  // Build 4 slots — filled from players array, rest show empty
+  let html='';
+  for(let i=0;i<4;i++){
+    const p=players[i];
+    const colorCls=slotColors[i];
+    if(p){
+      const isHost=i===0;
+      html+=`<div class="waiting-slot filled ${colorCls}">
+        <span class="waiting-slot-icon">${slotIcons[i]}</span>
+        <div class="waiting-slot-info">
+          <span class="waiting-slot-name">${p.name}</span>
+          <span class="waiting-slot-badge${isHost?' host-badge':''}">${isHost?'HOST':'HRÁČ '+(i+1)}</span>
+        </div>
+      </div>`;
+    } else {
+      html+=`<div class="waiting-slot ${colorCls}">
+        <span class="waiting-slot-icon">${slotIcons[i]}</span>
+        <div class="waiting-slot-info">
+          <span class="waiting-slot-empty-lbl">ČEKÁ SE...</span>
+        </div>
+      </div>`;
+    }
+  }
+  list.innerHTML=html;
+  // Update status line
+  const statusEl=document.getElementById('lobby-status');
+  if(statusEl){
+    const n=players.length;
+    if(n<2){
+      statusEl.textContent='Čekám na hráče';
+      statusEl.classList.add('waiting-dots');
+    } else {
+      statusEl.textContent=n+' hráč'+(n===1?'':'i')+' v lobby';
+      statusEl.classList.remove('waiting-dots');
+    }
+  }
   // Update start button
   const btn=document.getElementById('start-online-btn');
   if(btn&&ON.isHost) btn.style.display=players.length>=2?'':'none';
+}
+
+function copyRoomCode(btn){
+  const code=document.getElementById('room-code-display').textContent;
+  if(!code||code==='----')return;
+  navigator.clipboard.writeText(code).then(()=>{
+    btn.textContent='✔ ZKOPÍROVÁNO';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.innerHTML='📋 KOPÍROVAT KÓD';btn.classList.remove('copied');},2000);
+  }).catch(()=>{
+    // Fallback for older Safari
+    const ta=document.createElement('textarea');
+    ta.value=code;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent='✔ ZKOPÍROVÁNO';btn.classList.add('copied');
+    setTimeout(()=>{btn.innerHTML='📋 KOPÍROVAT KÓD';btn.classList.remove('copied');},2000);
+  });
 }
 
 function startOnlineGame(){
@@ -3353,6 +3847,291 @@ setTimeout(()=>['s1-vis','s2-vis','s1v-vis'].forEach(id=>{
   const c=document.getElementById(id);
   if(c&&c.parentElement){idleVis(id.replace('-vis',''));}
 }),300);
+
+// ════════════════════════════════════════════════════════
+// WHIMSY EFFECTS
+// ════════════════════════════════════════════════════════
+
+// ── EFFECT 1: Score ghost float ──────────────────────────
+// Wraps bumpScore/bumpScoreBy to spawn a "+N" ghost that
+// floats up from the score card and fades out.
+(function patchScoreGhost(){
+  const PLAYER_COLORS=['var(--p1)','var(--p2)','var(--p3)','var(--p4)'];
+
+  function spawnGhost(playerIdx, amount){
+    const scoreEl=document.getElementById('sc-p'+(playerIdx+1));
+    if(!scoreEl)return;
+    const rect=scoreEl.getBoundingClientRect();
+    const ghost=document.createElement('div');
+    ghost.className='score-ghost';
+    ghost.textContent='+'+amount;
+    ghost.style.color=PLAYER_COLORS[playerIdx];
+    ghost.style.left=(rect.left+rect.width/2-20)+'px';
+    ghost.style.top=(rect.top+window.scrollY+rect.height/2-18)+'px';
+    document.body.appendChild(ghost);
+    ghost.addEventListener('animationend',()=>ghost.remove(),{once:true});
+  }
+
+  // Patch bumpScore (already patched once for online — safe to double-wrap)
+  const _prev=bumpScore;
+  bumpScore=function(p){
+    _prev(p);
+    spawnGhost(p,1);
+  };
+
+  const _prevBy=bumpScoreBy;
+  bumpScoreBy=function(p,n){
+    _prevBy(p,n);
+    spawnGhost(p,n);
+  };
+})();
+
+
+// ── EFFECT 2: Lobby metal quotes ─────────────────────────
+// Rotates Sepultura/metal quotes in the waiting room every
+// 3 s. Starts when waiting card becomes visible.
+(function initLobbyQuotes(){
+  const QUOTES=[
+    '"CHAOS A.D. — TANKS ON THE STREETS"',
+    '"ARISE — ARISE!"',
+    '"ROOTS — BLOODY — ROOTS"',
+    '"REFUSE / RESIST"',
+    '"SLAVE NEW WORLD"',
+    '"TERRITORY"',
+    '"KAIOWAS"',
+    '"PROPAGANDA"',
+    '"WE WHO ARE NOT AS OTHERS"',
+  ];
+  let _qInt=null;
+  let _qi=0;
+
+  function startQuotes(){
+    const el=document.getElementById('lobby-metal-quote');
+    if(!el)return;
+    if(_qInt)return; // already running
+    _qi=Math.floor(Math.random()*QUOTES.length);
+    function show(){
+      if(!document.getElementById('waiting-card')||
+         document.getElementById('waiting-card').style.display==='none'){
+        stopQuotes(); return;
+      }
+      el.style.animation='none';
+      void el.offsetWidth;
+      el.textContent=QUOTES[_qi%QUOTES.length];
+      el.style.animation='quoteFade .6s ease';
+      _qi++;
+    }
+    show();
+    _qInt=setInterval(show,3000);
+  }
+
+  function stopQuotes(){
+    if(_qInt){clearInterval(_qInt);_qInt=null;}
+    const el=document.getElementById('lobby-metal-quote');
+    if(el)el.textContent='';
+  }
+
+  // Observe waiting-card display changes via MutationObserver
+  const waitCard=document.getElementById('waiting-card');
+  if(waitCard){
+    const obs=new MutationObserver(()=>{
+      if(waitCard.style.display!=='none'){startQuotes();}
+      else{stopQuotes();}
+    });
+    obs.observe(waitCard,{attributes:true,attributeFilter:['style']});
+  }
+})();
+
+
+// ── EFFECT 3: Metal shutter section transition ────────────
+// Replaces the plain 1.8 s fade with a 6-bar venetian-blind
+// shutter close → icon flash → shutter open sequence.
+// We monkey-patch showSectionTransition.
+(function patchShutterTransition(){
+  const shutter=document.getElementById('metal-shutter');
+  if(!shutter)return;
+
+  window.showSectionTransition=function(sec,cb){
+    hideAllSections();
+    const go=G.gameOrder||SECTION_META;
+    const meta=go[sec]||SECTION_META[0];
+
+    // Populate shutter content
+    document.getElementById('shutter-icon').textContent=meta.icon||'🎸';
+    document.getElementById('shutter-name').textContent=meta.title||'';
+    document.getElementById('trans-title').textContent=meta.title;
+    document.getElementById('trans-sub').textContent=
+      `HRA ${sec+1} / ${go.length} · ${meta.rounds||G.roundsPS} kol`;
+
+    // Phase 1: bars close (0–260 ms)
+    shutter.style.display='block';
+    shutter.className='animate';
+    const slash=document.getElementById('shutter-slash');
+    slash.style.opacity='0';
+    slash.style.transition='opacity .25s ease .3s';
+
+    setTimeout(()=>{
+      // Phase 2: icon reveal (260–900 ms)
+      slash.style.opacity='1';
+    },260);
+
+    setTimeout(()=>{
+      // Phase 3: bars open (900–1150 ms)
+      slash.style.transition='opacity .15s ease';
+      slash.style.opacity='0';
+      shutter.className='open';
+    },900);
+
+    setTimeout(()=>{
+      shutter.style.display='none';
+      shutter.className='';
+      cb();
+    },1150);
+  };
+})();
+
+
+// ── EFFECT 4: Timer danger — vignette + screen shake ─────
+// Patches updateTimerDisplay to add vignette at <30 s and
+// a single screen-shake burst at exactly 10 s.
+(function patchTimerDanger(){
+  const vig=document.getElementById('danger-vignette');
+  const appEl=document.getElementById('main-app');
+  let _shook10=false;
+  let _vigActive=false;
+
+  const _orig=updateTimerDisplay;
+  updateTimerDisplay=function(sec){
+    _orig(sec);
+
+    const timerEl=document.getElementById('hud-timer');
+    const DANGER=30, CRITICAL=10;
+
+    if(sec<=DANGER && sec>0){
+      // Vignette
+      if(!_vigActive){
+        vig.classList.add('active');
+        _vigActive=true;
+      }
+      // Swap timer class to danger style
+      if(timerEl){
+        timerEl.classList.remove('low');
+        timerEl.classList.add('danger');
+      }
+      // Single shake at 10 s
+      if(sec<=CRITICAL && !_shook10){
+        _shook10=true;
+        if(appEl){
+          appEl.classList.add('shake');
+          appEl.addEventListener('animationend',()=>appEl.classList.remove('shake'),{once:true});
+        }
+      }
+    } else {
+      // Timer reset or above danger threshold
+      if(_vigActive){
+        vig.classList.remove('active');
+        _vigActive=false;
+      }
+      if(timerEl) timerEl.classList.remove('danger');
+      _shook10=false;
+    }
+
+    // Cleanup when timer hits 0
+    if(sec<=0){
+      vig.classList.remove('active');
+      _vigActive=false;
+      if(timerEl) timerEl.classList.remove('danger');
+    }
+  };
+
+  // Also reset on new game
+  const _origStart=startGame;
+  startGame=function(){
+    _shook10=false;
+    _vigActive=false;
+    vig.classList.remove('active');
+    const t=document.getElementById('hud-timer');
+    if(t)t.classList.remove('danger');
+    _origStart();
+  };
+})();
+
+
+// ── EFFECT 5: Konami code — tribal seizure easter egg ────
+// Up Up Down Down Left Right Left Right B A triggers a 4 s
+// "ROOTS BLOODY ROOTS" tribal mode with floating song names.
+(function initKonamiEgg(){
+  const KONAMI=[38,38,40,40,37,39,37,39,66,65];
+  let seq=[];
+
+  const SONG_NAMES=[
+    'REFUSE / RESIST','TERRITORY','SLAVE NEW WORLD',
+    'AMEN','KAIOWAS','PROPAGANDA','BIOTECH IS GODZILLA',
+    'NOMAD','MANIFEST','THE HUNT','CHAOS A.D.','ARISE',
+    'ROOTS BLOODY ROOTS','RATAMAHATTA','ATTITUDE',
+  ];
+
+  document.addEventListener('keydown',(e)=>{
+    seq.push(e.keyCode);
+    seq=seq.slice(-10);
+    if(seq.join(',')===KONAMI.join(',')) triggerTribal();
+  });
+
+  function triggerTribal(){
+    const overlay=document.getElementById('tribal-overlay');
+    if(!overlay)return;
+    overlay.classList.add('active');
+
+    // Spawn floating song names
+    const frag=document.createDocumentFragment();
+    for(let i=0;i<18;i++){
+      const el=document.createElement('div');
+      el.className='tribal-text';
+      el.textContent=SONG_NAMES[Math.floor(Math.random()*SONG_NAMES.length)];
+      el.style.left=Math.random()*90+'%';
+      el.style.top=(90+Math.random()*20)+'%';
+      el.style.fontSize=(11+Math.random()*14)+'px';
+      el.style.animationDelay=(Math.random()*2)+'s';
+      el.style.animationDuration=(2+Math.random()*1.5)+'s';
+      el.style.transform='rotate('+(Math.random()*20-10)+'deg)';
+      frag.appendChild(el);
+    }
+    overlay.appendChild(frag);
+
+    // Auto-dismiss after 4 s
+    setTimeout(()=>{
+      overlay.classList.remove('active');
+      // Remove spawned text nodes
+      overlay.querySelectorAll('.tribal-text').forEach(n=>n.remove());
+    },4000);
+  }
+})();
+
+
+// ── EFFECT 6: Victory title letter-by-letter explosion ───
+// When endGame() shows the winner view, it splits the winner
+// name into individual <span> letters that each scale in from
+// a random rotation with staggered delay.
+(function patchVictoryExplosion(){
+  const _origEnd=endGame;
+  endGame=function(){
+    _origEnd();
+
+    // Give the DOM a frame to render the winner name
+    requestAnimationFrame(()=>{
+      const titleEl=document.getElementById('w-name');
+      if(!titleEl)return;
+      const text=titleEl.textContent;
+      if(!text||text.length<2)return;
+
+      titleEl.innerHTML=text.split('').map((ch,i)=>{
+        const rot=(Math.random()*40-20).toFixed(1);
+        const delay=(i*0.06).toFixed(2);
+        return `<span class="w-letter" style="--r:${rot}deg;animation-delay:${delay}s">${ch==' '?'&nbsp;':ch}</span>`;
+      }).join('');
+    });
+  };
+})();
 </script>
 </body>
 </html>
