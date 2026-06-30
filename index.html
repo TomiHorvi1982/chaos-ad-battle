@@ -2017,7 +2017,8 @@ async function s1GoPrep(){
   // Show who is playing + riff name (no tab)
   const playerName=G.pNames[G.turn];
   document.getElementById('s1-prep-player').textContent=`🎸 ${playerName}`;
-  document.getElementById('s1-prep-riff-name').textContent=`${G.curRiff.name} · ${G.curSong.title} · ${G.curSong.tuning}`;
+  const tuningOrAlbum=G.curSong.tuning&&G.curSong.tuning!=='Standard'?G.curSong.tuning:G.curSong.albumLabel||'Sepultura';
+  document.getElementById('s1-prep-riff-name').textContent=`${G.curRiff.name} · ${G.curSong.title} · ${tuningOrAlbum}`;
 
   const ok=await loadStems('s1',[G.curRiff.drumsSnippet||G.curSong.drumsId]);
   if(!ok)return;
@@ -2799,8 +2800,16 @@ async function s6Start(stem){
   const badge=document.getElementById('s6-diff-badge');
   badge.className='diff-badge diff-'+stem;
   badge.textContent={drums:'🥁 BICÍ +1',rhythm:'🎸 KYTARA +2',bass:'🎸 BASA +3'}[stem];
-  // Random song
-  G.curSong=shuffle([...(G.songs||SONGS).filter(s=>s.drumsId||s.rhythmId||s.bassId)])[0]||shuffle([...(G.songs||SONGS)])[0];
+  // Random song — needs full WAV stems (Chaos A.D. only)
+  const songsWithWav=(G.songs||SONGS).filter(s=>s.drumsId||s.rhythmId||s.bassId);
+  if(!songsWithWav.length){
+    setStatus('s6','⚠ Tato sekce vyžaduje Chaos A.D. album — vyber ho v nastavení.');
+    document.getElementById('s6-play-card').style.display='none';
+    document.getElementById('s6-diff-card').style.display='';
+    setTimeout(()=>nextRound(),3000);
+    return;
+  }
+  G.curSong=shuffle([...songsWithWav])[0];
   const stemId=stem==='drums'?G.curSong.drumsId:stem==='rhythm'?G.curSong.rhythmId:G.curSong.bassId;
   setStatus('s6','⏳ Načítám...');
   document.getElementById('s6-buzz-area').style.display='';
@@ -3097,6 +3106,14 @@ function goLocalGame(){
   const sv=document.getElementById('setup-view');
   sv.classList.add('show');
   sv.style.display='block';
+  // Sync album count display with current selection
+  const total=G.selectedAlbums.reduce((s,a)=>s+(ALBUM_SIZES[a]||0),0);
+  const el=document.getElementById('album-count');
+  if(el)el.textContent=total+' songů vybráno';
+  // Sync album button states
+  document.querySelectorAll('.album-btn').forEach(b=>{
+    b.classList.toggle('sel',G.selectedAlbums.includes(b.dataset.album));
+  });
 }
 
 function showWaitingRoom(code,players,isHost){
