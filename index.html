@@ -50,6 +50,11 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;fo
 .scores-bar.multi{flex-wrap:wrap;gap:4px;justify-content:center;}
 .scores-bar.multi .sc{min-width:70px;flex:1;}
 .scores-bar.multi .vs{display:none;}
+.album-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.album-btn{flex:1;min-width:80px;padding:8px 4px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--t3);font-size:11px;font-family:'Bebas Neue',cursive;letter-spacing:1px;cursor:pointer;text-align:center;transition:all .2s;}
+.album-btn.sel{background:rgba(212,160,23,.15);border-color:var(--gold);color:var(--gold);}
+.album-btn .ab-year{display:block;font-size:9px;color:var(--t3);letter-spacing:0;font-family:sans-serif;margin-top:2px;}
+.album-btn.sel .ab-year{color:var(--gold2);}
 .pcount-row{display:flex;gap:8px;margin-bottom:10px;}
 .pcount-btn{flex:1;padding:8px 4px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--t3);font-size:13px;font-family:'Bebas Neue',cursive;letter-spacing:1px;cursor:pointer;}
 .pcount-btn.sel{background:rgba(212,160,23,.15);border-color:var(--gold);color:var(--gold);}
@@ -481,6 +486,22 @@ canvas.vis{width:100%;height:100%;display:block;}
 
 <!-- ═══════════ SETUP VIEW ═══════════ -->
 <div class="view" id="setup-view">
+  <div class="card">
+    <div class="card-title">ALBA</div>
+    <div class="album-row">
+      <button class="album-btn sel" data-album="chaos-ad" onclick="toggleAlbum('chaos-ad',this)">
+        💀 CHAOS A.D.<span class="ab-year">1993</span>
+      </button>
+      <button class="album-btn" data-album="roots" onclick="toggleAlbum('roots',this)">
+        🌿 ROOTS<span class="ab-year">1996</span>
+      </button>
+      <button class="album-btn" data-album="arise" onclick="toggleAlbum('arise',this)">
+        ⚡ ARISE<span class="ab-year">1991</span>
+      </button>
+    </div>
+    <div id="album-count" style="font-size:10px;color:var(--t3);text-align:center;margin-top:2px">12 songů vybráno</div>
+  </div>
+
   <div class="card">
     <div class="card-title">HRÁČI</div>
     <div class="pcount-row">
@@ -989,7 +1010,7 @@ canvas.vis{width:100%;height:100%;display:block;}
 const CAD='/audio/';
 const SNIPPET_BASE='/snippets/';
 const SONGS=[
-  {title:'Refuse/Resist',bpm:118,key:'D minor',tuning:'Drop D (D A D G B E)',
+  {title:'Refuse/Resist',bpm:118,key:'D minor',tuning:'Drop D (D A D G B E)',album:'chaos-ad',albumLabel:'Chaos A.D.',trackNo:1,trackTotal:12,
    drumsId:CAD+'01. Refuse , Resist-D minor-118bpm-444hz/01. Refuse , Resist-drums-D minor-118bpm-444hz.wav',
    rhythmId:CAD+'01. Refuse , Resist-D minor-118bpm-444hz/01. Refuse , Resist-rhythm-D minor-118bpm-444hz.wav',
    bassId:CAD+'01. Refuse , Resist-D minor-118bpm-444hz/01. Refuse , Resist-bass-D minor-118bpm-444hz.wav',
@@ -1010,7 +1031,7 @@ E|-------------------|`,desc:'Synkopa na přizávce, těžká doražení spodní
      drumsSnippet:SNIPPET_BASE+'Refuse_Resist_Verse_Palm_Mute_drums.mp3',
      rhythmSnippet:SNIPPET_BASE+'Refuse_Resist_Verse_Palm_Mute_rhythm.mp3'},
   ]},
-  {title:'Territory',bpm:76,key:'D minor',tuning:'Standard Eb (Eb Ab Db Gb Bb Eb)',
+  {title:'Territory',bpm:76,key:'D minor',tuning:'Standard Eb (Eb Ab Db Gb Bb Eb)',album:'chaos-ad',albumLabel:'Chaos A.D.',trackNo:2,trackTotal:12,
    drumsId:CAD+'02. Territory-D minor-76bpm-444hz/02. Territory-drums-D minor-76bpm-444hz.wav',
    rhythmId:CAD+'02. Territory-D minor-76bpm-444hz/02. Territory-rhythm-D minor-76bpm-444hz.wav',
    bassId:CAD+'02. Territory-D minor-76bpm-444hz/02. Territory-bass-D minor-76bpm-444hz.wav',
@@ -1026,7 +1047,7 @@ A|--7-7---5-5---3-3---|`,desc:'Výrazný bending na posledním akordu před opak
      drumsSnippet:SNIPPET_BASE+'Territory_Chorus_Chords_drums.mp3',
      rhythmSnippet:SNIPPET_BASE+'Territory_Chorus_Chords_rhythm.mp3'},
   ]},
-  {title:'Slave New World',bpm:99,key:'Eb minor',tuning:'Drop Db',
+  {title:'Slave New World',bpm:99,key:'Eb minor',tuning:'Drop Db',album:'chaos-ad',albumLabel:'Chaos A.D.',trackNo:3,trackTotal:12,
    drumsId:CAD+'03. Slave New World-Eb minor-99bpm-444hz/03. Slave New World-drums-Eb minor-99bpm-444hz.wav',
    rhythmId:CAD+'03. Slave New World-Eb minor-99bpm-444hz/03. Slave New World-rhythm-Eb minor-99bpm-444hz.wav',
    bassId:CAD+'03. Slave New World-Eb minor-99bpm-444hz/03. Slave New World-bass-Eb minor-99bpm-444hz.wav',
@@ -1040,7 +1061,7 @@ Ab|--0-x-0-x-0---0-x-0-x-0--|`,desc:'Synkopy s ghost-notami, přesný muting kl�
      drumsSnippet:SNIPPET_BASE+'Slave_New_World_Verse_Syncopated_drums.mp3',
      rhythmSnippet:SNIPPET_BASE+'Slave_New_World_Verse_Syncopated_rhythm.mp3'},
   ]},
-  {title:'Amen',bpm:81,key:'Eb minor',tuning:'Standard Eb',
+  {title:'Amen',bpm:81,key:'Eb minor',tuning:'Standard Eb',album:'chaos-ad',albumLabel:'Chaos A.D.',trackNo:4,trackTotal:12,
    drumsId:CAD+'04. Amen-Eb minor-81bpm-444hz/04. Amen-drums-Eb minor-81bpm-444hz.wav',
    rhythmId:CAD+'04. Amen-Eb minor-81bpm-444hz/04. Amen-rhythm-Eb minor-81bpm-444hz.wav',
    bassId:CAD+'04. Amen-Eb minor-81bpm-444hz/04. Amen-bass-Eb minor-81bpm-444hz.wav',
@@ -1056,7 +1077,7 @@ A|--6-6-6--4---|`,desc:'Náhlý skok power chordů, maximální zkreslení.',
      drumsSnippet:SNIPPET_BASE+'Amen_Heavy_Chorus_drums.mp3',
      rhythmSnippet:SNIPPET_BASE+'Amen_Heavy_Chorus_rhythm.mp3'},
   ]},
-  {title:'Kaiowas',bpm:71,key:'D major',tuning:'Standard D',
+  {title:'Kaiowas',bpm:71,key:'D major',tuning:'Standard D',album:'chaos-ad',albumLabel:'Chaos A.D.',trackNo:5,trackTotal:12,
    drumsId:CAD+'05. Kaiowas-D major-71bpm-431hz/05. Kaiowas-drums-D major-71bpm-431hz.wav',
    rhythmId:CAD+'05. Kaiowas-D major-71bpm-431hz/05. Kaiowas-rhythm-D major-71bpm-431hz.wav',
    bassId:CAD+'05. Kaiowas-D major-71bpm-431hz/05. Kaiowas-bass-D major-71bpm-431hz.wav',
@@ -1072,7 +1093,7 @@ A|--0-----------0---0---|`,desc:'Fingerpicking D dur, hraj prsty; žádné trsá
      drumsSnippet:SNIPPET_BASE+'Kaiowas_Main_Theme_drums.mp3',
      rhythmSnippet:SNIPPET_BASE+'Kaiowas_Main_Theme_rhythm.mp3'},
   ]},
-  {title:'Propaganda',bpm:77,key:'Eb minor',tuning:'Standard Eb',
+  {title:'Propaganda',bpm:77,key:'Eb minor',tuning:'Standard Eb',album:'chaos-ad',albumLabel:'Chaos A.D.',trackNo:6,trackTotal:12,
    drumsId:CAD+'06. Propaganda-Eb minor-77bpm-444hz/06. Propaganda-drums-Eb minor-77bpm-444hz.wav',
    rhythmId:CAD+'06. Propaganda-Eb minor-77bpm-444hz/06. Propaganda-rhythm-Eb minor-77bpm-444hz.wav',
    bassId:CAD+'06. Propaganda-Eb minor-77bpm-444hz/06. Propaganda-bass-Eb minor-77bpm-444hz.wav',
@@ -1086,7 +1107,7 @@ A|--2-2---1-1---0-0---|`,desc:'Chromat. sestup Eb→D→Db, těžký palm mute.'
      drumsSnippet:SNIPPET_BASE+'Propaganda_Main_Chromatic_drums.mp3',
      rhythmSnippet:SNIPPET_BASE+'Propaganda_Main_Chromatic_rhythm.mp3'},
   ]},
-  {title:'Biotech Is Godzilla',bpm:118,key:'E minor',tuning:'Standard Eb',
+  {title:'Biotech Is Godzilla',bpm:118,key:'E minor',tuning:'Standard Eb',album:'chaos-ad',albumLabel:'Chaos A.D.',trackNo:7,trackTotal:12,
    drumsId:CAD+'07. Biotech Is Godzilla-E minor-118bpm-443hz/07. Biotech Is Godzilla-drums-E minor-118bpm-443hz.wav',
    rhythmId:CAD+'07. Biotech Is Godzilla-E minor-118bpm-443hz/07. Biotech Is Godzilla-rhythm-E minor-118bpm-443hz.wav',
    bassId:CAD+'07. Biotech Is Godzilla-E minor-118bpm-443hz/07. Biotech Is Godzilla-bass-E minor-118bpm-443hz.wav',
@@ -1100,7 +1121,7 @@ A|--7-7-6-6-5-5-4-4-3-3--|`,desc:'Chromatický sestup ze Eb na Em, palm mute.',
      drumsSnippet:SNIPPET_BASE+'Biotech_Is_Godzilla_Verse_Palm_Mute_drums.mp3',
      rhythmSnippet:SNIPPET_BASE+'Biotech_Is_Godzilla_Verse_Palm_Mute_rhythm.mp3'},
   ]},
-  {title:'Nomad',bpm:81,key:'F major',tuning:'Standard Eb',
+  {title:'Nomad',bpm:81,key:'F major',tuning:'Standard Eb',album:'chaos-ad',albumLabel:'Chaos A.D.',trackNo:8,trackTotal:12,
    drumsId:CAD+'08. Nomad-F major-81bpm-444hz/08. Nomad-drums-F major-81bpm-444hz.wav',
    rhythmId:CAD+'08. Nomad-F major-81bpm-444hz/08. Nomad-rhythm-F major-81bpm-444hz.wav',
    bassId:CAD+'08. Nomad-F major-81bpm-444hz/08. Nomad-bass-F major-81bpm-444hz.wav',
@@ -1114,7 +1135,7 @@ A|--1-1---3-3---5-5---6-6--|`,desc:'Vzestupná sekvence F→G→A→Bb.',
      drumsSnippet:SNIPPET_BASE+'Nomad_Rising_Figure_drums.mp3',
      rhythmSnippet:SNIPPET_BASE+'Nomad_Rising_Figure_rhythm.mp3'},
   ]},
-  {title:'We Who Are Not As Others',bpm:74,key:'C minor',tuning:'Standard Eb',
+  {title:'We Who Are Not As Others',bpm:74,key:'C minor',tuning:'Standard Eb',album:'chaos-ad',albumLabel:'Chaos A.D.',trackNo:9,trackTotal:12,
    drumsId:CAD+'09. We Who Are Not As Others-C minor-74bpm-443hz/09. We Who Are Not As Others-drums-C minor-74bpm-443hz.wav',
    rhythmId:CAD+'09. We Who Are Not As Others-C minor-74bpm-443hz/09. We Who Are Not As Others-rhythm-C minor-74bpm-443hz.wav',
    bassId:CAD+'09. We Who Are Not As Others-C minor-74bpm-443hz/09. We Who Are Not As Others-bass-C minor-74bpm-443hz.wav',
@@ -1128,7 +1149,7 @@ A|--3-3---3-3---1-1---|`,desc:'Pomalý C moll groove, těžké doražení na 1 a
      drumsSnippet:SNIPPET_BASE+'We_Who_Are_Not_As_Others_High_Lead_drums.mp3',
      rhythmSnippet:SNIPPET_BASE+'We_Who_Are_Not_As_Others_High_Lead_rhythm.mp3'},
   ]},
-  {title:'Manifest',bpm:69,key:'F# minor',tuning:'Standard Eb',
+  {title:'Manifest',bpm:69,key:'F# minor',tuning:'Standard Eb',album:'chaos-ad',albumLabel:'Chaos A.D.',trackNo:10,trackTotal:12,
    drumsId:CAD+'10. Manifest-F# minor-69bpm-444hz/10. Manifest-drums-F# minor-69bpm-444hz.wav',
    rhythmId:CAD+'10. Manifest-F# minor-69bpm-444hz/10. Manifest-rhythm-F# minor-69bpm-444hz.wav',
    bassId:CAD+'10. Manifest-F# minor-69bpm-444hz/10. Manifest-bass-F# minor-69bpm-444hz.wav',
@@ -1142,7 +1163,7 @@ A|--4-4---2-2---0-0---|`,desc:'F#m→Em→Dm, silný synkop na 2+ a 4+.',
      drumsSnippet:SNIPPET_BASE+'Manifest_Verse_Syncopated_drums.mp3',
      rhythmSnippet:SNIPPET_BASE+'Manifest_Verse_Syncopated_rhythm.mp3'},
   ]},
-  {title:'The Hunt',bpm:185,key:'D minor',tuning:'Standard Eb',
+  {title:'The Hunt',bpm:185,key:'D minor',tuning:'Standard Eb',album:'chaos-ad',albumLabel:'Chaos A.D.',trackNo:11,trackTotal:12,
    drumsId:CAD+'11. The Hunt-D minor-185bpm-445hz/11. The Hunt-drums-D minor-185bpm-445hz.wav',
    rhythmId:CAD+'11. The Hunt-D minor-185bpm-445hz/11. The Hunt-rhythm-D minor-185bpm-445hz.wav',
    bassId:CAD+'11. The Hunt-D minor-185bpm-445hz/11. The Hunt-bass-D minor-185bpm-445hz.wav',
@@ -1156,7 +1177,7 @@ A|--5-5---3-3---1-1---|`,desc:'Dm power chord sekvence, downpicking.',
      drumsSnippet:SNIPPET_BASE+'The_Hunt_Heavy_Verse_drums.mp3',
      rhythmSnippet:SNIPPET_BASE+'The_Hunt_Heavy_Verse_rhythm.mp3'},
   ]},
-  {title:'Clenched Fist',bpm:100,key:'Eb minor',tuning:'Standard Eb',
+  {title:'Clenched Fist',bpm:100,key:'Eb minor',tuning:'Standard Eb',album:'chaos-ad',albumLabel:'Chaos A.D.',trackNo:12,trackTotal:12,
    drumsId:CAD+'12. Clenched Fist-Eb minor-100bpm-443hz/12. Clenched Fist-drums-Eb minor-100bpm-443hz.wav',
    rhythmId:CAD+'12. Clenched Fist-Eb minor-100bpm-443hz/12. Clenched Fist-rhythm-Eb minor-100bpm-443hz.wav',
    bassId:CAD+'12. Clenched Fist-Eb minor-100bpm-443hz/12. Clenched Fist-bass-Eb minor-100bpm-443hz.wav',
@@ -1169,6 +1190,169 @@ D|--6-6---4-4---6-6---|
 A|--4-4---2-2---4-4---|`,desc:'Podpůrný rhythm part, pevný mute na 2 a 4.',
      drumsSnippet:SNIPPET_BASE+'Clenched_Fist_Rhythm_Groove_drums.mp3',
      rhythmSnippet:SNIPPET_BASE+'Clenched_Fist_Rhythm_Groove_rhythm.mp3'},
+  ]},
+  // ── ROOTS BLOODY ROOTS (1996) ──────────────────────────────────────────
+  {title:'Roots Bloody Roots',bpm:121,key:'C major',tuning:'Standard',album:'roots',albumLabel:'Roots',trackNo:1,trackTotal:15,
+   riffs:[
+    {name:'Main_Riff',diff:'mid',desc:'Tribal groove, synkopa na basové struně.',
+     drumsSnippet:SNIPPET_BASE+'Roots_Bloody_Roots_Main_Riff_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Roots_Bloody_Roots_Main_Riff_rhythm.mp3'},
+    {name:'Verse_Groove',diff:'easy',desc:'Opakující se riff s palm mute.',
+     drumsSnippet:SNIPPET_BASE+'Roots_Bloody_Roots_Verse_Groove_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Roots_Bloody_Roots_Verse_Groove_rhythm.mp3'},
+  ]},
+  {title:'Attitude',bpm:80,key:'F major',tuning:'Standard',album:'roots',albumLabel:'Roots',trackNo:2,trackTotal:15,
+   riffs:[
+    {name:'Main_Riff',diff:'easy',desc:'Jednoduchý power chord riff.',
+     drumsSnippet:SNIPPET_BASE+'Attitude_Main_Riff_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Attitude_Main_Riff_rhythm.mp3'},
+    {name:'Chorus',diff:'mid',desc:'Chorový groove s důrazem na přizávku.',
+     drumsSnippet:SNIPPET_BASE+'Attitude_Chorus_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Attitude_Chorus_rhythm.mp3'},
+  ]},
+  {title:'Cut-Throat',bpm:98,key:'Bb major',tuning:'Standard',album:'roots',albumLabel:'Roots',trackNo:3,trackTotal:15,
+   riffs:[
+    {name:'Intro_Riff',diff:'mid',desc:'Agresivní intro s chromatickým pohybem.',
+     drumsSnippet:SNIPPET_BASE+'Cut_Throat_Intro_Riff_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Cut_Throat_Intro_Riff_rhythm.mp3'},
+    {name:'Verse',diff:'easy',desc:'Verse groove, downpicking.',
+     drumsSnippet:SNIPPET_BASE+'Cut_Throat_Verse_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Cut_Throat_Verse_rhythm.mp3'},
+  ]},
+  {title:'Ratamahatta',bpm:113,key:'Bb minor',tuning:'Standard',album:'roots',albumLabel:'Roots',trackNo:4,trackTotal:15,
+   riffs:[
+    {name:'Tribal_Intro',diff:'hard',desc:'Brazilský tribal rytmus, složitá synkopa.',
+     drumsSnippet:SNIPPET_BASE+'Ratamahatta_Tribal_Intro_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Ratamahatta_Tribal_Intro_rhythm.mp3'},
+    {name:'Main_Groove',diff:'mid',desc:'Hlavní groove s tribal perkusemi.',
+     drumsSnippet:SNIPPET_BASE+'Ratamahatta_Main_Groove_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Ratamahatta_Main_Groove_rhythm.mp3'},
+  ]},
+  {title:'Breed Apart',bpm:104,key:'D minor',tuning:'Standard',album:'roots',albumLabel:'Roots',trackNo:5,trackTotal:15,
+   riffs:[
+    {name:'Main_Riff',diff:'mid',desc:'Těžký palm mute riff v D mol.',
+     drumsSnippet:SNIPPET_BASE+'Breed_Apart_Main_Riff_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Breed_Apart_Main_Riff_rhythm.mp3'},
+    {name:'Heavy_Break',diff:'hard',desc:'Breakdownový part, maximální zkreslení.',
+     drumsSnippet:SNIPPET_BASE+'Breed_Apart_Heavy_Break_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Breed_Apart_Heavy_Break_rhythm.mp3'},
+  ]},
+  {title:'Straighthate',bpm:78,key:'D major',tuning:'Standard',album:'roots',albumLabel:'Roots',trackNo:6,trackTotal:15,
+   riffs:[
+    {name:'Main_Groove',diff:'easy',desc:'Pomalý groove, tribální feel.',
+     drumsSnippet:SNIPPET_BASE+'Straighthate_Main_Groove_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Straighthate_Main_Groove_rhythm.mp3'},
+    {name:'Chorus',diff:'mid',desc:'Chorový riff s důrazem.',
+     drumsSnippet:SNIPPET_BASE+'Straighthate_Chorus_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Straighthate_Chorus_rhythm.mp3'},
+  ]},
+  {title:'Spit',bpm:181,key:'E minor',tuning:'Standard',album:'roots',albumLabel:'Roots',trackNo:7,trackTotal:15,
+   riffs:[
+    {name:'Fast_Riff',diff:'hard',desc:'Extrémně rychlý thrash riff.',
+     drumsSnippet:SNIPPET_BASE+'Spit_Fast_Riff_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Spit_Fast_Riff_rhythm.mp3'},
+    {name:'Verse_Blast',diff:'hard',desc:'Blast beat sekce, alternating picking.',
+     drumsSnippet:SNIPPET_BASE+'Spit_Verse_Blast_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Spit_Verse_Blast_rhythm.mp3'},
+  ]},
+  {title:'Lookaway',bpm:71,key:'B minor',tuning:'Standard',album:'roots',albumLabel:'Roots',trackNo:8,trackTotal:15,
+   riffs:[
+    {name:'Main_Groove',diff:'easy',desc:'Funky groove s Jonathan Davisem.',
+     drumsSnippet:SNIPPET_BASE+'Lookaway_Main_Groove_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Lookaway_Main_Groove_rhythm.mp3'},
+    {name:'Chorus',diff:'mid',desc:'Chorový part s výraznou basovou linkou.',
+     drumsSnippet:SNIPPET_BASE+'Lookaway_Chorus_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Lookaway_Chorus_rhythm.mp3'},
+  ]},
+  {title:'Dusted',bpm:108,key:'D minor',tuning:'Standard',album:'roots',albumLabel:'Roots',trackNo:9,trackTotal:15,
+   riffs:[
+    {name:'Main_Riff',diff:'mid',desc:'Moderní groove s tribal prvky.',
+     drumsSnippet:SNIPPET_BASE+'Dusted_Main_Riff_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Dusted_Main_Riff_rhythm.mp3'},
+    {name:'Verse',diff:'easy',desc:'Verse riff, opakující se motiv.',
+     drumsSnippet:SNIPPET_BASE+'Dusted_Verse_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Dusted_Verse_rhythm.mp3'},
+  ]},
+  {title:'Born Stubborn',bpm:71,key:'D major',tuning:'Standard',album:'roots',albumLabel:'Roots',trackNo:10,trackTotal:15,
+   riffs:[
+    {name:'Main_Groove',diff:'easy',desc:'Pomalý groove, tribal rytmus.',
+     drumsSnippet:SNIPPET_BASE+'Born_Stubborn_Main_Groove_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Born_Stubborn_Main_Groove_rhythm.mp3'},
+    {name:'Heavy_Part',diff:'mid',desc:'Těžší sekce s palm mute.',
+     drumsSnippet:SNIPPET_BASE+'Born_Stubborn_Heavy_Part_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Born_Stubborn_Heavy_Part_rhythm.mp3'},
+  ]},
+  {title:'Jasco',bpm:110,key:'D major',tuning:'Standard',album:'roots',albumLabel:'Roots',trackNo:11,trackTotal:15,
+   riffs:[
+    {name:'Tribal_Riff',diff:'hard',desc:'Komplexní tribal perkusní riff.',
+     drumsSnippet:SNIPPET_BASE+'Jasco_Tribal_Riff_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Jasco_Tribal_Riff_rhythm.mp3'},
+    {name:'Main_Theme',diff:'mid',desc:'Hlavní téma písně.',
+     drumsSnippet:SNIPPET_BASE+'Jasco_Main_Theme_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Jasco_Main_Theme_rhythm.mp3'},
+  ]},
+  {title:'Itsári',bpm:179,key:'Db major',tuning:'Standard',album:'roots',albumLabel:'Roots',trackNo:12,trackTotal:15,
+   riffs:[
+    {name:'Fast_Intro',diff:'hard',desc:'Rychlé intro, tribal element.',
+     drumsSnippet:SNIPPET_BASE+'Itsari_Fast_Intro_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Itsari_Fast_Intro_rhythm.mp3'},
+    {name:'Main_Groove',diff:'mid',desc:'Tribal groove s perkusemi.',
+     drumsSnippet:SNIPPET_BASE+'Itsari_Main_Groove_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Itsari_Main_Groove_rhythm.mp3'},
+  ]},
+  {title:'Ambush',bpm:95,key:'G major',tuning:'Standard',album:'roots',albumLabel:'Roots',trackNo:13,trackTotal:15,
+   riffs:[
+    {name:'Main_Riff',diff:'mid',desc:'Power chord riff s agresivním feelingem.',
+     drumsSnippet:SNIPPET_BASE+'Ambush_Main_Riff_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Ambush_Main_Riff_rhythm.mp3'},
+    {name:'Verse',diff:'easy',desc:'Verse groove.',
+     drumsSnippet:SNIPPET_BASE+'Ambush_Verse_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Ambush_Verse_rhythm.mp3'},
+  ]},
+  {title:'Endangered Species',bpm:80,key:'D minor',tuning:'Standard',album:'roots',albumLabel:'Roots',trackNo:14,trackTotal:15,
+   riffs:[
+    {name:'Main_Groove',diff:'easy',desc:'Pomalý tribal groove.',
+     drumsSnippet:SNIPPET_BASE+'Endangered_Species_Main_Groove_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Endangered_Species_Main_Groove_rhythm.mp3'},
+    {name:'Heavy_Verse',diff:'mid',desc:'Těžší verse sekce.',
+     drumsSnippet:SNIPPET_BASE+'Endangered_Species_Heavy_Verse_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Endangered_Species_Heavy_Verse_rhythm.mp3'},
+  ]},
+  {title:'Dictatorshit',bpm:99,key:'Eb minor',tuning:'Standard',album:'roots',albumLabel:'Roots',trackNo:15,trackTotal:15,
+   riffs:[
+    {name:'Main_Riff',diff:'mid',desc:'Agresivní thrash riff.',
+     drumsSnippet:SNIPPET_BASE+'Dictatorshit_Main_Riff_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Dictatorshit_Main_Riff_rhythm.mp3'},
+    {name:'Chorus',diff:'hard',desc:'Chorový part, rychlé přechody.',
+     drumsSnippet:SNIPPET_BASE+'Dictatorshit_Chorus_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Dictatorshit_Chorus_rhythm.mp3'},
+  ]},
+  // ── ARISE (1991) ───────────────────────────────────────────────────────
+  {title:'Arise',bpm:140,key:'E minor',tuning:'Standard',album:'arise',albumLabel:'Arise',trackNo:1,trackTotal:11,
+   riffs:[
+    {name:'Main_Riff',diff:'mid',desc:'Klasický thrash riff z alba Arise.',
+     drumsSnippet:SNIPPET_BASE+'Arise_Main_Riff_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Arise_Main_Riff_rhythm.mp3'},
+    {name:'Heavy_Verse',diff:'hard',desc:'Těžká verse sekce, alternate picking.',
+     drumsSnippet:SNIPPET_BASE+'Arise_Heavy_Verse_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Arise_Heavy_Verse_rhythm.mp3'},
+  ]},
+  {title:'Dead Embryonic Cells',bpm:160,key:'E minor',tuning:'Standard',album:'arise',albumLabel:'Arise',trackNo:2,trackTotal:11,
+   riffs:[
+    {name:'Intro_Blast',diff:'hard',desc:'Blast beat intro, extrémní tempo.',
+     drumsSnippet:SNIPPET_BASE+'Dead_Embryonic_Cells_Intro_Blast_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Dead_Embryonic_Cells_Intro_Blast_rhythm.mp3'},
+    {name:'Main_Groove',diff:'mid',desc:'Hlavní groove sekce.',
+     drumsSnippet:SNIPPET_BASE+'Dead_Embryonic_Cells_Main_Groove_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Dead_Embryonic_Cells_Main_Groove_rhythm.mp3'},
+  ]},
+  {title:'Desperate Cry',bpm:120,key:'E minor',tuning:'Standard',album:'arise',albumLabel:'Arise',trackNo:3,trackTotal:11,
+   riffs:[
+    {name:'Main_Riff',diff:'mid',desc:'Melodický riff s emocionálním feelingem.',
+     drumsSnippet:SNIPPET_BASE+'Desperate_Cry_Main_Riff_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Desperate_Cry_Main_Riff_rhythm.mp3'},
+    {name:'Chorus',diff:'easy',desc:'Chorový part, výrazné akordy.',
+     drumsSnippet:SNIPPET_BASE+'Desperate_Cry_Chorus_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Desperate_Cry_Chorus_rhythm.mp3'},
+  ]},
+  {title:'Infected Voice',bpm:130,key:'E minor',tuning:'Standard',album:'arise',albumLabel:'Arise',trackNo:5,trackTotal:11,
+   riffs:[
+    {name:'Main_Groove',diff:'mid',desc:'Groove riff s agresivním feelingem.',
+     drumsSnippet:SNIPPET_BASE+'Infected_Voice_Main_Groove_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Infected_Voice_Main_Groove_rhythm.mp3'},
+    {name:'Verse',diff:'easy',desc:'Verse sekce, opakující se motiv.',
+     drumsSnippet:SNIPPET_BASE+'Infected_Voice_Verse_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Infected_Voice_Verse_rhythm.mp3'},
+  ]},
+  {title:'Subtraction',bpm:125,key:'E minor',tuning:'Standard',album:'arise',albumLabel:'Arise',trackNo:6,trackTotal:11,
+   riffs:[
+    {name:'Main_Riff',diff:'mid',desc:'Technický thrash riff.',
+     drumsSnippet:SNIPPET_BASE+'Subtraction_Main_Riff_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Subtraction_Main_Riff_rhythm.mp3'},
+    {name:'Chorus',diff:'hard',desc:'Chorový part s rychlými přechody.',
+     drumsSnippet:SNIPPET_BASE+'Subtraction_Chorus_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Subtraction_Chorus_rhythm.mp3'},
+  ]},
+  {title:'Under Siege (Regnum Irae)',bpm:135,key:'E minor',tuning:'Standard',album:'arise',albumLabel:'Arise',trackNo:9,trackTotal:11,
+   riffs:[
+    {name:'Main_Riff',diff:'mid',desc:'Mocný thrash riff.',
+     drumsSnippet:SNIPPET_BASE+'Under_Siege_Main_Riff_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Under_Siege_Main_Riff_rhythm.mp3'},
+    {name:'Heavy_Break',diff:'hard',desc:'Breakdown sekce, maximální intenzita.',
+     drumsSnippet:SNIPPET_BASE+'Under_Siege_Heavy_Break_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Under_Siege_Heavy_Break_rhythm.mp3'},
+  ]},
+  {title:'C.I.U. (Criminals in Uniform)',bpm:145,key:'E minor',tuning:'Standard',album:'arise',albumLabel:'Arise',trackNo:10,trackTotal:11,
+   riffs:[
+    {name:'Intro_Groove',diff:'easy',desc:'Intro groove, přímočarý riff.',
+     drumsSnippet:SNIPPET_BASE+'CIU_Intro_Groove_drums.mp3',rhythmSnippet:SNIPPET_BASE+'CIU_Intro_Groove_rhythm.mp3'},
+    {name:'Main_Riff',diff:'mid',desc:'Hlavní riff, thrash energie.',
+     drumsSnippet:SNIPPET_BASE+'CIU_Main_Riff_drums.mp3',rhythmSnippet:SNIPPET_BASE+'CIU_Main_Riff_rhythm.mp3'},
+  ]},
+  {title:'Orgasmatron',bpm:100,key:'E minor',tuning:'Standard',album:'arise',albumLabel:'Arise',trackNo:11,trackTotal:11,
+   riffs:[
+    {name:'Main_Riff',diff:'mid',desc:'Motorhead cover, mocný riff.',
+     drumsSnippet:SNIPPET_BASE+'Orgasmatron_Main_Riff_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Orgasmatron_Main_Riff_rhythm.mp3'},
+    {name:'Heavy_Verse',diff:'easy',desc:'Verse groove, pomalejší tempo.',
+     drumsSnippet:SNIPPET_BASE+'Orgasmatron_Heavy_Verse_drums.mp3',rhythmSnippet:SNIPPET_BASE+'Orgasmatron_Heavy_Verse_rhythm.mp3'},
   ]},
 ];
 
@@ -1298,6 +1482,9 @@ const G={
   // mic + metro
   micMode:false,
   s1IntroAsked:false,
+  // album filter
+  selectedAlbums:['chaos-ad'],
+  songs:null,
 };
 
 const SECTION_META=[
@@ -1495,6 +1682,23 @@ function fmtT(s){if(!s||isNaN(s))return'0:00';const m=Math.floor(s/60),sec=Math.
 // ════════════════ GAME CONFIGURATOR ════════════════
 let gcConfig=[];
 
+const ALBUM_SIZES={'chaos-ad':12,'roots':15,'arise':8};
+function toggleAlbum(id,btn){
+  const sel=G.selectedAlbums;
+  const idx=sel.indexOf(id);
+  if(idx>=0){
+    if(sel.length===1){return;}
+    sel.splice(idx,1);
+    btn.classList.remove('sel');
+  } else {
+    sel.push(id);
+    btn.classList.add('sel');
+  }
+  const total=sel.reduce((s,a)=>s+(ALBUM_SIZES[a]||0),0);
+  const el=document.getElementById('album-count');
+  if(el)el.textContent=total+' songů vybráno';
+}
+
 function gcInit(){
   gcConfig=SECTION_META.map(m=>({...m,enabled:true,rounds:5}));
   gcRender();
@@ -1575,10 +1779,14 @@ function startGame(){
   if(!G.gameOrder.length){alert('Vyber aspoň jednu hru!');return;}
   G.roundsPS=G.gameOrder[0].rounds;
 
+  // Filter songs by selected albums
+  G.songs=SONGS.filter(s=>G.selectedAlbums.includes(s.album));
+  if(!G.songs.length)G.songs=[...SONGS];
+
   // Build queues
-  const allRiffs=SONGS.flatMap(s=>s.riffs.map(r=>({...r,song:s})));
+  const allRiffs=G.songs.flatMap(s=>s.riffs.map(r=>({...r,song:s})));
   G.riffQ=shuffle([...allRiffs]);
-  G.s2SongQ=shuffle([...SONGS]);
+  G.s2SongQ=shuffle([...G.songs]);
   G.trivQ=shuffle([...QUIZ]);
   G.trivQS1=shuffle([...QUIZ]);
 
@@ -1716,7 +1924,7 @@ const CIRC_R=42,CIRC_C=2*Math.PI*CIRC_R;
 function startS1(){
   showSection('s1');
   // Pick riff for this round
-  if(!G.riffQ.length)G.riffQ=shuffle(SONGS.flatMap(s=>s.riffs.map(r=>({...r,song:s}))));
+  if(!G.riffQ.length)G.riffQ=shuffle((G.songs||SONGS).flatMap(s=>s.riffs.map(r=>({...r,song:s}))));
   G.curRiff=G.riffQ.pop();
   G.curSong=G.curRiff.song;
   stopAudio('s1');stopAudio('s1v');
@@ -1950,7 +2158,7 @@ function startS2(){
   hintTimers.forEach(t=>clearTimeout(t));hintTimers=[];
   if(s2HintInt){clearInterval(s2HintInt);s2HintInt=null;}
 
-  if(!G.s2SongQ.length)G.s2SongQ=shuffle([...SONGS]);
+  if(!G.s2SongQ.length)G.s2SongQ=shuffle([...(G.songs||SONGS)]);
   G.curSong=G.s2SongQ.pop();
   const song=G.curSong;
 
@@ -1964,7 +2172,7 @@ function startS2(){
   const hints=[
     {val:song.key,   key:'Tónina / Key',       icon:'🎵'},
     {val:song.tuning,key:'Ladění',              icon:'🎸'},
-    {val:`Track #${SONGS.indexOf(song)+1} / 12`,key:'Pořadí na albu', icon:'💿'},
+    {val:`Track #${song.trackNo||'?'} / ${song.trackTotal||'?'} — ${song.albumLabel||'Sepultura'}`,key:'Pořadí na albu', icon:'💿'},
     {val:s2ExtraHint(song), key:'Extra hint',  icon:'🔑'},
   ];
   hints.forEach((h,i)=>{
@@ -2094,7 +2302,7 @@ function s2Buzz(p){
   document.getElementById('s2-who').textContent=`🔔 ${G.pNames[p-1]} odpovídá!`;
   const c=document.getElementById('s2-choices');c.innerHTML='';
   const song=G.curSong;
-  const opts=shuffle([song.title,...shuffle(SONGS.filter(s=>s.title!==song.title)).slice(0,3).map(s=>s.title)]);
+  const opts=shuffle([song.title,...shuffle((G.songs||SONGS).filter(s=>s.title!==song.title)).slice(0,3).map(s=>s.title)]);
   opts.forEach(opt=>{
     const b=document.createElement('button');b.className='qc';b.textContent=opt;
     b.onclick=()=>{
@@ -2403,7 +2611,7 @@ function startS4(){
   G.s4Bids=[null,null];
   G.s4BidStep=0;
   // Pick random riff + song
-  const allRiffs=SONGS.flatMap(s=>s.riffs.map(r=>({...r,song:s})));
+  const allRiffs=(G.songs||SONGS).flatMap(s=>s.riffs.map(r=>({...r,song:s})));
   G.curRiff=shuffle(allRiffs)[0];
   G.curSong=G.curRiff.song;
   document.getElementById('s4-riff-info').textContent=`${G.curRiff.name} · ${G.curSong.title}`;
@@ -2526,7 +2734,7 @@ async function s5DoRound(){
   document.getElementById('s5-choices-card').style.display='none';
   document.getElementById('s5-cd').textContent='';
   // Pick random riff (has rhythmSnippet in /snippets/)
-  const allRiffsS5=SONGS.flatMap(s=>s.riffs.map(r=>({...r,song:s})));
+  const allRiffsS5=(G.songs||SONGS).flatMap(s=>s.riffs.map(r=>({...r,song:s})));
   const riffS5=shuffle([...allRiffsS5])[0];
   G.curRiff=riffS5; G.curSong=riffS5.song;
   setStatus('s5','⏳ Načítám...');
@@ -2552,7 +2760,7 @@ function s5ShowChoices(p){
   document.getElementById('s5-cd').textContent='';
   setStatus('s5',`${G.pNames[p]} — vyber píseň!`);
   const correct=G.curSong.title;
-  const wrongs=shuffle(SONGS.filter(s=>s.title!==correct)).slice(0,3).map(s=>s.title);
+  const wrongs=shuffle((G.songs||SONGS).filter(s=>s.title!==correct)).slice(0,3).map(s=>s.title);
   const choices=shuffle([correct,...wrongs]);
   const c=document.getElementById('s5-choices');
   c.innerHTML='';
@@ -2592,7 +2800,7 @@ async function s6Start(stem){
   badge.className='diff-badge diff-'+stem;
   badge.textContent={drums:'🥁 BICÍ +1',rhythm:'🎸 KYTARA +2',bass:'🎸 BASA +3'}[stem];
   // Random song
-  G.curSong=shuffle([...SONGS])[0];
+  G.curSong=shuffle([...(G.songs||SONGS).filter(s=>s.drumsId||s.rhythmId||s.bassId)])[0]||shuffle([...(G.songs||SONGS)])[0];
   const stemId=stem==='drums'?G.curSong.drumsId:stem==='rhythm'?G.curSong.rhythmId:G.curSong.bassId;
   setStatus('s6','⏳ Načítám...');
   document.getElementById('s6-buzz-area').style.display='';
@@ -2611,7 +2819,7 @@ function s6Buzz(p){
   G.s6Buzzer=p;
   // 4 choices: correct + 3 wrong
   const correct=G.curSong.title;
-  const wrongs=shuffle(SONGS.filter(s=>s.title!==correct)).slice(0,3).map(s=>s.title);
+  const wrongs=shuffle((G.songs||SONGS).filter(s=>s.title!==correct)).slice(0,3).map(s=>s.title);
   const choices=shuffle([correct,...wrongs]);
   const c=document.getElementById('s6-choices');c.innerHTML='';
   choices.forEach(ch=>{
@@ -2636,7 +2844,7 @@ function startS7(){
   stopAudio('s7');
   G.s7Ratings=[null,null];
   G.s7PerfIdx=0;
-  const allRiffs=SONGS.flatMap(s=>s.riffs.map(r=>({...r,song:s})));
+  const allRiffs=(G.songs||SONGS).flatMap(s=>s.riffs.map(r=>({...r,song:s})));
   G.curRiff=shuffle(allRiffs)[0];G.curSong=G.curRiff.song;
   s7ShowPerformer(0);
 }
